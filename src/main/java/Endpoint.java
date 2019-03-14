@@ -1,4 +1,4 @@
-package group19;
+package main.java;
 
 public class Endpoint {
 

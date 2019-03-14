@@ -1,6 +1,9 @@
-package group19;
+package main.java;
 
 public class RBTree {
+	
+	private Node root;
+	private Node nil;
 
 	public RBTree() {
 		

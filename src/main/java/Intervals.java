@@ -1,4 +1,4 @@
-package group19;
+package main.java;
 
 public class Intervals {
 
@@ -20,6 +20,7 @@ public class Intervals {
 	 */
 	public void intervalInsert(int a, int b) {
 		//TODO
+		
 	}
 	
 	/**
