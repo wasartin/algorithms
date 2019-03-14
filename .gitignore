@@ -24,6 +24,8 @@ bin/
 .log
 business/application.log*
 
+### MAC ###
+.DS_Store
 
 ### NetBeans ###
 /nbproject/private/
