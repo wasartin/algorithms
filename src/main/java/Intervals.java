@@ -1,44 +1,41 @@
 package main.java;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Intervals {
 	
 	private int currID = 0;//Not sure how to handle a 'global' counter
 	private RBTree rbtree;
 	//Keep an arrayList of intervals? idk how else to do the id thing
-	private ArrayList<Interval> IntervalList = new ArrayList<>(); //the id of an interval can now just be it's position
+	private ArrayList<Interval> intervalList; //the id of an interval can now just be it's position
 	
-	//? How is this?
-	protected class Interval {
+	//Made public for testing
+	public class Interval {
 		private int left;
 		private int right;
 		
-		protected Interval(int left, int right) {
+		public Interval(int left, int right) {
 			this.left = left;
 			this.right = right;
 		}
 		
-		protected Interval(Endpoint e1, Endpoint e2) {
+		public Interval(Endpoint e1, Endpoint e2) {
 			this.left = e1.getValue();
 			this.right = e2.getValue();
 		}
 		
-		protected int getLeft() {
+		public int getLeft() {
 			return this.left;
 		}
 		
-		protected int getRight() {
+		public int getRight() {
 			return this.right;
 		}
 	}
 	
 	public Intervals() {
-	}
-
-	public Intervals(Endpoint a, Endpoint b) {
-		
+		rbtree = new RBTree();
+		intervalList = new ArrayList<>();
 	}
 	
 	/**
@@ -53,33 +50,38 @@ public class Intervals {
 	 * @param firstPoint
 	 * @param secondPoint
 	 */
-	public void intervalInsert(int a, int b) {
+	public void intervalInsert(int a, int b) throws IllegalArgumentException {
 		if(a > b) {
 			throw new IllegalArgumentException("The first point must precede the second point");
 		}
 		//Will this just be inserting into the RBTree?
-		//boolean left = true;// this just feels stupid
-		//boolean right = !left;
-		//Endpoint x = new Endpoint(a, left);
-		//Endpoint y = new Endpoint(b, right);
+		
+		//Make ints into endpoints and add into interval list
 		int left = 1;
 		int right = -1;
-		Endpoint x = new Endpoint(a, left);
-		Endpoint y = new Endpoint(b, right);
-		Interval i = new Interval(x, y);
-		IntervalList.add(i);
-		//IntervalList.add(newInterval(new Endpoint(a, left), new Endpoint(b, right))); 
-		//TODO
+		Endpoint start = new Endpoint(a, left);
+		Endpoint end = new Endpoint(b, right);
+		intervalList.add(new Interval(start, end)); 
+		
+		//Turn endpoint into nodes so they can be inserted into a tree
+		Node newNodeA = new Node(start);
+		Node newNodeB = new Node(end);
+		
+		//Insert nodes into RBT
+		rbtree.RBInsert(newNodeA);
+		rbtree.RBInsert(newNodeB);
 	}
+	
+	
 	
 	public Interval getInterval(int position) {
 		if(position < 1) {
 			throw new IllegalArgumentException("Interval starts at 1");
 		}
-		else if(position > IntervalList.size()) {
-			throw new IllegalArgumentException("The position you selected is larger than the size of current intervals: " + IntervalList.size());
+		else if(position > intervalList.size()) {
+			throw new IllegalArgumentException("The position you selected is larger than the size of current intervals: " + intervalList.size());
 		}
-		return IntervalList.get(position);
+		return intervalList.get(position - 1);
 	}
 	
 	
@@ -106,7 +108,10 @@ public class Intervals {
 	 * @return
 	 */
 	public int findPOM() {
-		return -1;
+		if(rbtree.getSize() > 0) {
+			return -1;
+		}
+		return rbtree.getRoot().getEmax().getValue();
 	}
 	
 	/**

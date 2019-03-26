@@ -1,13 +1,13 @@
 package main.java;
 
-public class RBTree <Key extends Comparable<Key>, Value>{
+public class RBTree{
 	public static final int RED = 0;
 	public static final int BLACK = 1;
 	
 	private Node root;
 	private Node nil;
-	private int size;
-	private int height;
+//	private int size;
+//	private int height;
 	private int blackHeight;
 
 	public RBTree() {
@@ -21,7 +21,6 @@ public class RBTree <Key extends Comparable<Key>, Value>{
 	 * @return
 	 */
 	public Node getRoot() {
-		//TODO
 		return root;
 	}
 	
@@ -136,7 +135,7 @@ public class RBTree <Key extends Comparable<Key>, Value>{
 	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
-	private void RBInsert(Node z) {
+	public void RBInsert(Node z) {
 		Node y = this.nil;
 		Node x = this.root;
 		while(!x.equals(this.nil)) {

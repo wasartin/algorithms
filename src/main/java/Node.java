@@ -17,7 +17,6 @@ public class Node{
 	private int p; //this is 'p(e)'
 	private Endpoint e;
 	private int color;
-	private int value;//this one looks a bit tricky
 	private Node parent;
 	private Node left;
 	private Node right;
@@ -104,11 +103,17 @@ public class Node{
 	 *
 	 * @return
 	 */
+	//This value is dynamic, this is why I don't make it an instance variable.
 	public int getVal() {
 		return getValue(this);
 	}
 	
-	public int getValue(Node x) {
+	/**
+	 * Helper method for getVal(), recursive
+	 * @param x
+	 * @return
+	 */
+	private int getValue(Node x) {
 		if(x.getP() == 0) {//NIL NODE, this is the base case
 			return x.getP();
 		}
@@ -140,6 +145,7 @@ public class Node{
 	 * 		
 	 * @return
 	 */
+	//This value is dynamic, which is why it isn't an instance variable.
 	public int getMaxVal() { 
 		int caseOne = this.left.getMaxVal();
 		int caseTwo = this.left.getVal() + this.getP();
@@ -162,7 +168,7 @@ public class Node{
 	
 	/**
 	 * Returns an Endpoint object that represents emax. Calling this
-	 * method on the root node will give the Endpoint object whose getValue() provides a
+	 * method on the root* node will give the Endpoint object whose getValue() provides a
 	 * point of maximum overlap.
 	 * 
 	 * Which is a reference to an endpoint em, where
@@ -170,9 +176,23 @@ public class Node{
 	 * 	over all i such that lv <= i <= rv.
 	 * @return
 	 */
-	public Endpoint getEmax() {
-		//TODO
-		return null;
+	//This value is dynamic, which is why it is not an instance variable
+	public Endpoint getEmax() { //the child that has the highest maxval
+		return getEmax(this);
+	}
+	
+	private Endpoint getEmax(Node x) {
+		if(x.getP() == 0) { //base case, at the NIL Node
+			return null;
+		}
+		Endpoint currMax = x.getEndpoint();
+		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
+			getEmax(x.getLeft());
+		}
+		else {
+			return currMax;
+		}
+		return currMax;
 	}
 	
 	
@@ -187,4 +207,20 @@ public class Node{
 	public void setColor(int color) {
 		this.color = color;
 	}
+	
+	/**
+	 * Helper method that returns the number of internal nodes
+	 * @return
+	 */
+	public int getSize() {
+		return getNumOfInternalNodes(this);
+	}
+	
+	private int getNumOfInternalNodes(Node x) {
+		if(x.getEndpoint().getPValue() == 0) {//base case
+			return 1;
+		}
+		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
+	}
+
 }
