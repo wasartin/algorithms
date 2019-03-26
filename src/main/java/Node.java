@@ -1,6 +1,6 @@
 package main.java;
 
-public class Node<Key extends Comparable<Key>, Value> {
+public class Node{
 	
 	public static final int RED = 0;
 	public static final int BLACK = 1;
@@ -8,28 +8,32 @@ public class Node<Key extends Comparable<Key>, Value> {
 	/**
 	 * (I think) the keys are the endpoints. 
 	 */
-	private Key key; //this is 'e', 
+	private int key; //this is 'e', 
 	/**
 	 * is the sum of the p-values of the nodes in 
 	 * the subtree rooted at v (including v itself)
 	 * that is, v.val = s(`v,rv ).
 	 */
-	private Value val; 
 	private int p; //this is 'p(e)'
 	private Endpoint e;
 	private int color;
-	
+	private int value;//this one looks a bit tricky
 	private Node parent;
 	private Node left;
 	private Node right;
 	
 	public Node() {
-		
+		//?
+		color = RED; //all new nodes are red
 	}
 	
-	public Node(Key key, Node parent) {
-		this.parent = parent;
-		this.key = key;
+	//Not sure how to handle the nil node yet, a -1 for key?
+	public Node(Endpoint e) {
+		this.e = e;
+		this.key = e.getValue();
+		//p = (e.isLeft()) ? 1 : -1; //+1 if e is a left endpoint and -1 if e is a right endpoint
+		p = e.getPValue();
+		color = RED; //all new nodes are red
 	}
 	
 	/**
@@ -72,11 +76,11 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * Returns the endpoint value, which is an integer.
 	 * @return 'e', which is the key
 	 */
-	public Key getKey() {
+	public int getKey() {
 		return this.key;
 	}
 	
-	public void setKey(Key key) {
+	public void setKey(int key) {
 		this.key = key;
 	}
 	
@@ -101,8 +105,14 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * @return
 	 */
 	public int getVal() {
-		//TODO
-		return -1;
+		return getValue(this);
+	}
+	
+	public int getValue(Node x) {
+		if(x.getP() == 0) {//NIL NODE, this is the base case
+			return x.getP();
+		}
+		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
 	}
 	
 	/**
@@ -130,10 +140,10 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * 		
 	 * @return
 	 */
-	public int getMaxVal() {
+	public int getMaxVal() { 
 		int caseOne = this.left.getMaxVal();
 		int caseTwo = this.left.getVal() + this.getP();
-		int caseThree = caseTwo + this.right.getMaxVal();
+		int caseThree = caseTwo + this.right.getMaxVal(); 
 		return max(caseOne, caseTwo, caseThree);
 	}
 	
@@ -147,8 +157,7 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * @return
 	 */
 	public Endpoint getEndpoint() {
-		//TODO
-		return null;
+		return e;
 	}
 	
 	/**
@@ -157,7 +166,7 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * point of maximum overlap.
 	 * 
 	 * Which is a reference to an endpoint em, where
-	 * 	m is teh value of i that maximizes s(lv, i)
+	 * 	m is the value of i that maximizes s(lv, i)
 	 * 	over all i such that lv <= i <= rv.
 	 * @return
 	 */
@@ -172,18 +181,10 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * @return
 	 */
 	public int getColor() {
-		//TODO
-		return -1;
+		return color;
 	}
 	
 	public void setColor(int color) {
 		this.color = color;
 	}
-	
-	/**
-	 * Comparable
-	 * positive int if current obj is greater than specific obj
-	 * negative int if the current obj is less than specific obj
-	 * zero if the current obj is equal to the specific obj
-	 */
 }

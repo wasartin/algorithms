@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 
 public class RBTreeTest {
 
-	
-	//
-	
 	@Test
 	public void test() {
 		fail("Not yet implemented");
@@ -52,7 +49,6 @@ public class RBTreeTest {
 	 */
 	@Test
 	public void RBTreePropertyFive_Success() {
-		
 		
 	}
 

@@ -1,18 +1,19 @@
 package main.java;
 
-import com.sun.javafx.css.StyleCacheEntry.Key;
-
-public class RBTree {
-	
+public class RBTree <Key extends Comparable<Key>, Value>{
 	public static final int RED = 0;
 	public static final int BLACK = 1;
 	
 	private Node root;
 	private Node nil;
+	private int size;
+	private int height;
+	private int blackHeight;
 
 	public RBTree() {
-		nil = new Node(null, null);
-		root = new Node(null, nil);
+		Endpoint e = new Endpoint(0, 0);
+		nil = new Node(e);
+		nil.setColor(BLACK);//all new nodes are red, correct that here for the nil node
 	}
 	
 	/**
@@ -33,8 +34,7 @@ public class RBTree {
 	 * @return
 	 */
 	public Node getNILNode() {
-		//TODO
-		return null;
+		return nil;
 	}
 	
 	/**
@@ -47,13 +47,39 @@ public class RBTree {
 	}
 	
 	/**
-	 *  Returns the height of the tree
+	 *  Returns the height of the tree.
+	 *  The height is the maximum number of edges from the root to its descendant leaves. 
+	 *  Do not forget the sentinal Node in a RBTree
 	 * @return
 	 */
 	public int getHeight() {
-		//TODO
-		return -1;
+		return getHeight(this.root);
 	}
+	
+	private int getHeight(Node x) {
+		if(x.equals(this.nil)) {
+			return -1;
+		}
+		return Math.max(getHeight(x.getLeft()), getHeight(x.getRight())) + 1; //Maximum descendent leaves + 1 for the nil node.
+	}
+	
+	//This is probably not needed, will need to be tested.
+	public int getBlackHeight() {
+		return getBlackHeight(this.root);
+	}
+	
+	private int getBlackHeight(Node x) {
+		if(x.equals(this.nil)) {
+			return 1;
+		}
+		if(x.getColor() == BLACK){
+			return 1 + Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); //IDK if this is right or not.
+		}
+		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); //Node is red so keep traversing
+
+	}
+
+	//Additional RedBlackTree methods from CLRS
 	
 	/** From CLRS
 	 * Private helper method. Not sure if we need this for the 
@@ -115,7 +141,7 @@ public class RBTree {
 		Node x = this.root;
 		while(!x.equals(this.nil)) {
 			y = x;
-			if(z.getKey().compareTo(x.getKey()) < 0) {
+			if(z.getKey() < x.getKey()) {
 				x = x.getLeft();
 			}
 			else {
@@ -126,7 +152,7 @@ public class RBTree {
 		if(y.equals(this.nil)) {
 			this.root = z;
 		}
-		else if(z.getKey().compareTo(y.getKey()) < 0) {
+		else if(z.getKey() < y.getKey()) {
 			y.setLeft(z);
 		}
 		else {
@@ -301,14 +327,13 @@ public class RBTree {
 	 * such that y.key == k. Return null if no such y exists.
 	 */
 	
-	private Node searchIterative(Node x, Key k) {
+	private Node searchIterative(Node x, int k) {
 		Node currNode = this.root;
 		while(!currNode.equals(this.nil)) {
-			int compare = currNode.getKey().compareTo(k);
-			if(compare == 0) {
+			if(currNode.getKey() == k) {
 				return currNode;
 			}
-			else if(compare > 0) {
+			else if(currNode.getKey() < k) {
 				currNode = currNode.getLeft();
 			}
 			else {
