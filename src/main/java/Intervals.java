@@ -1,6 +1,8 @@
 package main.java;
 
 public class Intervals {
+	
+	private int currID = 1;
 
 	public Intervals() {
 		
@@ -15,10 +17,14 @@ public class Intervals {
 	 * These IDs are permanent for the respective intervals. Keep track of the IDs, as multiple
 	 * intervals that have the same endpoints on both sides can be added. intervalInsert
 	 * should run in O(log n) time
-	 * @param a
-	 * @param b
+	 * @param firstPoint
+	 * @param secondPoint
 	 */
-	public void intervalInsert(int a, int b) {
+	public void intervalInsert(int firstPoint, int secondPoint) {
+		if(firstPoint > secondPoint) {
+			throw new IllegalArgumentException("The first point must precede the second point");
+		}
+		
 		//TODO
 		
 	}
@@ -57,7 +63,7 @@ public class Intervals {
 	}
 	
 	
-		/**
+	/**TODO: put this in the test class
 	 * This is a suggested way on how to add intervals and call POM()
 	 * 
 	 * @param args

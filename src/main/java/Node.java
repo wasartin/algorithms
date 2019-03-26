@@ -5,7 +5,10 @@ public class Node<Key extends Comparable<Key>, Value> {
 	public static final int RED = 0;
 	public static final int BLACK = 1;
 	
-	private Key key; //this is 'e'
+	/**
+	 * (I think) the keys are the endpoints. 
+	 */
+	private Key key; //this is 'e', 
 	/**
 	 * is the sum of the p-values of the nodes in 
 	 * the subtree rooted at v (including v itself)
@@ -14,6 +17,7 @@ public class Node<Key extends Comparable<Key>, Value> {
 	private Value val; 
 	private int p; //this is 'p(e)'
 	private Endpoint e;
+	private int color;
 	
 	private Node parent;
 	private Node left;
@@ -21,6 +25,11 @@ public class Node<Key extends Comparable<Key>, Value> {
 	
 	public Node() {
 		
+	}
+	
+	public Node(Key key, Node parent) {
+		this.parent = parent;
+		this.key = key;
 	}
 	
 	/**
@@ -31,6 +40,9 @@ public class Node<Key extends Comparable<Key>, Value> {
 		return this.parent;
 	}
 	
+	public void setParent(Node parent) {
+		this.parent = parent;
+	}
 	/**
 	 * Returns the left child.
 	 * @return
@@ -39,6 +51,9 @@ public class Node<Key extends Comparable<Key>, Value> {
 		return this.left;
 	}
 	
+	public void setLeft(Node left) {
+		this.left = left;
+	}
 	/**Returns the right child.
 	 * 
 	 * @return
@@ -47,6 +62,9 @@ public class Node<Key extends Comparable<Key>, Value> {
 		return this.right;
 	}
 	
+	public void setRight(Node right) {
+		this.right = right;
+	}
 	/**
 	 * TODO check if this is right. 
 	 * i.e., do we just do int for this, or 
@@ -56,6 +74,10 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 */
 	public Key getKey() {
 		return this.key;
+	}
+	
+	public void setKey(Key key) {
+		this.key = key;
 	}
 	
 	/** Returns the value of the function p based on this endpoint.
@@ -153,4 +175,15 @@ public class Node<Key extends Comparable<Key>, Value> {
 		//TODO
 		return -1;
 	}
+	
+	public void setColor(int color) {
+		this.color = color;
+	}
+	
+	/**
+	 * Comparable
+	 * positive int if current obj is greater than specific obj
+	 * negative int if the current obj is less than specific obj
+	 * zero if the current obj is equal to the specific obj
+	 */
 }

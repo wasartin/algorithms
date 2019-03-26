@@ -1,6 +1,8 @@
 package main.java;
 
 public class Endpoint {
+	
+	//TODO: Do we need instance variables for left and right?
 
 	/**
 	 *  Returns the endpoint value. For example if the Endpoint object
