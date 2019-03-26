@@ -11,25 +11,27 @@ public class Intervals {
 	
 	//Made public for testing
 	public class Interval {
-		private int left;
-		private int right;
+		private Endpoint start;
+		private Endpoint end;
 		
-		public Interval(int left, int right) {
-			this.left = left;
-			this.right = right;
+		public Interval(int start, int end) {
+			int left = 1;
+			int right = -1;
+			this.start = new Endpoint(start, left);
+			this.end = new Endpoint(end, right);
 		}
 		
 		public Interval(Endpoint e1, Endpoint e2) {
-			this.left = e1.getValue();
-			this.right = e2.getValue();
+			this.start = e1;
+			this.end = e2;
 		}
 		
-		public int getLeft() {
-			return this.left;
+		public Endpoint getStart() {
+			return this.start;
 		}
 		
-		public int getRight() {
-			return this.right;
+		public Endpoint getEnd() {
+			return this.end;
 		}
 	}
 	
@@ -54,25 +56,19 @@ public class Intervals {
 		if(a > b) {
 			throw new IllegalArgumentException("The first point must precede the second point");
 		}
-		//Will this just be inserting into the RBTree?
 		
-		//Make ints into endpoints and add into interval list
-		int left = 1;
-		int right = -1;
-		Endpoint start = new Endpoint(a, left);
-		Endpoint end = new Endpoint(b, right);
-		intervalList.add(new Interval(start, end)); 
-		
-		//Turn endpoint into nodes so they can be inserted into a tree
-		Node newNodeA = new Node(start);
-		Node newNodeB = new Node(end);
-		
-		//Insert nodes into RBT
-		rbtree.RBInsert(newNodeA);
-		rbtree.RBInsert(newNodeB);
+		Interval toAdd = new Interval(a, b);
+		intervalList.add(toAdd);
+		updateRBTree(toAdd);
 	}
 	
-	
+	public void updateRBTree(Interval toAdd) {
+		Node newNodeOne = new Node(toAdd.getStart());
+		Node newNodeTwo = new Node(toAdd.getEnd());
+		rbtree.RBInsert(newNodeOne);
+		rbtree.RBInsert(newNodeTwo);
+		
+	}
 	
 	public Interval getInterval(int position) {
 		if(position < 1) {
