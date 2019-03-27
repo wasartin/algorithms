@@ -73,6 +73,7 @@ public class RBTreeTest {
 		Node aR = new Node(new Endpoint(4, right));
 		Node bL = new Node(new Endpoint(1, left));
 		Node bR = new Node(new Endpoint(6, right));
+		
 		Node cL = new Node(new Endpoint(3, left));
 		Node cR = new Node(new Endpoint(9, right));
 		Node dL = new Node(new Endpoint(7, left));
@@ -84,10 +85,10 @@ public class RBTreeTest {
 		
 		rbtree.RBInsert(bL);
 		rbtree.RBInsert(bR);
-//		rbtree.RBInsert(cL);
-//		rbtree.RBInsert(cR);
-//		rbtree.RBInsert(dL);
-//		rbtree.RBInsert(dR);
+		rbtree.RBInsert(cL);
+		rbtree.RBInsert(cR);
+		rbtree.RBInsert(dL);
+		rbtree.RBInsert(dR);
 		
 		System.out.println(rbtree.toString());
 	}

@@ -179,11 +179,14 @@ public class RBTree{
 					z.getParent().getParent().setColor(RED);
 					z = z.getParent().getParent();
 				}
-				else if(z.equals(z.getParent().getRight())) { 		//case 2
-					z = z.getParent();
-					leftRotate(z);
+				else {
+					if(z.equals(z.getParent().getRight())) { 
+						z = z.getParent();
+						leftRotate(z);//case 2
+					}
 					z.getParent().setColor(BLACK);					//case 3
 					z.getParent().getParent().setColor(RED);
+					rightRotate(z.getParent().getParent());
 				}
 			}
 			else {													//Same as previous if statement, but left and right are flipped
@@ -194,11 +197,14 @@ public class RBTree{
 					z.getParent().getParent().setColor(RED);
 					z = z.getParent().getParent();
 				}
-				else if(z.equals(z.getParent().getLeft())) {
-					z = z.getParent();
-					rightRotate(z);
+				else {
+					if(z.equals(z.getParent().getLeft())) {
+						z = z.getParent();
+						rightRotate(z);
+					}
 					z.getParent().setColor(BLACK);
 					z.getParent().getParent().setColor(RED);
+					leftRotate(z.getParent().getParent());
 				}
 			}
 		}
