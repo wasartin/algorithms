@@ -6,20 +6,16 @@ public class Node{
 	public static final int BLACK = 1;
 	
 	/**
-	 * (I think) the keys are the endpoints. 
+	 * The tree is sorted by endpoints. the Key is the endpoint.
 	 */
 	private int key; //this is 'e', 
-	/**
-	 * is the sum of the p-values of the nodes in 
-	 * the subtree rooted at v (including v itself)
-	 * that is, v.val = s(`v,rv ).
-	 */
 	private int p; //this is 'p(e)'
 	private Endpoint e;
 	private int color;
 	private Node parent;
 	private Node left;
 	private Node right;
+	private int size; //number of internal nodes of this subtree
 	
 	public Node() {
 		//?
@@ -32,7 +28,15 @@ public class Node{
 		this.key = e.getValue();
 		//p = (e.isLeft()) ? 1 : -1; //+1 if e is a left endpoint and -1 if e is a right endpoint
 		p = e.getPValue();
-		color = RED; //all new nodes are red
+		color = RED; //all new nodes are red, this is probably a bad way to do this.
+	}
+	
+	public Node(Node Parent, Endpoint e, int color, int size) {
+		this.parent = parent;
+		this.e = e;
+		this.key = e.getValue();
+		p = e.getPValue();
+		this.size = size;
 	}
 	
 	/**
@@ -108,7 +112,7 @@ public class Node{
 		return getValue(this);
 	}
 	
-	/**
+	/**TODO this is wrong, getValue needs to be O(1)
 	 * Helper method for getVal(), recursive
 	 * @param x
 	 * @return
@@ -120,7 +124,7 @@ public class Node{
 		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
 	}
 	
-	/**
+	/** TODO: This is wrong, maxVal needs to be found in O(1)
 	 * Returns the maxval of the node as described in this assignment.
 	 * Which is ->
 	 * 	the max value obtained by the expression
@@ -216,6 +220,15 @@ public class Node{
 		return getNumOfInternalNodes(this);
 	}
 	
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	/**
+	 * TODO: Probably delete, b/c I think get size needs to be a constant.
+	 * @param x
+	 * @return
+	 */
 	private int getNumOfInternalNodes(Node x) {
 		if(x.getEndpoint().getPValue() == 0) {//base case
 			return 1;
