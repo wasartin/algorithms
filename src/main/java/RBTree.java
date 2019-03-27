@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class RBTree{
 	public static final int RED = 0;
 	public static final int BLACK = 1;
@@ -392,6 +395,23 @@ public class RBTree{
 		return y;
 	}
 	
+//	public ArrayList<Node> getNodesInOrder(Node x){
+//		ArrayList<Node> toReturn = new ArrayList<>();
+//		Stack<Node> s = new Stack<>();
+//		Node curr = x;
+//		while(!s.isEmpty() || !curr.equals(nil)) {
+//			
+//			while(!curr.equals(nil)) {
+//				s.push(curr);
+//				curr = curr.getLeft();
+//			}
+//			curr = s.pop();
+//			toReturn.add(curr);
+//			curr = curr.getRight();
+//		}
+//		return toReturn;
+//	}
+	
 	/** From CLRS
 	 * Return a reference to node containing the key-value
 	 * immediately preceding x.key in the BST that contains x.
@@ -410,46 +430,4 @@ public class RBTree{
 		}
 		return y;
 	}
-	
-	  @Override
-	  public String toString(){
-	    StringBuilder sb = new StringBuilder();
-	    toStringRec(this.root, sb, 0);
-	    return sb.toString();
-	  }
-	  
-	  /**
-	   * Preorder traversal of the tree that builds a string representation
-	   * in the given StringBuilder.
-	   * @param n root of subtree to be traversed
-	   * @param sb StringBuilder in which to create a string representation
-	   * @param depth depth of the given node in the tree
-	   */
-	  private void toStringRec(Node n, StringBuilder sb, int depth){
-	    for (int i = 0; i <= depth; ++i){
-	      sb.append("  ");
-	    }
-	    
-	    if (n == null){
-	      sb.append("-\n");
-	      return;
-	    }
-	    
-	    if (!n.getLeft().equals(this.nil) || !n.getRight().equals(this.nil)){
-	      sb.append("+ ");
-	    }
-	    else{
-	      sb.append("- ");
-	    }
-	    sb.append(String.valueOf(n.getKey()) + ((n.getColor() == RED) ? "R" : "B"));
-	    sb.append("\n");
-	    if (!n.getLeft().equals(this.nil)){
-	    	toStringRec(n.getLeft(), sb, depth + 1);   
-
-	    }
-	    if(!n.getRight().equals(this.nil)) {
-	    	toStringRec(n.getRight(), sb, depth + 1);
-	    }
-	  }
-	
 }

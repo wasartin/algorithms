@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import main.java.Intervals;
-import main.java.Intervals.Interval;
 
 public class IntervalsTest {
 	
@@ -32,7 +31,7 @@ public class IntervalsTest {
 			intv.intervalInsert(points[i][0], points[i][1]);
 		}
 		int expectedPOM = 3;
-		System.out.println(intv.findPOM());
-		Assert.assertEquals(expectedPOM, intv.findPOM());
+		int actualPOM = intv.findPOM();
+		Assert.assertEquals(expectedPOM, actualPOM);
 	}
 }

@@ -2,7 +2,14 @@ package test.java;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import org.junit.jupiter.api.BeforeAll;
 
 import main.java.Endpoint;
 import main.java.Node;
@@ -10,12 +17,44 @@ import main.java.RBTree;
 
 public class RBTreeTest {
 	
+	//This is the tree from the spec sheet
+	public static RBTree rbt1;
+	
+	public final static int LEFT = 1;
+	public final static int RIGHT = -1;
+	public final static int RED = 0;
+	public final static int BLACK = 1;
+	
+
+	@BeforeAll
+	public static void setUp() {
+		rbt1 = new RBTree();
+		
+		rbt1.RBInsert(new Node(new Endpoint(0, LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		
+		rbt1.RBInsert(new Node(new Endpoint(1, LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(6, RIGHT)));
+		
+		rbt1.RBInsert(new Node(new Endpoint(3, LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(9, RIGHT)));
+		
+		rbt1.RBInsert(new Node(new Endpoint(7, LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
+		
+	}
+
+	
 	/**
 	 * Every Node is either red or black
 	 */
 	@Test
 	public void RBTreePropertyOne_Success() {
-		
+//		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+//		for(int i = 0; i < x.size(); i++) {
+//			Assert.assertTrue(x.get(i).getColor() == RED || x.get(i).getColor() == BLACK);
+//		}
+//		System.out.println(x.toString());
 	}
 	
 	/**
@@ -23,6 +62,7 @@ public class RBTreeTest {
 	 */
 	@Test
 	public void RBTreePropertyTwo_Success() {
+		Assert.assertTrue(rbt1.getRoot().getColor() == BLACK);
 	}
 	
 	/**
@@ -44,10 +84,15 @@ public class RBTreeTest {
 	
 	/**
 	 * For each node, all simple paths from the node to the 
-	 * descendant leaves contain the same number of black nodes
+	 * descendant leaves contain the same number of black nodes (blackheight)
 	 */
 	@Test
 	public void RBTreePropertyFive_Success() {
+		
+	}
+	
+	@Test
+	public void RBTree_AllNilNodesAreTheSame() {
 		
 	}
 	
@@ -64,33 +109,6 @@ public class RBTreeTest {
 		rbtree.RBInsert(newNodeB);
 	}
 	
-	@Test
-	public void RBTreePrint() {
-		//Example from PDF
-		int left = 1;
-		int right = -1;
-		Node aL = new Node(new Endpoint(0, left));
-		Node aR = new Node(new Endpoint(4, right));
-		Node bL = new Node(new Endpoint(1, left));
-		Node bR = new Node(new Endpoint(6, right));
-		
-		Node cL = new Node(new Endpoint(3, left));
-		Node cR = new Node(new Endpoint(9, right));
-		Node dL = new Node(new Endpoint(7, left));
-		Node dR = new Node(new Endpoint(11, right));
-		
-		RBTree rbtree = new RBTree();
-		rbtree.RBInsert(aL);
-		rbtree.RBInsert(aR);
-		
-		rbtree.RBInsert(bL);
-		rbtree.RBInsert(bR);
-		rbtree.RBInsert(cL);
-		rbtree.RBInsert(cR);
-		rbtree.RBInsert(dL);
-		rbtree.RBInsert(dR);
-		
-		System.out.println(rbtree.toString());
-	}
+	
 
 }
