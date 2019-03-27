@@ -235,5 +235,4 @@ public class Node{
 		}
 		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
 	}
-
 }

@@ -13,6 +13,7 @@ public class IntervalsTest {
 	@Rule
 	public final ExpectedException thrown = ExpectedException.none();
 
+
 	///error should be thrown
 	@Test
 	public void intervalInsert_Fail1() throws IllegalArgumentException {
@@ -23,7 +24,7 @@ public class IntervalsTest {
 	}
 	
 	
-	/*@Test //This test was given in the project1Temp.size provided by a TA
+	@Test //This test was given in the project1Temp.size provided by a TA
 	public void findPOM_Success() {
 		int points[][] = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
 		Intervals intv = new Intervals();
@@ -34,5 +35,4 @@ public class IntervalsTest {
 		System.out.println(intv.findPOM());
 		Assert.assertEquals(expectedPOM, intv.findPOM());
 	}
-	*/
 }
