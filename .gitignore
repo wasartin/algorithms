@@ -34,3 +34,6 @@ business/application.log*
 /nbdist/
 /.nb-gradle/
 /build/
+
+### IntelliJ ###
+/.idea/
