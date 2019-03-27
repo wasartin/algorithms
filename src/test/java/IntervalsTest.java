@@ -1,11 +1,10 @@
 package test.java;
 
+import main.java.Intervals;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import main.java.Intervals;
 
 public class IntervalsTest {
 	

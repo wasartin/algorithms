@@ -1,19 +1,11 @@
 package test.java;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.ArrayList;
-
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import org.junit.jupiter.api.BeforeAll;
-
 import main.java.Endpoint;
 import main.java.Node;
 import main.java.RBTree;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class RBTreeTest {
 	
@@ -25,9 +17,8 @@ public class RBTreeTest {
 	public final static int RED = 0;
 	public final static int BLACK = 1;
 	
-
-	@BeforeAll
-	public static void setUp() {
+	@Before
+	public void setUp() {
 		rbt1 = new RBTree();
 		
 		rbt1.RBInsert(new Node(new Endpoint(0, LEFT)));

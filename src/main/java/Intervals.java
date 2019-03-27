@@ -88,10 +88,7 @@ public class Intervals {
 	}
 	
 	private boolean isOverlap(Interval i, Interval j) {
-		if((i.getStart().getValue() < i.getEnd().getValue()) || (j.getEnd().getValue() < i.getStart().getValue())) {
-			return true;
-		}
-		return false;
+		return (i.getStart().getValue() < i.getEnd().getValue()) || (j.getEnd().getValue() < i.getStart().getValue());
 	}
 	
 	
@@ -150,7 +147,7 @@ public class Intervals {
 	 * @param args
 	 */
 	public static void main(String [] args) {
-		int points[][] = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
+		int[][] points = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
 		Intervals intv = new Intervals();
 		
 		for(int i=0; i<points.length; i++) {
