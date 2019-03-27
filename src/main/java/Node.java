@@ -15,6 +15,7 @@ public class Node{
 	private Node parent;
 	private Node left;
 	private Node right;
+	private Endpoint emax;
 	private int size; //number of internal nodes of this subtree
 	
 	public Node() {
@@ -181,23 +182,24 @@ public class Node{
 	 * @return
 	 */
 	//This value is dynamic, which is why it is not an instance variable
-	public Endpoint getEmax() { //the child that has the highest maxval
-		return getEmax(this);
+	//the child that has the highest maxval
+	public Endpoint getEmax() {
+		return this.emax;
 	}
 	
-	private Endpoint getEmax(Node x) {
-		if(x.getP() == 0) { //base case, at the NIL Node
-			return null;
-		}
-		Endpoint currMax = x.getEndpoint();
-		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
-			getEmax(x.getLeft());
-		}
-		else {
-			return currMax;
-		}
-		return currMax;
-	}
+//	private Endpoint getEmax(Node x) {
+//		if(x.getP() == 0) { //base case, at the NIL Node
+//			return null;
+//		}
+//		Endpoint currMax = x.getEndpoint();
+//		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
+//			getEmax(x.getLeft());
+//		}
+//		else {
+//			return currMax;
+//		}
+//		return currMax;
+//	}
 	
 	
 	/**
