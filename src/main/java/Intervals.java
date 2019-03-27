@@ -15,10 +15,10 @@ public class Intervals {
 		private Endpoint end;
 		
 		public Interval(int start, int end) {
-			int left = 1;
-			int right = -1;
-			this.start = new Endpoint(start, left);
-			this.end = new Endpoint(end, right);
+			int left_pvalue = 1;
+			int right_pvalue = -1;
+			this.start = new Endpoint(start, left_pvalue);
+			this.end = new Endpoint(end, right_pvalue);
 		}
 		
 		public Interval(Endpoint e1, Endpoint e2) {
