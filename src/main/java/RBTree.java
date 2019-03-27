@@ -395,22 +395,21 @@ public class RBTree{
 		return y;
 	}
 	
-//	public ArrayList<Node> getNodesInOrder(Node x){
-//		ArrayList<Node> toReturn = new ArrayList<>();
-//		Stack<Node> s = new Stack<>();
-//		Node curr = x;
-//		while(!s.isEmpty() || !curr.equals(nil)) {
-//			
-//			while(!curr.equals(nil)) {
-//				s.push(curr);
-//				curr = curr.getLeft();
-//			}
-//			curr = s.pop();
-//			toReturn.add(curr);
-//			curr = curr.getRight();
-//		}
-//		return toReturn;
-//	}
+	public ArrayList<Node> getNodesInOrder(Node x){
+		ArrayList<Node> toReturn = new ArrayList<>();
+		Stack<Node> s = new Stack<>();
+		Node curr = x;
+		while(!s.isEmpty() || !curr.equals(nil)) {
+			while(!curr.equals(nil)) {
+				s.push(curr);
+				curr = curr.getLeft();
+			}
+			curr = s.pop();
+			toReturn.add(curr);
+			curr = curr.getRight();
+		}
+		return toReturn;
+	}
 	
 	/** From CLRS
 	 * Return a reference to node containing the key-value

@@ -129,7 +129,7 @@ public class Intervals {
 	 * @return
 	 */
 	public int findPOM() {
-		if(rbtree.getSize() > 0) {
+		if(rbtree.getRoot().equals(rbtree.getNILNode())) {
 			return -1;
 		}
 		return rbtree.getRoot().getEmax().getValue();
