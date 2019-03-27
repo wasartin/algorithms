@@ -50,7 +50,6 @@ public class RBTreeTest {
 	@Test
 	public void RBTreePropertyFive_Success() {
 		
-		
 	}
 
 }

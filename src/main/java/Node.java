@@ -1,26 +1,38 @@
 package main.java;
 
-public class Node<Key extends Comparable<Key>, Value> {
+public class Node{
 	
 	public static final int RED = 0;
 	public static final int BLACK = 1;
 	
-	private Key key; //this is 'e'
+	/**
+	 * (I think) the keys are the endpoints. 
+	 */
+	private int key; //this is 'e', 
 	/**
 	 * is the sum of the p-values of the nodes in 
 	 * the subtree rooted at v (including v itself)
 	 * that is, v.val = s(`v,rv ).
 	 */
-	private Value val; 
 	private int p; //this is 'p(e)'
 	private Endpoint e;
-	
+	private int color;
 	private Node parent;
 	private Node left;
 	private Node right;
 	
 	public Node() {
-		
+		//?
+		color = RED; //all new nodes are red
+	}
+	
+	//Not sure how to handle the nil node yet, a -1 for key?
+	public Node(Endpoint e) {
+		this.e = e;
+		this.key = e.getValue();
+		//p = (e.isLeft()) ? 1 : -1; //+1 if e is a left endpoint and -1 if e is a right endpoint
+		p = e.getPValue();
+		color = RED; //all new nodes are red
 	}
 	
 	/**
@@ -31,6 +43,9 @@ public class Node<Key extends Comparable<Key>, Value> {
 		return this.parent;
 	}
 	
+	public void setParent(Node parent) {
+		this.parent = parent;
+	}
 	/**
 	 * Returns the left child.
 	 * @return
@@ -39,6 +54,9 @@ public class Node<Key extends Comparable<Key>, Value> {
 		return this.left;
 	}
 	
+	public void setLeft(Node left) {
+		this.left = left;
+	}
 	/**Returns the right child.
 	 * 
 	 * @return
@@ -47,6 +65,9 @@ public class Node<Key extends Comparable<Key>, Value> {
 		return this.right;
 	}
 	
+	public void setRight(Node right) {
+		this.right = right;
+	}
 	/**
 	 * TODO check if this is right. 
 	 * i.e., do we just do int for this, or 
@@ -54,8 +75,12 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * Returns the endpoint value, which is an integer.
 	 * @return 'e', which is the key
 	 */
-	public Key getKey() {
+	public int getKey() {
 		return this.key;
+	}
+	
+	public void setKey(int key) {
+		this.key = key;
 	}
 	
 	/** Returns the value of the function p based on this endpoint.
@@ -78,9 +103,21 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 *
 	 * @return
 	 */
+	//This value is dynamic, this is why I don't make it an instance variable.
 	public int getVal() {
-		//TODO
-		return -1;
+		return getValue(this);
+	}
+	
+	/**
+	 * Helper method for getVal(), recursive
+	 * @param x
+	 * @return
+	 */
+	private int getValue(Node x) {
+		if(x.getP() == 0) {//NIL NODE, this is the base case
+			return x.getP();
+		}
+		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
 	}
 	
 	/**
@@ -108,10 +145,11 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * 		
 	 * @return
 	 */
-	public int getMaxVal() {
+	//This value is dynamic, which is why it isn't an instance variable.
+	public int getMaxVal() { 
 		int caseOne = this.left.getMaxVal();
 		int caseTwo = this.left.getVal() + this.getP();
-		int caseThree = caseTwo + this.right.getMaxVal();
+		int caseThree = caseTwo + this.right.getMaxVal(); 
 		return max(caseOne, caseTwo, caseThree);
 	}
 	
@@ -125,23 +163,36 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * @return
 	 */
 	public Endpoint getEndpoint() {
-		//TODO
-		return null;
+		return e;
 	}
 	
 	/**
 	 * Returns an Endpoint object that represents emax. Calling this
-	 * method on the root node will give the Endpoint object whose getValue() provides a
+	 * method on the root* node will give the Endpoint object whose getValue() provides a
 	 * point of maximum overlap.
 	 * 
 	 * Which is a reference to an endpoint em, where
-	 * 	m is teh value of i that maximizes s(lv, i)
+	 * 	m is the value of i that maximizes s(lv, i)
 	 * 	over all i such that lv <= i <= rv.
 	 * @return
 	 */
-	public Endpoint getEmax() {
-		//TODO
-		return null;
+	//This value is dynamic, which is why it is not an instance variable
+	public Endpoint getEmax() { //the child that has the highest maxval
+		return getEmax(this);
+	}
+	
+	private Endpoint getEmax(Node x) {
+		if(x.getP() == 0) { //base case, at the NIL Node
+			return null;
+		}
+		Endpoint currMax = x.getEndpoint();
+		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
+			getEmax(x.getLeft());
+		}
+		else {
+			return currMax;
+		}
+		return currMax;
 	}
 	
 	
@@ -150,7 +201,26 @@ public class Node<Key extends Comparable<Key>, Value> {
 	 * @return
 	 */
 	public int getColor() {
-		//TODO
-		return -1;
+		return color;
 	}
+	
+	public void setColor(int color) {
+		this.color = color;
+	}
+	
+	/**
+	 * Helper method that returns the number of internal nodes
+	 * @return
+	 */
+	public int getSize() {
+		return getNumOfInternalNodes(this);
+	}
+	
+	private int getNumOfInternalNodes(Node x) {
+		if(x.getEndpoint().getPValue() == 0) {//base case
+			return 1;
+		}
+		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
+	}
+
 }
