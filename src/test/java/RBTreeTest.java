@@ -3,9 +3,9 @@ package test.java;
 import java.util.ArrayList;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import junit.runner.Version;
 import main.java.Endpoint;
 import main.java.Node;
 import main.java.RBTree;
@@ -19,15 +19,9 @@ public class RBTreeTest {
 	public final static int RIGHT = -1;
 	public final static int RED = 0;
 	public final static int BLACK = 1;
-	
-	
 
-	/**
-	 * Every Node is either red or black
-	 */
-	@Test
-	public void RBTreePropertyOne_Success() {
-		
+	@Before
+	public void setUp() {
 		rbt1 = new RBTree();
 		
 		rbt1.RBInsert(new Node(new Endpoint(0, LEFT)));
@@ -41,9 +35,13 @@ public class RBTreeTest {
 		
 		rbt1.RBInsert(new Node(new Endpoint(7, LEFT)));
 		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
-		System.out.println("JUnit version is: " + Version.id());
-
-
+		
+	}
+		/**
+		 * Every Node is either red or black
+		 */
+		@Test
+		public void RBTreePropertyOne_Success() {
 		ArrayList<Node> x = new ArrayList<>();
 		x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {

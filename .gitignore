@@ -36,4 +36,5 @@ business/application.log*
 /build/
 
 ### IntelliJ ###
+*.iml
 /.idea/
