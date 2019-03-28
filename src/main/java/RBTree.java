@@ -396,12 +396,10 @@ public class RBTree{
 	}
 	
 	//BST Methods
-	
 	/** From CLRS
 	 * Return a reference to the node y in the subtree rooted at x
 	 * such that y.key == k. Return null if no such y exists.
 	 */
-	
 	private Node searchIterative(Node x, int k) {
 		Node currNode = this.root;
 		while(!currNode.equals(this.nil)) {
@@ -422,7 +420,6 @@ public class RBTree{
 	 * Return a reference to the node in the subtree rooted at x
 	 * that contains the minimum key-value
 	 */
-	
 	public Node minimum(Node x) {
 		while(!x.getLeft().equals(this.nil)) {
 			x = x.getLeft();

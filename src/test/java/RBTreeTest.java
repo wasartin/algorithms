@@ -15,6 +15,14 @@ public class RBTreeTest {
 	//This is the tree from the spec sheet
 	public static RBTree rbt1;
 	
+	RBTree tree;
+	Node node1;
+    Node node2;
+    Node node3;
+    Node node4;
+    Node node5;
+    Node node6;
+	
 	public final static Node nilNode = new Node(new Endpoint(-1, 0));
 	public final static int LEFT = 1;
 	public final static int RIGHT = -1;
@@ -36,7 +44,7 @@ public class RBTreeTest {
 		
 		rbt1.RBInsert(new Node(new Endpoint(7, LEFT)));
 		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
-		
+	
 	}
 		/**
 		 * Every Node is either red or black
