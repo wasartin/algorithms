@@ -108,6 +108,7 @@ public class RBTree{
 		z.setRight(this.nil);
 		z.setColor(RED);
 		RBInsertFixup(z);
+		z.setEmax(findEMax(z));
 	}
 	
 	/** From CLRS
@@ -289,6 +290,7 @@ public class RBTree{
 		int caseOne = v.getLeft().getVal();
 		int caseTwo = v.getLeft().getVal() + v.getP();
 		int caseThree = caseTwo + v.getRight().getVal();
+		
 		int maxNum = max(caseOne, caseTwo, caseThree);
 		if(maxNum == caseOne) {
 			return v.getLeft().getEndpoint();

@@ -50,9 +50,14 @@ public class NodeTest {
 		int[] correctValues = {1, 3, 1, 0, -1, -2, -2, -1};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
-			System.out.println(x.get(i).toString());
+			//System.out.println(x.get(i).toString());
 			Assert.assertTrue(x.get(i).getVal() == correctValues[i]);
 		}
+		
+		Node max = rbt1.maximum(rbt1.getRoot());
+	//	System.out.println("11's left:" + max.getLeft().toString());
+	//	System.out.println("11's right:" + max.getRight().toString());
+	//	System.out.println("11 node info:" + max.toString());
 	}
 	
 	@Test
@@ -76,7 +81,7 @@ public class NodeTest {
 		Endpoint[] eMax = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
-			Assert.assertTrue(x.get(i).getEndpoint() == eMax[i]);
+			Assert.assertTrue(x.get(i).getEmax().equals(eMax[i]));
 		}
 	}
 
