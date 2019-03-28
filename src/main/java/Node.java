@@ -18,7 +18,6 @@ public class Node{
 	private Endpoint eMax;//TODO needs to be O(1)
 	public int val; //TODO needs to be O(1)
 	public int maxVal; //TODO needs to be O(1)
-	
 	private int size; //number of internal nodes of this subtree
 	
 	public Node() {
@@ -227,7 +226,19 @@ public class Node{
 		}
 		return currMax;
 	}
-	
+//	private Endpoint getEmax(Node x) {
+//		if(x.getP() == 0) { //base case, at the NIL Node
+//			return null;
+//		}
+//		Endpoint currMax = x.getEndpoint();
+//		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
+//			getEmax(x.getLeft());
+//		}
+//		else {
+//			return currMax;
+//		}
+//		return currMax;
+//	}
 	public void setEmax(Endpoint e) {
 		this.eMax = e;
 	}
