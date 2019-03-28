@@ -170,6 +170,8 @@ public class RBTree{
 		else { //right rotate takes left
 			rightRotate(x, y);
 		}
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
 		updateNodeInfo(x);
 		updateNodeInfo(y);
 	}
