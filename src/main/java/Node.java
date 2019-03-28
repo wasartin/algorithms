@@ -19,6 +19,7 @@ public class Node{
 	private Endpoint eMax;//TODO needs to be O(1)
 	public int val; //TODO needs to be O(1)
 	public int maxVal; //TODO needs to be O(1)
+	public int height;
 	
 	public Node() {
 		color = RED; //all new nodes are red
@@ -42,6 +43,7 @@ public class Node{
 		this.color = color;
 		this.size = size;
 		maxVal = val = e.getPValue();
+		height = 0;
 	}
 	
 	/**
@@ -254,7 +256,10 @@ public class Node{
 	public void setSize(int size) {
 		this.size = size;
 	}
-	
+
+	public int getHeight() {
+		return height;
+	}
 	/**
 	 * TODO: Probably delete, b/c I think get size needs to be a constant.
 	 * @param x
