@@ -6,6 +6,8 @@ import java.util.Stack;
 public class RBTree{
 	public static final int RED = 0;
 	public static final int BLACK = 1;
+	private static final boolean LEFT = true;//this is stupid
+	private static final boolean RIGHT = false;
 	
 	private Node root;
 	private Node nil;
@@ -108,7 +110,7 @@ public class RBTree{
 		z.setRight(this.nil);
 		z.setColor(RED);
 		RBInsertFixup(z);
-		z.setEmax(findEMax(z));
+		z.setEmax(findEMax_Rec(z));
 	}
 	
 	/** From CLRS
@@ -130,11 +132,11 @@ public class RBTree{
 				else {
 					if(z.equals(z.getParent().getRight())) { 		//case 2
 						z = z.getParent();
-						leftRotate(z);
+						rotate(z, LEFT);
 					}
 					z.getParent().setColor(BLACK);					//case 3
 					z.getParent().getParent().setColor(RED);
-					rightRotate(z.getParent().getParent());
+					rotate(z.getParent().getParent(), RIGHT);
 				}
 			}
 			else {													//Same as previous if statement, but left and right are flipped
@@ -148,15 +150,27 @@ public class RBTree{
 				else {
 					if(z.equals(z.getParent().getLeft())) {
 						z = z.getParent();
-						rightRotate(z);
+						rotate(z, RIGHT);
 					}
 					z.getParent().setColor(BLACK);
 					z.getParent().getParent().setColor(RED);
-					leftRotate(z.getParent().getParent());
+					rotate(z.getParent().getParent(), LEFT);
 				}
 			}
 		}
 		this.root.setColor(BLACK);
+	}
+	
+	private void rotate(Node x, boolean direction) { //true means take left rotate
+		Node y = (direction) ? x.getRight() : x.getLeft();
+		if(direction) {//left rotate takes right
+			leftRotate(x, y);
+		}
+		else { //right rotate takes left
+			rightRotate(x, y);
+		}
+		updateNodeInfo(x);
+		updateNodeInfo(y);
 	}
 	
 	/** From CLRS
@@ -164,8 +178,7 @@ public class RBTree{
 	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
-	private void leftRotate(Node x) {
-		Node y = x.getRight();
+	private void leftRotate(Node x, Node y) {
 		x.setRight(y.getLeft());
 		if(!y.getLeft().equals(nil)) {
 			y.getLeft().setParent(x);
@@ -182,7 +195,6 @@ public class RBTree{
 		}
 		y.setLeft(x);
 		x.setParent(y);
-		updateNodesInfo(x, y);
 	}
 	
 	/** From CLRS
@@ -190,8 +202,7 @@ public class RBTree{
 	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
-	private void rightRotate(Node x) {
-		Node y = x.getLeft();
+	private void rightRotate(Node x, Node y) {
 		x.setLeft(y.getRight());
 		if(!y.getRight().equals(nil)) {
 			y.getRight().setParent(x);
@@ -208,35 +219,14 @@ public class RBTree{
 		}
 		y.setRight(x);
 		x.setParent(y);
-		updateNodesInfo(x, y); //TODO refactor this shit
 	}
 	
-	//helper method, public for testing
-	public void updateNodesInfo(Node x, Node y) {
-		updateNodeSize(x, y); //Probably not needed
-		updateNodeVal(x, y); 
-		updateNodeMaxVal(x, y);
-		updateEMax(x, y); // TODO
+	public void updateNodeInfo(Node v) {
+		v.setVal(getNodeVal(v));
+		v.setMaxVal(getNodeMaxVal(v));
+		v.setEmax(findEMax_Rec(v));
 	}
-	
-	//helper method, public for testing
-	public void updateNodeSize(Node x, Node y) {
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
-	}
-	
-	
-	//if Node v == T.nil the rec bottoms out
-	public void updateNodeMaxVal(Node x, Node y) {
-		updateNodeMaxVal(x);
-		updateNodeMaxVal(y);
-	}
-	
-	public void updateNodeMaxVal(Node x) {
-		x.setMaxVal(getNodeMaxVal(x));
-	}
-	
-	//This just can't be right. it does not look like it is O(logn)
+
 	public int getNodeMaxVal(Node x) {
 		if(x.equals(this.nil)) {//base case
 			return x.getP(); //which is 0
@@ -247,17 +237,7 @@ public class RBTree{
 		x.setMaxVal(max(caseOne, caseTwo, caseThree));
 		return x.getMaxVal();
 	}
-	
-	private void updateNodeVal(Node x, Node y) {
-		updateNodeVal(x);
-		updateNodeVal(y);
-	}
-	
-	private void updateNodeVal(Node input) {
-		input.setVal(getNodeVal(input));
-	}
-	
-	//There is just no way this is O(log n), but it follows the algorithm provided
+
 	private int getNodeVal(Node input) {
 		if(input.equals(this.nil)) {
 			return input.getP();
@@ -270,48 +250,11 @@ public class RBTree{
 		int temp = Math.max(one, two);
 		return Math.max(temp, three);
 	}
-	
-	//TODO
-	public void updateEMax(Node x, Node y) {
-		updateEMax(x);
-		updateEMax(y);
-		//THings I know
-		//1. If both children are T.nil AND pValue is >= 0, then eMax = self
-		//2. If both CHildren are T.nil AND pValue is < 0, then eMax is T.nil
-		//3. An inOrder traversal up until we hit a negative pValue will yield the last point which is the eMax
-	}
-	
-	public void updateEMax(Node v) {
-		v.setEmax(findEMax_Rec(v));
-	}
-	
-	//LEFT OFF, I have little to no idea//this seems really close
-	public Endpoint findEMax(Node v) {
-		int caseOne = v.getLeft().getVal();
-		int caseTwo = v.getLeft().getVal() + v.getP();
-		int caseThree = caseTwo + v.getRight().getVal();
-		
-		int maxNum = max(caseOne, caseTwo, caseThree);
-		if(maxNum == caseOne) {
-			return v.getLeft().getEndpoint();
-		}
-		if(maxNum == caseTwo) {
-			return v.getEndpoint();
-		}
-		if(maxNum == caseThree) {
-			return v.getRight().getEndpoint();
-		}
-		return this.nil.getEndpoint();
-	}
-	
-	//LEFT OFF, I have little to no idea//this seems really close
+
 	public Endpoint findEMax_Rec(Node v) {
 		if(v.equals(this.nil)) { //base case
 			return this.nil.getEndpoint();
 		}
-//		if(v.getLeft().equals(this.nil) && v.getRight().equals(this.nil) && v.getP() < 0) {
-//			return this.nil.getEndpoint();
-//		}
 		int caseOne = v.getLeft().getVal();
 		int caseTwo = v.getLeft().getVal() + v.getP();
 		int caseThree = caseTwo + v.getRight().getVal();
@@ -329,29 +272,6 @@ public class RBTree{
 			v.getRight().setEmax(findEMax_Rec(v.getRight()));
 			return v.getRight().getEmax();
 		}
-	}
-	
-	
-	
-	//TODO DELETE, just typing out to get an understanding
-	public Endpoint intervalSearch(Endpoint e) {
-		Node x = this.getRoot();//start at root
-		while(!x.equals(this.nil) && !overlap(e, x.getEndpoint())){ //base case, stop when node is nil
-			if(!x.getLeft().equals(this.nil) && x.getLeft().getP() > 0){ //as long as the left isn't nil and the left's P is greater than 0
-				x = x.getLeft(); //traverse down
-			}
-			else {
-				x = x.getRight(); //traverse the other way
-			}
-		}
-		return x.getEndpoint();
-	}
-	
-	private boolean overlap(Endpoint a, Endpoint b) {
-		if(a.getValue() <= b.getValue() || b.getValue() <= a.getValue()) {
-			return true;
-		}
-		return false;
 	}
 	
 	/**
@@ -417,7 +337,8 @@ public class RBTree{
 				if(w.getColor() == RED) { 					//Case 1
 					w.setColor(BLACK);
 					x.getParent().setColor(RED);
-					leftRotate(x.getParent());
+					//leftRotate(x.getParent());
+					rotate(x.getParent(), true);
 					w = x.getParent().getRight();
 				}
 				if(w.getLeft().getColor() == BLACK && w.getRight().getColor() == BLACK) { // Case 2
@@ -428,13 +349,16 @@ public class RBTree{
 					if(w.getRight().getColor() == BLACK) {
 						w.getLeft().setColor(BLACK);		//Case 3
 						w.setColor(RED);
-						rightRotate(w);
+						//rightRotate(w);
+						rotate(w, false);
+						
 						w = x.getParent().getRight();
 					}
 					w.setColor(x.getParent().getColor());	//Case 4
 					x.getParent().setColor(BLACK);
 					w.getRight().setColor(BLACK);
-					leftRotate(x.getParent());
+					//leftRotate(x.getParent());
+					rotate(x.getParent(), LEFT);
 					x = this.root;
 				}
 			}
@@ -443,7 +367,8 @@ public class RBTree{
 				if(w.getColor() == RED) { 					//Case 1
 					w.setColor(BLACK);
 					x.getParent().setColor(RED);
-					rightRotate(x.getParent());
+					//rightRotate(x.getParent());
+					rotate(x.getParent(), RIGHT);
 					w = x.getParent().getLeft();
 				}
 				if(w.getRight().getColor() == BLACK && w.getLeft().getColor() == BLACK) { 
@@ -454,13 +379,15 @@ public class RBTree{
 					if(w.getLeft().getColor() == BLACK) {
 						w.getRight().setColor(BLACK);		//Case 3
 						w.setColor(RED);
-						leftRotate(w);
+						//leftRotate(w);
+						rotate(w, LEFT);
 						w = x.getParent().getLeft();
 					}
 					w.setColor(x.getParent().getColor());	//Case 4
 					x.getParent().setColor(BLACK);
 					w.getLeft().setColor(BLACK);
-					rightRotate(x.getParent());
+					//rightRotate(x.getParent());
+					rotate(x.getParent(), RIGHT);
 					x = this.root; //This is probably wrong b/c each node
 						//is it's own subtree.
 				}

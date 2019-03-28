@@ -41,7 +41,7 @@ public class Node{
 		p = e.getPValue();
 		this.color = color;
 		this.size = size;
-		maxVal = val = e.getPValue();		
+		maxVal = val = e.getPValue();
 	}
 	
 	/**
