@@ -15,20 +15,28 @@ public class Node{
 	private Node parent;
 	private Node left;
 	private Node right;
+	private Endpoint eMax;//TODO needs to be O(1)
+	public int val; //TODO needs to be O(1)
+	public int maxVal; //TODO needs to be O(1)
+	
 	private int size; //number of internal nodes of this subtree
 	
 	public Node() {
 		//?
 		color = RED; //all new nodes are red
+		size = 1;
+		maxVal = val = 0;
 	}
 	
 	//Not sure how to handle the nil node yet, a -1 for key?
 	public Node(Endpoint e) {
 		this.e = e;
 		this.key = e.getValue();
-		//p = (e.isLeft()) ? 1 : -1; //+1 if e is a left endpoint and -1 if e is a right endpoint
 		p = e.getPValue();
 		color = RED; //all new nodes are red, this is probably a bad way to do this.
+		size = 1;
+		val = e.getPValue();
+		
 	}
 	
 	public Node(Node Parent, Endpoint e, int color, int size) {
@@ -107,9 +115,13 @@ public class Node{
 	 *
 	 * @return
 	 */
-	//This value is dynamic, this is why I don't make it an instance variable.
 	public int getVal() {
-		return getValue(this);
+		return val;
+		//return getValue(this);
+	}
+	
+	public void setVal(int x) {
+		this.val = x;
 	}
 	
 	/**TODO this is wrong, getValue needs to be O(1)
@@ -117,12 +129,12 @@ public class Node{
 	 * @param x
 	 * @return
 	 */
-	private int getValue(Node x) {
-		if(x.getP() == 0) {//NIL NODE, this is the base case
-			return x.getP();
-		}
-		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
-	}
+//	private int getValue(Node x) {
+//		if(x.getP() == 0) {//NIL NODE, this is the base case
+//			return x.getP();
+//		}
+//		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
+//	}
 	
 	/** TODO: This is wrong, maxVal needs to be found in O(1)
 	 * Returns the maxval of the node as described in this assignment.
@@ -134,8 +146,6 @@ public class Node{
 	 * 		s(i, j) = p(e1) + p(e2) + .... + p(en) #with n being the last node
 	 *  	Any endpoint e, that maximizes s(l, i) is a point of maximum overlap 
 	 *  		(the entire point of this project)
-	 * 
-	 * 
 	 * Two possibilities ,
 	 * 		1. If this node == T.nil, then v.maxVal = 0;
 	 * 		2. this possibility has three vases
@@ -149,11 +159,26 @@ public class Node{
 	 * 		
 	 * @return
 	 */
-	//This value is dynamic, which is why it isn't an instance variable.
 	public int getMaxVal() { 
-		int caseOne = this.left.getMaxVal();
-		int caseTwo = this.left.getVal() + this.getP();
-		int caseThree = caseTwo + this.right.getMaxVal(); 
+		return maxVal;
+		
+//		int caseOne = getMaxVal(this.getLeft());
+//		int caseTwo = this.getLeft().getVal() + this.getP();
+//		int caseThree = caseTwo + getMaxVal(this.getRight()); 
+//		return max(caseOne, caseTwo, caseThree);
+	}
+	
+	public void setMaxVal(int max) {
+		this.maxVal = max;
+	}
+	
+	public int getMaxVal(Node x) {
+		if(x.getP() == 0) {
+			return 0;
+		}
+		int caseOne = getMaxVal(x.getLeft());
+		int caseTwo = x.getLeft().getVal() + x.getP();
+		int caseThree = caseTwo + getMaxVal(x.getRight());
 		return max(caseOne, caseTwo, caseThree);
 	}
 	
@@ -182,21 +207,29 @@ public class Node{
 	 */
 	//This value is dynamic, which is why it is not an instance variable
 	public Endpoint getEmax() { //the child that has the highest maxval
-		return getEmax(this);
+		return eMax;
+		//return getEmax(this);
 	}
 	
 	private Endpoint getEmax(Node x) {
 		if(x.getP() == 0) { //base case, at the NIL Node
-			return null;
+			return new Endpoint(0, 0);
 		}
 		Endpoint currMax = x.getEndpoint();
 		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
 			getEmax(x.getLeft());
 		}
+		else if(x.getRight().getMaxVal() >= x.getMaxVal()) {
+			getEmax(x.getRight());
+		}
 		else {
 			return currMax;
 		}
 		return currMax;
+	}
+	
+	public void setEmax(Endpoint e) {
+		this.eMax = e;
 	}
 	
 	

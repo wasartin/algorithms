@@ -106,6 +106,18 @@ public class RBTree{
 		}
 		y.setLeft(x);
 		x.setParent(y);
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+		
+		x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
+		y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
+//		x.setMaxVal();
+//		y.setMaxVal(max);
+//		
+//		x.setEmax(e);
+//		y.setEmax(e);
+		
+		
 	}
 	
 	/** From CLRS
@@ -131,6 +143,11 @@ public class RBTree{
 		}
 		y.setRight(x);
 		x.setParent(y);
+		y.setSize(x.getSize());
+		x.setSize(x.getRight().getSize() + x.getLeft().getSize() + 1);
+		
+		x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
+		y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
 	}
 	
 	/** From CLRS

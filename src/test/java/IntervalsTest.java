@@ -20,8 +20,6 @@ public class IntervalsTest {
 		Intervals intv = new Intervals();
 		intv.intervalInsert(4, 1);
 	}
-	
-	
 	@Test //This test was given in the project1Temp.size provided by a TA
 	public void findPOM_Success() {
 		int points[][] = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
