@@ -213,8 +213,8 @@ public class RBTree{
 	//helper method, public for testing
 	public void updateNodesInfo(Node x, Node y) {
 		updateNodeSize(x, y); //Probably not needed
-		updateNodeVal(x, y); //All Good
-		updateNodeMaxVal(x, y); //TODO
+		updateNodeVal(x, y); 
+		updateNodeMaxVal(x, y);
 		updateEMax(x, y); // TODO
 	}
 	
@@ -272,7 +272,84 @@ public class RBTree{
 	
 	//TODO
 	public void updateEMax(Node x, Node y) {
+		updateEMax(x);
+		updateEMax(y);
+		//THings I know
+		//1. If both children are T.nil AND pValue is >= 0, then eMax = self
+		//2. If both CHildren are T.nil AND pValue is < 0, then eMax is T.nil
+		//3. An inOrder traversal up until we hit a negative pValue will yield the last point which is the eMax
+	}
+	
+	public void updateEMax(Node v) {
+		v.setEmax(findEMax_Rec(v));
+	}
+	
+	//LEFT OFF, I have little to no idea//this seems really close
+	public Endpoint findEMax(Node v) {
+		int caseOne = v.getLeft().getVal();
+		int caseTwo = v.getLeft().getVal() + v.getP();
+		int caseThree = caseTwo + v.getRight().getVal();
+		int maxNum = max(caseOne, caseTwo, caseThree);
+		if(maxNum == caseOne) {
+			return v.getLeft().getEndpoint();
+		}
+		if(maxNum == caseTwo) {
+			return v.getEndpoint();
+		}
+		if(maxNum == caseThree) {
+			return v.getRight().getEndpoint();
+		}
+		return this.nil.getEndpoint();
+	}
+	
+	//LEFT OFF, I have little to no idea//this seems really close
+	public Endpoint findEMax_Rec(Node v) {
+		if(v.equals(this.nil)) { //base case
+			return this.nil.getEndpoint();
+		}
+//		if(v.getLeft().equals(this.nil) && v.getRight().equals(this.nil) && v.getP() < 0) {
+//			return this.nil.getEndpoint();
+//		}
+		int caseOne = v.getLeft().getVal();
+		int caseTwo = v.getLeft().getVal() + v.getP();
+		int caseThree = caseTwo + v.getRight().getVal();
 		
+		int maxNum = max(caseOne, caseTwo, caseThree);
+		if(maxNum == caseOne) {
+			v.getLeft().setEmax(findEMax_Rec(v.getLeft()));
+			return v.getLeft().getEmax();
+		}
+		if(maxNum == caseTwo) {
+			v.setEmax(v.getEndpoint());
+			return v.getEndpoint();
+		}
+		else {
+			v.getRight().setEmax(findEMax_Rec(v.getRight()));
+			return v.getRight().getEmax();
+		}
+	}
+	
+	
+	
+	//TODO DELETE, just typing out to get an understanding
+	public Endpoint intervalSearch(Endpoint e) {
+		Node x = this.getRoot();//start at root
+		while(!x.equals(this.nil) && !overlap(e, x.getEndpoint())){ //base case, stop when node is nil
+			if(!x.getLeft().equals(this.nil) && x.getLeft().getP() > 0){ //as long as the left isn't nil and the left's P is greater than 0
+				x = x.getLeft(); //traverse down
+			}
+			else {
+				x = x.getRight(); //traverse the other way
+			}
+		}
+		return x.getEndpoint();
+	}
+	
+	private boolean overlap(Endpoint a, Endpoint b) {
+		if(a.getValue() <= b.getValue() || b.getValue() <= a.getValue()) {
+			return true;
+		}
+		return false;
 	}
 	
 	/**

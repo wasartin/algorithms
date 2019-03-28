@@ -47,7 +47,6 @@ public class RBTreeTest {
 		for(int i = 0; i < x.size(); i++) {
 			Assert.assertTrue(x.get(i).getColor() == RED || x.get(i).getColor() == BLACK);
 		}
-		//System.out.println(x.toString());
 	}
 	
 	/**
