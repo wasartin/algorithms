@@ -15,6 +15,7 @@ public class Node{
 	private Node left;
 	private Node right;
 	private int size; //number of internal nodes of this subtree
+	private int height;
 	
 	private Endpoint eMax;//TODO needs to be O(1)
 	public int val; //TODO needs to be O(1)
@@ -42,6 +43,7 @@ public class Node{
 		this.color = color;
 		this.size = size;
 		maxVal = val = e.getPValue();
+		height = 0;
 	}
 	
 	/**
@@ -190,7 +192,8 @@ public class Node{
 	 * @return
 	 */
 	public int getSize() {
-		return getNumOfInternalNodes(this);
+		return size;
+		//return getNumOfInternalNodes(this);
 	}
 	
 	public void setSize(int size) {
@@ -207,6 +210,14 @@ public class Node{
 			return 1;
 		}
 		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public void setHeight(int x) {
+		this.height = x;
 	}
 	
 	@Override

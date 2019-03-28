@@ -169,6 +169,8 @@ public class RBTree{
 		else { //right rotate takes left
 			rightRotate(x, y);
 		}
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
 		updateNodeInfo(x);
 		updateNodeInfo(y);
 	}
@@ -222,6 +224,7 @@ public class RBTree{
 	}
 	
 	public void updateNodeInfo(Node v) {
+		//TODO: SET HEIGHT HERE>
 		v.setVal(getNodeVal(v));
 		v.setMaxVal(getNodeMaxVal(v));
 		v.setEmax(findEMax_Rec(v));
