@@ -117,19 +117,7 @@ public class Node{
 	public void setVal(int x) {
 		this.val = x;
 	}
-	
-	/**TODO this is wrong, getValue needs to be O(1)
-	 * Helper method for getVal(), recursive
-	 * @param x
-	 * @return
-	 */
-//	private int getValue(Node x) {
-//		if(x.getP() == 0) {//NIL NODE, this is the base case
-//			return x.getP();
-//		}
-//		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
-//	}
-	
+
 	/** TODO: This is wrong, maxVal needs to be found in O(1)
 	 * Returns the maxval of the node as described in this assignment.
 	 * Which is ->
@@ -155,26 +143,11 @@ public class Node{
 	 */
 	public int getMaxVal() { 
 		return maxVal;
-//		int caseOne = getMaxVal(this.getLeft());
-//		int caseTwo = this.getLeft().getVal() + this.getP();
-//		int caseThree = caseTwo + getMaxVal(this.getRight()); 
-//		return max(caseOne, caseTwo, caseThree);
 	}
 	
 	public void setMaxVal(int max) {
 		this.maxVal = max;
 	}
-	
-//	public int getMaxVal() {
-//		return this.maxVal;
-//		if(x.getP() == 0) {
-//			return 0;
-//		}
-//		int caseOne = getMaxVal(x.getLeft());
-//		int caseTwo = x.getLeft().getVal() + x.getP();
-//		int caseThree = caseTwo + getMaxVal(x.getRight());
-//		return max(caseOne, caseTwo, caseThree);
-//	}
 	
 	/**
 	 * Returns the Endpoint object that this node represents.
@@ -194,41 +167,10 @@ public class Node{
 	 * 	over all i such that lv <= i <= rv.
 	 * @return
 	 */
-	//This value is dynamic, which is why it is not an instance variable
 	public Endpoint getEmax() { //the child that has the highest maxval
 		return eMax;
-		//return getEmax(this);
 	}
-	
-	private Endpoint getEmax(Node x) {
-		if(x.getP() == 0) { //base case, at the NIL Node
-			return new Endpoint(0, 0);
-		}
-		Endpoint currMax = x.getEndpoint();
-		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
-			getEmax(x.getLeft());
-		}
-		else if(x.getRight().getMaxVal() >= x.getMaxVal()) {
-			getEmax(x.getRight());
-		}
-		else {
-			return currMax;
-		}
-		return currMax;
-	}
-//	private Endpoint getEmax(Node x) {
-//		if(x.getP() == 0) { //base case, at the NIL Node
-//			return null;
-//		}
-//		Endpoint currMax = x.getEndpoint();
-//		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
-//			getEmax(x.getLeft());
-//		}
-//		else {
-//			return currMax;
-//		}
-//		return currMax;
-//	}
+
 	public void setEmax(Endpoint e) {
 		this.eMax = e;
 	}
