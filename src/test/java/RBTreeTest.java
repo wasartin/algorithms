@@ -129,4 +129,28 @@ public class RBTreeTest {
 		Assert.assertTrue(nilNode.equals(rbt1.getRoot().getParent()));
 	}
 	
+	@Test
+	public void minimum_Success() {
+		Node minOfRoot = new Node(nilNode, new Endpoint(0, LEFT), BLACK, 3);
+		Assert.assertTrue(rbt1.minimum(rbt1.getRoot()).equals(minOfRoot));
+		Assert.assertTrue(rbt1.minimum(rbt1.getRoot().getLeft().getLeft()).equals(minOfRoot));
+	}
+	
+	@Test
+	public void maximum_Success() {
+		Node maxOfRoot = new Node(nilNode, new Endpoint(11, RIGHT), RED, 3);
+		Assert.assertTrue(rbt1.maximum(rbt1.getRoot()).equals(maxOfRoot));
+		Assert.assertTrue(rbt1.maximum(rbt1.getRoot().getRight().getRight().getRight()).equals(maxOfRoot));
+	}
+	
+	@Test
+	public void successor_Success() {
+		
+	}
+	
+	@Test
+	public void predessor_Success() {
+		
+	}
+	
 }

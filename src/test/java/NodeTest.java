@@ -1,14 +1,15 @@
 package test.java;
 
 
+import java.util.ArrayList;
+
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import main.java.Endpoint;
 import main.java.Node;
 import main.java.RBTree;
-
-import org.junit.Assert;
-import org.junit.Before;
 
 public class NodeTest {
 
@@ -38,22 +39,31 @@ public class NodeTest {
 	}
 	
 	@Test
-	public void sizeOfRoot() {
-		//System.out.println(rbt1.getRoot().getSize());
+	public void sizeOfNode() {
+		Assert.assertTrue(rbt1.getRoot().getSize() == 17);
 	}
 	
-	//TODO: Left off trying to getValCorrect
 	@Test
 	public void value() {
-		System.out.println(rbt1.getRoot().getVal());//this should be 0
-		System.out.println(rbt1.getRoot().getLeft().getVal()); // this should be 1
-		
+		int[] correctValues = {1, 3, 1, 0, -1, -2, -2, -1};
+		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		for(int i = 0; i < x.size(); i++) {
+			Assert.assertTrue(x.get(i).getVal() == correctValues[i]);
+		}
+
 	}
 	
+	//TODO
 	@Test
 	public void getMaxValue() {
-		//System.out.println(rbt1.getRoot().getMaxVal());
-		//Assert.assertTrue(rbt1.getRoot().getMaxVal() == 3);
+	//	System.out.println("Root maxVal expected: 3, actual:  " + rbt1.getRoot().getMaxVal());
+		Assert.assertTrue(rbt1.getRoot().getMaxVal() == 3);
+	}
+	
+	//TODO
+	@Test
+	public void getEmax() {
+		
 	}
 
 }

@@ -23,7 +23,7 @@ public class Node{
 	public Node() {
 		color = RED; //all new nodes are red
 		size = 1;
-		maxVal = val = 0;
+		p = maxVal = val = 0;
 	}
 	
 	//Not sure how to handle the nil node yet, a -1 for key?
@@ -37,10 +37,12 @@ public class Node{
 	public Node(Node parent, Endpoint e, int color, int size) {
 		this.parent = parent;
 		this.key = e;
+		eMax = e;
 		p = e.getPValue();
 		this.color = color;
 		this.size = size;
 		maxVal = val = e.getPValue();
+
 	}
 	
 	/**
@@ -284,7 +286,8 @@ public class Node{
 	
 	@Override
 	public String toString() {
-		return "Key:" + this.getKey() + ", Color:" + ((this.getColor() == RED) ? "Red" : "Black")  + ", p:" + this.getP();
+		return "Key:" + this.getKey() + ", Color:" + ((this.getColor() == RED) ? "Red" : "Black")  + ", p:" + this.getP() +
+				", maxVal: " + this.getMaxVal() + ", val: " + this.getVal() + ", emax.value: " + this.getEmax().getValue();
 	}
 	
 }

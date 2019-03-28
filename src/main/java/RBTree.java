@@ -9,8 +9,6 @@ public class RBTree{
 	
 	private Node root;
 	private Node nil;
-//	private int height;
-	private int blackHeight;
 
 	public RBTree() {
 		nil = new Node(new Endpoint(-1, 0));
@@ -84,123 +82,6 @@ public class RBTree{
 	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
-	private void leftRotate(Node x) {
-		Node y = x.getRight();
-		x.setRight(y.getLeft());
-		if(!y.getLeft().equals(nil)) {
-			y.getLeft().setParent(x);
-		}
-		y.setParent(x.getParent());
-		if(x.getParent().equals(nil)) {
-			root = y;
-		}
-		else if(x.equals(x.getParent().getLeft())) {
-			x.getParent().setLeft(y);
-		}
-		else {
-			x.getParent().setRight(y);
-		}
-		y.setLeft(x);
-		x.setParent(y);
-		//y.setSize(x.getSize());
-		//x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
-		
-		//x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
-		//y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
-		updateNodesInfo(x, y);
-	}
-	
-	//helper method, public for testing
-	public void updateNodesInfo(Node x, Node y) {
-		updateNodeSize(x, y);
-		updateNodeMaxVal(x, y);
-		updateEMax(x, y);
-	}
-	
-	//helper method, public for testing
-	public void updateNodeSize(Node x, Node y) {
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
-	}
-	
-	
-	/* Returns the maxval of the node as described in this assignment.
-	 * Which is ->
-	 * 	the max value obtained by the expression
-	 * 	s(lv, i) for lv <= i <= rv.
-	 * 
-	 * 		Define s(i, j)
-	 * 		s(i, j) = p(e1) + p(e2) + .... + p(en) #with n being the last node
-	 *  	Any endpoint e, that maximizes s(l, i) is a point of maximum overlap 
-	 *  		(the entire point of this project)
-	 * Two possibilities ,
-	 * 		1. If this node == T.nil, then v.maxVal = 0;
-	 * 		2. this possibility has three vases
-	 * 			a.) The max is in This Node's left subtree
-	 * 			b.) the max is in This Node
-	 * 			c.) The max is in This Node's right subtree
-	 * Which leads to this expression
-	 * 	thisNode.maxVal = max(this.left.maxval, 					#case 1
-	 * 						this.left.val + v.p, 					#case 2
-	 * 						this.left.val + v.p + v.right.maxval) 	#case 3	
-	 */
-	public void updateNodeMaxVal(Node x, Node y) {
-		updateNodeMaxVal(x);
-		updateNodeMaxVal(y);
-	}
-	
-	private int max(int one, int two, int three) {
-		int temp = Math.max(one, two);
-		return Math.max(temp, three);
-	}
-	
-	public void updateNodeMaxVal(Node x) {
-		int caseOne = x.getLeft().getMaxVal(); //rec?
-		int caseTwo = x.getLeft().getVal() + x.getP();
-		int caseThree = caseTwo + x.getRight().getMaxVal(); //rec?
-		x.setMaxVal(max(caseOne, caseTwo, caseThree));
-	}
-	
-	public void updateEMax(Node x, Node y) {
-		
-	}
-
-	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
-	 * @param x
-	 */
-	private void rightRotate(Node x) {
-		Node y = x.getLeft();
-		x.setLeft(y.getRight());
-		if(!y.getRight().equals(nil)) {
-			y.getRight().setParent(x);
-		}
-		y.setParent(x.getParent());
-		if(x.getParent().equals(nil)) {
-			root = y;
-		}
-		else if(x.equals(x.getParent().getRight())) {
-			x.getParent().setRight(y);
-		}
-		else {
-			x.getParent().setLeft(y);
-		}
-		y.setRight(x);
-		x.setParent(y);
-		//x.setSize(x.getRight().getSize() + x.getLeft().getSize() + 1);
-		
-		//x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
-		//y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
-		
-		updateNodesInfo(x, y);
-	}
-	
-	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
-	 * @param x
-	 */
 	public void RBInsert(Node z) {
 		Node y = this.nil;
 		Node x = this.root;
@@ -235,7 +116,7 @@ public class RBTree{
 	 * @param x
 	 */
 	private void RBInsertFixup(Node z) {
-		Node y;
+		Node y = null;
 		while(z.getParent().getColor() == RED) {
 			if(z.getParent().equals(z.getParent().getParent().getLeft())) {
 				y = z.getParent().getParent().getRight();	
@@ -246,9 +127,9 @@ public class RBTree{
 					z = z.getParent().getParent();
 				}
 				else {
-					if(z.equals(z.getParent().getRight())) { 
+					if(z.equals(z.getParent().getRight())) { 		//case 2
 						z = z.getParent();
-						leftRotate(z);//case 2
+						leftRotate(z);
 					}
 					z.getParent().setColor(BLACK);					//case 3
 					z.getParent().getParent().setColor(RED);
@@ -275,6 +156,112 @@ public class RBTree{
 			}
 		}
 		this.root.setColor(BLACK);
+	}
+	
+	/** From CLRS
+	 * Private helper method. Not sure if we need this for the 
+	 * project, but it is a method for a RBTree so I made it.
+	 * @param x
+	 */
+	private void leftRotate(Node x) {
+		Node y = x.getRight();
+		x.setRight(y.getLeft());
+		if(!y.getLeft().equals(nil)) {
+			y.getLeft().setParent(x);
+		}
+		y.setParent(x.getParent());
+		if(x.getParent().equals(nil)) {
+			root = y;
+		}
+		else if(x.equals(x.getParent().getLeft())) {
+			x.getParent().setLeft(y);
+		}
+		else {
+			x.getParent().setRight(y);
+		}
+		y.setLeft(x);
+		x.setParent(y);
+		updateNodesInfo(x, y);
+	}
+	
+	/** From CLRS
+	 * Private helper method. Not sure if we need this for the 
+	 * project, but it is a method for a RBTree so I made it.
+	 * @param x
+	 */
+	private void rightRotate(Node x) {
+		Node y = x.getLeft();
+		x.setLeft(y.getRight());
+		if(!y.getRight().equals(nil)) {
+			y.getRight().setParent(x);
+		}
+		y.setParent(x.getParent());
+		if(x.getParent().equals(nil)) {
+			root = y;
+		}
+		else if(x.equals(x.getParent().getRight())) {
+			x.getParent().setRight(y);
+		}
+		else {
+			x.getParent().setLeft(y);
+		}
+		y.setRight(x);
+		x.setParent(y);
+		updateNodesInfo(x, y); //TODO refactor this shit
+	}
+	
+	//helper method, public for testing
+	public void updateNodesInfo(Node x, Node y) {
+		updateNodeSize(x, y); //Probably not needed
+		updateNodeVal(x, y); //All Good
+		updateNodeMaxVal(x, y); //TODO
+		updateEMax(x, y); // TODO
+	}
+	
+	//helper method, public for testing
+	public void updateNodeSize(Node x, Node y) {
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+	}
+	
+	public void updateNodeMaxVal(Node x, Node y) {
+		updateNodeMaxVal(x);
+		updateNodeMaxVal(y);
+	}
+	
+	public void updateNodeMaxVal(Node x) {
+		int caseOne = x.getLeft().getMaxVal(); //rec?
+		int caseTwo = x.getLeft().getVal() + x.getP();
+		int caseThree = caseTwo + x.getRight().getMaxVal(); //rec?
+		x.setMaxVal(max(caseOne, caseTwo, caseThree));
+	}
+	
+	private void updateNodeVal(Node x, Node y) {
+		updateNodeVal(x);
+		updateNodeVal(y);
+	}
+	
+	private void updateNodeVal(Node input) {
+		input.setVal(getNodeVal(input));
+	}
+	
+	//There is just no way this is O(log n)
+	private int getNodeVal(Node input) {
+		if(input.equals(this.nil)) {
+			return input.getP();
+		}
+		input.setVal(getNodeVal(input.getLeft()) + input.getP() + getNodeVal(input.getRight()));
+		return input.getVal();
+	}
+	
+	private int max(int one, int two, int three) {
+		int temp = Math.max(one, two);
+		return Math.max(temp, three);
+	}
+	
+	//TODO
+	public void updateEMax(Node x, Node y) {
+		
 	}
 	
 	/**
@@ -419,7 +406,7 @@ public class RBTree{
 	 * that contains the minimum key-value
 	 */
 	
-	private Node minimum(Node x) {
+	public Node minimum(Node x) {
 		while(!x.getLeft().equals(this.nil)) {
 			x = x.getLeft();
 		}
@@ -432,7 +419,7 @@ public class RBTree{
 	 * @param x
 	 * @return
 	 */
-	private Node maximum(Node x) {
+	public Node maximum(Node x) {
 		while(!x.getRight().equals(this.nil)) {
 			x = x.getRight();
 		}
@@ -446,7 +433,7 @@ public class RBTree{
 	 * @param x
 	 * @return
 	 */
-	private Node successor(Node x) {
+	public Node successor(Node x) {
 		if(!x.getRight().equals(this.nil)) {
 			return minimum(x.getRight());
 		}
@@ -481,7 +468,7 @@ public class RBTree{
 	 * @param x
 	 * @return
 	 */
-	private Node predecessor(Node x) {
+	public Node predecessor(Node x) {
 		if(!(x.getRight().equals(this.nil))) {
 			return maximum(x.getLeft());
 		}
