@@ -89,10 +89,6 @@ public class Node{
 		return this.key.getValue();
 	}
 	
-//	public void setKey(int key) {
-//		this.key = key;
-//	}
-	
 	/** Returns the value of the function p based on this endpoint.
 	 * 
 	 * @return
@@ -115,7 +111,6 @@ public class Node{
 	 */
 	public int getVal() {
 		return val;
-		//return getValue(this);
 	}
 	
 	public void setVal(int x) {

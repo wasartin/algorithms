@@ -224,16 +224,27 @@ public class RBTree{
 		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
 	}
 	
+	
+	//if Node v == T.nil the rec bottoms out
 	public void updateNodeMaxVal(Node x, Node y) {
 		updateNodeMaxVal(x);
 		updateNodeMaxVal(y);
 	}
 	
 	public void updateNodeMaxVal(Node x) {
-		int caseOne = x.getLeft().getMaxVal(); //rec?
+		x.setMaxVal(getNodeMaxVal(x));
+	}
+	
+	//This just can't be right. it does not look like it is O(logn)
+	public int getNodeMaxVal(Node x) {
+		if(x.equals(this.nil)) {//base case
+			return x.getP(); //which is 0
+		}
+		int caseOne = getNodeMaxVal(x.getLeft());
 		int caseTwo = x.getLeft().getVal() + x.getP();
-		int caseThree = caseTwo + x.getRight().getMaxVal(); //rec?
+		int caseThree = caseTwo + getNodeMaxVal(x.getRight());
 		x.setMaxVal(max(caseOne, caseTwo, caseThree));
+		return x.getMaxVal();
 	}
 	
 	private void updateNodeVal(Node x, Node y) {
@@ -245,7 +256,7 @@ public class RBTree{
 		input.setVal(getNodeVal(input));
 	}
 	
-	//There is just no way this is O(log n)
+	//There is just no way this is O(log n), but it follows the algorithm provided
 	private int getNodeVal(Node input) {
 		if(input.equals(this.nil)) {
 			return input.getP();

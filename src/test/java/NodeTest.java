@@ -48,16 +48,21 @@ public class NodeTest {
 		int[] correctValues = {1, 3, 1, 0, -1, -2, -2, -1};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
+			System.out.println(x.get(i).toString());
 			Assert.assertTrue(x.get(i).getVal() == correctValues[i]);
 		}
 
 	}
 	
-	//TODO
 	@Test
 	public void getMaxValue() {
 	//	System.out.println("Root maxVal expected: 3, actual:  " + rbt1.getRoot().getMaxVal());
 		Assert.assertTrue(rbt1.getRoot().getMaxVal() == 3);
+		int[] correctMaxVals = {1, 3, 1, 3, 0, 0, 0, -0};
+		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		for(int i = 0; i < x.size(); i++) {
+			Assert.assertTrue(x.get(i).getMaxVal() == correctMaxVals[i]);
+		}
 	}
 	
 	//TODO
