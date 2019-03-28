@@ -13,9 +13,7 @@ public class RBTree{
 	private int blackHeight;
 
 	public RBTree() {
-		Endpoint e = new Endpoint(0, 0);
-		nil = new Node(e);
-		nil.setColor(BLACK);//all new nodes are red, correct that here for the nil node
+		nil = new Node(new Endpoint(-1, 0));
 		root = nil;
 	}
 	
@@ -44,8 +42,7 @@ public class RBTree{
 	 * @return
 	 */
 	public int getSize() {
-		//TODO
-		return -1;
+		return root.getSize();
 	}
 	
 	/**
@@ -65,19 +62,18 @@ public class RBTree{
 		return Math.max(getHeight(x.getLeft()), getHeight(x.getRight())) + 1; //Maximum descendent leaves + 1 for the nil node.
 	}
 	
-	//This is probably not needed, will need to be tested.
 	public int getBlackHeight() {
 		return getBlackHeight(this.root);
 	}
 	
-	private int getBlackHeight(Node x) {
+	public int getBlackHeight(Node x) {
 		if(x.equals(this.nil)) {
 			return 1;
 		}
 		if(x.getColor() == BLACK){
-			return 1 + Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); //IDK if this is right or not.
+			return 1 + Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
 		}
-		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); //Node is red so keep traversing
+		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
 
 	}
 
@@ -106,20 +102,69 @@ public class RBTree{
 		}
 		y.setLeft(x);
 		x.setParent(y);
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+		//y.setSize(x.getSize());
+		//x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
 		
-		x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
-		y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
-//		x.setMaxVal();
-//		y.setMaxVal(max);
-//		
-//		x.setEmax(e);
-//		y.setEmax(e);
-		
-		
+		//x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
+		//y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
+		updateNodesInfo(x, y);
 	}
 	
+	//helper method, public for testing
+	public void updateNodesInfo(Node x, Node y) {
+		updateNodeSize(x, y);
+		updateNodeMaxVal(x, y);
+		updateEMax(x, y);
+	}
+	
+	//helper method, public for testing
+	public void updateNodeSize(Node x, Node y) {
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+	}
+	
+	
+	/* Returns the maxval of the node as described in this assignment.
+	 * Which is ->
+	 * 	the max value obtained by the expression
+	 * 	s(lv, i) for lv <= i <= rv.
+	 * 
+	 * 		Define s(i, j)
+	 * 		s(i, j) = p(e1) + p(e2) + .... + p(en) #with n being the last node
+	 *  	Any endpoint e, that maximizes s(l, i) is a point of maximum overlap 
+	 *  		(the entire point of this project)
+	 * Two possibilities ,
+	 * 		1. If this node == T.nil, then v.maxVal = 0;
+	 * 		2. this possibility has three vases
+	 * 			a.) The max is in This Node's left subtree
+	 * 			b.) the max is in This Node
+	 * 			c.) The max is in This Node's right subtree
+	 * Which leads to this expression
+	 * 	thisNode.maxVal = max(this.left.maxval, 					#case 1
+	 * 						this.left.val + v.p, 					#case 2
+	 * 						this.left.val + v.p + v.right.maxval) 	#case 3	
+	 */
+	public void updateNodeMaxVal(Node x, Node y) {
+		updateNodeMaxVal(x);
+		updateNodeMaxVal(y);
+	}
+	
+	private int max(int one, int two, int three) {
+		int temp = Math.max(one, two);
+		return Math.max(temp, three);
+	}
+	
+	public void updateNodeMaxVal(Node x) {
+		int caseOne = x.getLeft().getMaxVal(); //rec?
+		int caseTwo = x.getLeft().getVal() + x.getP();
+		int caseThree = caseTwo + x.getRight().getMaxVal(); //rec?
+		x.setMaxVal(max(caseOne, caseTwo, caseThree));
+	}
+	
+	public void updateEMax(Node x, Node y) {
+		
+	}
+
 	/** From CLRS
 	 * Private helper method. Not sure if we need this for the 
 	 * project, but it is a method for a RBTree so I made it.
@@ -143,11 +188,12 @@ public class RBTree{
 		}
 		y.setRight(x);
 		x.setParent(y);
-		y.setSize(x.getSize());
-		x.setSize(x.getRight().getSize() + x.getLeft().getSize() + 1);
+		//x.setSize(x.getRight().getSize() + x.getLeft().getSize() + 1);
 		
-		x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
-		y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
+		//x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
+		//y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
+		
+		updateNodesInfo(x, y);
 	}
 	
 	/** From CLRS

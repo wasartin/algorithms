@@ -42,11 +42,12 @@ public class NodeTest {
 		//System.out.println(rbt1.getRoot().getSize());
 	}
 	
-	
+	//TODO: Left off trying to getValCorrect
 	@Test
 	public void value() {
-		System.out.println(rbt1.getRoot().getVal());
-		System.out.println(rbt1.getRoot().getLeft().getVal());
+		System.out.println(rbt1.getRoot().getVal());//this should be 0
+		System.out.println(rbt1.getRoot().getLeft().getVal()); // this should be 1
+		
 	}
 	
 	@Test

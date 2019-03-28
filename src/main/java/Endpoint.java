@@ -11,19 +11,13 @@ public class Endpoint {
 	
 	public Endpoint() {
 	}
+	
 	public Endpoint(int value, int p) {
-		this.value = value;
-		switch(p) {
-		case NIL_POINT:
-			pValue = NIL_POINT;
-			break;
-		case RIGHT_POINT:
-			pValue = RIGHT_POINT;
-			break;
-		case LEFT_POINT:
-			pValue = LEFT_POINT;
-			break;
+		if(p > 1 || p < -1) {
+			throw new IllegalArgumentException("The value of p can only be -1 (right end point), 1 (left endpoint), and 0 (nil node");
 		}
+		this.value = value;
+		this.pValue = p;
 	}
 	
 	/**
@@ -36,5 +30,16 @@ public class Endpoint {
 	}
 	public int getPValue() {
 		return pValue;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof Endpoint) {
+			Endpoint temp = (Endpoint) other;
+			if(this.getPValue() == temp.getPValue() && this.getValue() == temp.getValue()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

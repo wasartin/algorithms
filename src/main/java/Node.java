@@ -8,20 +8,19 @@ public class Node{
 	/**
 	 * The tree is sorted by endpoints. the Key is the endpoint.
 	 */
-	private int key; //this is 'e', 
+	private Endpoint key; //this is 'e', 
 	private int p; //this is 'p(e)'
-	private Endpoint e;
 	private int color;
 	private Node parent;
 	private Node left;
 	private Node right;
+	private int size; //number of internal nodes of this subtree
+	
 	private Endpoint eMax;//TODO needs to be O(1)
 	public int val; //TODO needs to be O(1)
 	public int maxVal; //TODO needs to be O(1)
-	private int size; //number of internal nodes of this subtree
 	
 	public Node() {
-		//?
 		color = RED; //all new nodes are red
 		size = 1;
 		maxVal = val = 0;
@@ -29,21 +28,19 @@ public class Node{
 	
 	//Not sure how to handle the nil node yet, a -1 for key?
 	public Node(Endpoint e) {
-		this.e = e;
-		this.key = e.getValue();
-		p = e.getPValue();
-		color = RED; //all new nodes are red, this is probably a bad way to do this.
-		size = 1;
-		val = e.getPValue();
-		
+		this(null, e, RED, 1);
+		if(e.getPValue() == 0 && e.getValue() == -1) {//For nil node
+			this.setColor(BLACK);
+		}
 	}
 	
-	public Node(Node Parent, Endpoint e, int color, int size) {
+	public Node(Node parent, Endpoint e, int color, int size) {
 		this.parent = parent;
-		this.e = e;
-		this.key = e.getValue();
+		this.key = e;
 		p = e.getPValue();
+		this.color = color;
 		this.size = size;
+		maxVal = val = e.getPValue();
 	}
 	
 	/**
@@ -87,12 +84,12 @@ public class Node{
 	 * @return 'e', which is the key
 	 */
 	public int getKey() {
-		return this.key;
+		return this.key.getValue();
 	}
 	
-	public void setKey(int key) {
-		this.key = key;
-	}
+//	public void setKey(int key) {
+//		this.key = key;
+//	}
 	
 	/** Returns the value of the function p based on this endpoint.
 	 * 
@@ -160,7 +157,6 @@ public class Node{
 	 */
 	public int getMaxVal() { 
 		return maxVal;
-		
 //		int caseOne = getMaxVal(this.getLeft());
 //		int caseTwo = this.getLeft().getVal() + this.getP();
 //		int caseThree = caseTwo + getMaxVal(this.getRight()); 
@@ -171,27 +167,23 @@ public class Node{
 		this.maxVal = max;
 	}
 	
-	public int getMaxVal(Node x) {
-		if(x.getP() == 0) {
-			return 0;
-		}
-		int caseOne = getMaxVal(x.getLeft());
-		int caseTwo = x.getLeft().getVal() + x.getP();
-		int caseThree = caseTwo + getMaxVal(x.getRight());
-		return max(caseOne, caseTwo, caseThree);
-	}
-	
-	private int max(int one, int two, int three) {
-		int temp = Math.max(one, two);
-		return Math.max(temp, three);
-	}
+//	public int getMaxVal() {
+//		return this.maxVal;
+//		if(x.getP() == 0) {
+//			return 0;
+//		}
+//		int caseOne = getMaxVal(x.getLeft());
+//		int caseTwo = x.getLeft().getVal() + x.getP();
+//		int caseThree = caseTwo + getMaxVal(x.getRight());
+//		return max(caseOne, caseTwo, caseThree);
+//	}
 	
 	/**
 	 * Returns the Endpoint object that this node represents.
 	 * @return
 	 */
 	public Endpoint getEndpoint() {
-		return e;
+		return key;
 	}
 	
 	/**
@@ -243,7 +235,6 @@ public class Node{
 		this.eMax = e;
 	}
 	
-	
 	/**
 	 * : Returns 0 if red. Returns 1 if black
 	 * @return
@@ -279,4 +270,21 @@ public class Node{
 		}
 		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof Node){
+			Node temp = (Node) other;
+			if(temp.getEndpoint().equals(this.getEndpoint()) && (this.getColor() == temp.getColor())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "Key:" + this.getKey() + ", Color:" + ((this.getColor() == RED) ? "Red" : "Black")  + ", p:" + this.getP();
+	}
+	
 }
