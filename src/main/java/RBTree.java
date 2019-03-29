@@ -6,8 +6,6 @@ import java.util.Stack;
 public class RBTree{
 	public static final int RED = 0;
 	public static final int BLACK = 1;
-	private static final boolean LEFT = true;//this is stupid
-	private static final boolean RIGHT = false;
 	
 	private Node root;
 	private Node nil;
@@ -77,18 +75,15 @@ public class RBTree{
 		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
 
 	}
-
-	//Additional RedBlackTree methods from CLRS
 	
 	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
 	public void RBInsert(Node z) {
 		Node y = this.nil;
 		Node x = this.root;
 		while(!x.equals(this.nil)) {
+			x.setSize(x.getSize() + 1); //this doesn't consider nilNodes
 			y = x;
 			if(z.getKey() < x.getKey()) {
 				x = x.getLeft();
@@ -115,8 +110,6 @@ public class RBTree{
 	}
 	
 	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
 	private void RBInsertFixup(Node z) {
@@ -133,11 +126,11 @@ public class RBTree{
 				else {
 					if(z.equals(z.getParent().getRight())) { 		//case 2
 						z = z.getParent();
-						rotate(z, LEFT);
+						leftRotate(z);
 					}
 					z.getParent().setColor(BLACK);					//case 3
 					z.getParent().getParent().setColor(RED);
-					rotate(z.getParent().getParent(), RIGHT);
+					rightRotate(z.getParent().getParent());
 				}
 			}
 			else {													//Same as previous if statement, but left and right are flipped
@@ -151,37 +144,22 @@ public class RBTree{
 				else {
 					if(z.equals(z.getParent().getLeft())) {
 						z = z.getParent();
-						rotate(z, RIGHT);
+						rightRotate(z);
 					}
 					z.getParent().setColor(BLACK);
 					z.getParent().getParent().setColor(RED);
-					rotate(z.getParent().getParent(), LEFT);
+					leftRotate(z.getParent().getParent());
 				}
 			}
 		}
 		this.root.setColor(BLACK);
 	}
 	
-	private void rotate(Node x, boolean direction) { //true means take left rotate
-		Node y = (direction) ? x.getRight() : x.getLeft();
-		if(direction) {//left rotate takes right
-			leftRotate(x, y);
-		}
-		else { //right rotate takes left
-			rightRotate(x, y);
-		}
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
-		updateNodeInfo(x);
-		updateNodeInfo(y);
-	}
-	
 	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
-	private void leftRotate(Node x, Node y) {
+	private void leftRotate(Node x) {
+		Node y = x.getRight();
 		x.setRight(y.getLeft());
 		if(!y.getLeft().equals(nil)) {
 			y.getLeft().setParent(x);
@@ -198,6 +176,9 @@ public class RBTree{
 		}
 		y.setLeft(x);
 		x.setParent(y);
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+		updateNodesInfo(x, y);
 	}
 	
 	/** From CLRS
@@ -205,7 +186,8 @@ public class RBTree{
 	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
-	private void rightRotate(Node x, Node y) {
+	private void rightRotate(Node x) {
+		Node y = x.getLeft();
 		x.setLeft(y.getRight());
 		if(!y.getRight().equals(nil)) {
 			y.getRight().setParent(x);
@@ -222,13 +204,25 @@ public class RBTree{
 		}
 		y.setRight(x);
 		x.setParent(y);
+		y.setSize(x.getSize());
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+		updateNodesInfo(x, y); //TODO refactor this shit
+	}
+
+	private void updateNodesInfo(Node x, Node y) {
+		updateNodeInfo(x);
+		updateNodeInfo(y);
 	}
 	
-	public void updateNodeInfo(Node v) {
-		//TODO: SET HEIGHT HERE>
+	private void updateNodeInfo(Node v) {
+		//TODO: SET HEIGHT HERE>, floor of (logbase 2 n)
+		v.setHeight((int) Math.floor((Math.log(v.getSize()) / Math.log(2))));
 		v.setVal(getNodeVal(v));
 		v.setMaxVal(getNodeMaxVal(v));
 		v.setEmax(findEMax_Rec(v));
+//		if(!v.getParent().equals(this.nil)) {
+//			v.getParent().setSize(v.getParent().getLeft().getSize() + v.getParent().getRight().getSize() + 1);
+//		}
 	}
 
 	public int getNodeMaxVal(Node x) {
@@ -295,11 +289,6 @@ public class RBTree{
 		}
 		v.setParent(u.getParent());
 	}
-	
-	/**
-	 * From CLRS
-	 * @param z
-	 */
 	private void RBDelete(Node z) {
 		Node y = z;
 		Node x = this.nil;
@@ -341,8 +330,7 @@ public class RBTree{
 				if(w.getColor() == RED) { 					//Case 1
 					w.setColor(BLACK);
 					x.getParent().setColor(RED);
-					//leftRotate(x.getParent());
-					rotate(x.getParent(), true);
+					leftRotate(x.getParent());
 					w = x.getParent().getRight();
 				}
 				if(w.getLeft().getColor() == BLACK && w.getRight().getColor() == BLACK) { // Case 2
@@ -353,16 +341,13 @@ public class RBTree{
 					if(w.getRight().getColor() == BLACK) {
 						w.getLeft().setColor(BLACK);		//Case 3
 						w.setColor(RED);
-						//rightRotate(w);
-						rotate(w, false);
-						
+						rightRotate(w);
 						w = x.getParent().getRight();
 					}
 					w.setColor(x.getParent().getColor());	//Case 4
 					x.getParent().setColor(BLACK);
 					w.getRight().setColor(BLACK);
-					//leftRotate(x.getParent());
-					rotate(x.getParent(), LEFT);
+					leftRotate(x.getParent());
 					x = this.root;
 				}
 			}
@@ -371,8 +356,7 @@ public class RBTree{
 				if(w.getColor() == RED) { 					//Case 1
 					w.setColor(BLACK);
 					x.getParent().setColor(RED);
-					//rightRotate(x.getParent());
-					rotate(x.getParent(), RIGHT);
+					rightRotate(x.getParent());
 					w = x.getParent().getLeft();
 				}
 				if(w.getRight().getColor() == BLACK && w.getLeft().getColor() == BLACK) { 
@@ -383,21 +367,20 @@ public class RBTree{
 					if(w.getLeft().getColor() == BLACK) {
 						w.getRight().setColor(BLACK);		//Case 3
 						w.setColor(RED);
-						//leftRotate(w);
-						rotate(w, LEFT);
+						leftRotate(w);
 						w = x.getParent().getLeft();
 					}
 					w.setColor(x.getParent().getColor());	//Case 4
 					x.getParent().setColor(BLACK);
 					w.getLeft().setColor(BLACK);
-					//rightRotate(x.getParent());
-					rotate(x.getParent(), RIGHT);
+					rightRotate(x.getParent());
 					x = this.root; //This is probably wrong b/c each node
 						//is it's own subtree.
 				}
 			}
 		}
 	}
+
 	
 	//BST Methods
 	/** From CLRS

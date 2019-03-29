@@ -14,25 +14,25 @@ public class Node{
 	private Node parent;
 	private Node left;
 	private Node right;
-	private int size; //number of internal nodes of this subtree
-	private int height;
 	
-	private Endpoint eMax;//TODO needs to be O(1)
-	public int val; //TODO needs to be O(1)
-	public int maxVal; //TODO needs to be O(1)
 	private int height;
+	private int size;
+	private Endpoint eMax;
+	public int val; 
+	public int maxVal; 
 	
 	public Node() {
 		color = RED; //all new nodes are red
 		size = 1;
 		p = maxVal = val = 0;
 	}
-	
-	//Not sure how to handle the nil node yet, a -1 for key?
+
 	public Node(Endpoint e) {
 		this(null, e, RED, 1);
 		if(e.getPValue() == 0 && e.getValue() == -1) {//For nil node
 			this.setColor(BLACK);
+			//this.setSize(1);
+			this.setHeight(0);
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class Node{
 		this.color = color;
 		this.size = size;
 		maxVal = val = e.getPValue();
-		height = 0;
+		height = 1;//height of everyNode except the nil node is 1
 	}
 	
 	/**
@@ -194,7 +194,16 @@ public class Node{
 	 */
 	public int getSize() {
 		return size;
-		//return getNumOfInternalNodes(this);
+	}
+	
+	public int getMaxNodes() {
+		int power = (int) Math.floor((Math.log(this.getinternalNodes()) / Math.log(2))) + 1;
+		int maxNodes = (int) Math.pow(2, power) + 1;
+		return maxNodes;
+	}
+	
+	public int getinternalNodes() {
+		return size;
 	}
 	
 	public void setSize(int size) {
@@ -208,24 +217,16 @@ public class Node{
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	/**
-	 * TODO: Probably delete, b/c I think get size needs to be a constant.
-	 * @param x
-	 * @return
-	 */
-	private int getNumOfInternalNodes(Node x) {
+	
+	public int getNumOfNodes() {
+		return getNumOfNodes(this);
+	}
+	
+	private int getNumOfNodes(Node x) {
 		if(x.getEndpoint().getPValue() == 0) {//base case
 			return 1;
 		}
-		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
-	}
-	
-	public int getHeight() {
-		return height;
-	}
-	
-	public void setHeight(int x) {
-		this.height = x;
+		return 1 + getNumOfNodes(x.getLeft()) + getNumOfNodes(x.getRight());
 	}
 	
 	@Override

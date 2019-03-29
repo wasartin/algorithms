@@ -18,8 +18,6 @@ public class NodeTest {
 	
 	public final static int LEFT = 1;
 	public final static int RIGHT = -1;
-	public final static int RED = 0;
-	public final static int BLACK = 1;
 	
 	public final static Node nilNode = new Node(new Endpoint(-1, 0));
 
@@ -40,9 +38,21 @@ public class NodeTest {
 		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
 	}
 	
+	//LEFT OFF HERE
+	//Currently, getSize of a node returns the number of internal nodes.
+	//pretty sure there is a method for the maximum num of nodes in a tree just by internal nodes.
 	@Test
 	public void sizeOfNode() {
-		//Assert.assertTrue(rbt1.getRoot().getSize() == 17);
+		System.out.println("root.getSize() :" + rbt1.getRoot().getSize());
+		System.out.println("Num of nodes in root: " + rbt1.getRoot().getNumOfNodes());
+		System.out.println("MaxNodes: " +rbt1.getRoot().getMaxNodes());
+		Assert.assertTrue(rbt1.getRoot().getSize() == 17); //this is counting nil nodes
+	}
+	
+	@Test
+	public void heightOfNodes() {
+		System.out.println("Height of the tree: " + rbt1.getRoot().getHeight());
+		Assert.assertTrue(rbt1.getRoot().getHeight() == 4);
 	}
 	
 	@Test
