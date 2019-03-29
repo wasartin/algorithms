@@ -33,9 +33,7 @@ public class RBTree{
 	 * Note. A red-black tree T must contain exactly one instance of T.nil.
 	 * @return
 	 */
-	public Node getNILNode() {
-		return nil;
-	}
+	public Node getNILNode() { return nil; }
 	
 	/**
 	 * Returns the number of internal nodes in the tree.
@@ -55,11 +53,14 @@ public class RBTree{
 		return getHeight(this.root);
 	}
 	
+//	private int getHeight(Node x) {
+//		if(x.equals(this.nil)) {
+//			return -1;
+//		}
+//		return Math.max(getHeight(x.getLeft()), getHeight(x.getRight())) + 1; //Maximum descendent leaves + 1 for the nil node.
+//	}
 	private int getHeight(Node x) {
-		if(x.equals(this.nil)) {
-			return -1;
-		}
-		return Math.max(getHeight(x.getLeft()), getHeight(x.getRight())) + 1; //Maximum descendent leaves + 1 for the nil node.
+		return (x.getHeight());
 	}
 	
 	public int getBlackHeight() {
