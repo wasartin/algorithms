@@ -9,17 +9,17 @@ public class RBTree{
 	
 	private Node root;
 	private Node nil;
-//	private int height;
-	private int blackHeight;
 
+	/**
+	 * @Required
+	 */
 	public RBTree() {
-		Endpoint e = new Endpoint(0, 0);
-		nil = new Node(e);
-		nil.setColor(BLACK);//all new nodes are red, correct that here for the nil node
+		nil = new Node(new Endpoint(-1, 0));
 		root = nil;
 	}
 	
 	/**
+	 * @Required
 	 * Returns the root node.
 	 * @return
 	 */
@@ -31,134 +31,59 @@ public class RBTree{
 		this.root = root;
 	}
 	
-	/**Returns the nil node.
+	/**
+	 * @Required
+	 * Returns the nil node.
 	 * Note. A red-black tree T must contain exactly one instance of T.nil.
 	 * @return
 	 */
-	public Node getNILNode() {
-		return nil;
-	}
+	public Node getNILNode() { return this.nil; }
 	
-	/**
+	/** 
+	 * @Required
+	 * @Runtime O(1)
 	 * Returns the number of internal nodes in the tree.
 	 * @return
 	 */
 	public int getSize() {
-		//TODO
-		return -1;
+		return root.getSize();
 	}
 	
-	/**
+	/** @Required - 
+	 * 	@Runtime O(1)
 	 *  Returns the height of the tree.
 	 *  The height is the maximum number of edges from the root to its descendant leaves. 
 	 *  Do not forget the sentinal Node in a RBTree
 	 * @return
 	 */
 	public int getHeight() {
-		return getHeight(this.root);
+		return this.getRoot().getHeight();
 	}
 	
-	private int getHeight(Node x) {
-		if(x.equals(this.nil)) {
-			return -1;
-		}
-		return Math.max(getHeight(x.getLeft()), getHeight(x.getRight())) + 1; //Maximum descendent leaves + 1 for the nil node.
-	}
-	
-	//This is probably not needed, will need to be tested.
 	public int getBlackHeight() {
 		return getBlackHeight(this.root);
 	}
 	
-	private int getBlackHeight(Node x) {
+	public int getBlackHeight(Node x) {
 		if(x.equals(this.nil)) {
 			return 1;
 		}
 		if(x.getColor() == BLACK){
-			return 1 + Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); //IDK if this is right or not.
+			return 1 + Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
 		}
-		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); //Node is red so keep traversing
+		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
 
 	}
-
-	//Additional RedBlackTree methods from CLRS
 	
 	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
-	 * @param x
-	 */
-	private void leftRotate(Node x) {
-		Node y = x.getRight();
-		x.setRight(y.getLeft());
-		if(!y.getLeft().equals(nil)) {
-			y.getLeft().setParent(x);
-		}
-		y.setParent(x.getParent());
-		if(x.getParent().equals(nil)) {
-			root = y;
-		}
-		else if(x.equals(x.getParent().getLeft())) {
-			x.getParent().setLeft(y);
-		}
-		else {
-			x.getParent().setRight(y);
-		}
-		y.setLeft(x);
-		x.setParent(y);
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
-		
-		x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
-		y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
-//		x.setMaxVal();
-//		y.setMaxVal(max);
-//		
-//		x.setEmax(e);
-//		y.setEmax(e);
-		
-		
-	}
-	
-	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
-	 * @param x
-	 */
-	private void rightRotate(Node x) {
-		Node y = x.getLeft();
-		x.setLeft(y.getRight());
-		if(!y.getRight().equals(nil)) {
-			y.getRight().setParent(x);
-		}
-		y.setParent(x.getParent());
-		if(x.getParent().equals(nil)) {
-			root = y;
-		}
-		else if(x.equals(x.getParent().getRight())) {
-			x.getParent().setRight(y);
-		}
-		else {
-			x.getParent().setLeft(y);
-		}
-		y.setRight(x);
-		x.setParent(y);
-		y.setSize(x.getSize());
-		x.setSize(x.getRight().getSize() + x.getLeft().getSize() + 1);
-		
-		x.setVal(x.getLeft().getVal() + x.getP() + x.getRight().getVal());
-		y.setVal(y.getLeft().getVal() + y.getP() + y.getRight().getVal());
-	}
-	
-	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
 	public void RBInsert(Node z) {
 		Node y = this.nil;
 		Node x = this.root;
 		while(!x.equals(this.nil)) {
+			x.setSize(x.getSize() + 1); 					//1st phase update (Mentioned in CLRS 14.1)
+			x.setHeight(x.getHeight() + 1);					
 			y = x;
 			if(z.getKey() < x.getKey()) {
 				x = x.getLeft();
@@ -179,17 +104,15 @@ public class RBTree{
 		}
 		z.setLeft(this.nil);
 		z.setRight(this.nil);
-		z.setColor(RED);
 		RBInsertFixup(z);
+		z.setEmax(findEMax_Rec(z));//Cheap fix for now. (b/c this is also called in Left & right rotate)
 	}
 	
 	/** From CLRS
-	 * Private helper method. Not sure if we need this for the 
-	 * project, but it is a method for a RBTree so I made it.
 	 * @param x
 	 */
 	private void RBInsertFixup(Node z) {
-		Node y;
+		Node y = null;
 		while(z.getParent().getColor() == RED) {
 			if(z.getParent().equals(z.getParent().getParent().getLeft())) {
 				y = z.getParent().getParent().getRight();	
@@ -200,9 +123,9 @@ public class RBTree{
 					z = z.getParent().getParent();
 				}
 				else {
-					if(z.equals(z.getParent().getRight())) { 
+					if(z.equals(z.getParent().getRight())) { 		//case 2
 						z = z.getParent();
-						leftRotate(z);//case 2
+						leftRotate(z);
 					}
 					z.getParent().setColor(BLACK);					//case 3
 					z.getParent().getParent().setColor(RED);
@@ -231,6 +154,119 @@ public class RBTree{
 		this.root.setColor(BLACK);
 	}
 	
+	/** From CLRS
+	 * @param x
+	 */
+	private void leftRotate(Node x) {
+		Node y = x.getRight();
+		x.setRight(y.getLeft());
+		if(!y.getLeft().equals(nil)) {
+			y.getLeft().setParent(x);
+		}
+		y.setParent(x.getParent());
+		if(x.getParent().equals(nil)) {
+			root = y;
+		}
+		else if(x.equals(x.getParent().getLeft())) {
+			x.getParent().setLeft(y);
+		}
+		else {
+			x.getParent().setRight(y);
+		}
+		y.setLeft(x);
+		x.setParent(y);
+
+		updateNodesInfo(x, y);
+	}
+	
+	/** From CLRS
+	 * Private helper method. Not sure if we need this for the 
+	 * project, but it is a method for a RBTree so I made it.
+	 * @param x
+	 */
+	private void rightRotate(Node x) {
+		Node y = x.getLeft();
+		x.setLeft(y.getRight());
+		if(!y.getRight().equals(nil)) {
+			y.getRight().setParent(x);
+		}
+		y.setParent(x.getParent());
+		if(x.getParent().equals(nil)) {
+			root = y;
+		}
+		else if(x.equals(x.getParent().getRight())) {
+			x.getParent().setRight(y);
+		}
+		else {
+			x.getParent().setLeft(y);
+		}
+		y.setRight(x);
+		x.setParent(y);
+
+		updateNodesInfo(x, y);
+	}
+
+	private void updateNodesInfo(Node x, Node y) {
+		y.setSize(x.getSize());											//second phase update (Mentioned in CLRS 14.1)
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);	//second phase update (Mentioned in CLRS 14.1)
+		updateNodeInfo(x);
+		updateNodeInfo(y);
+	}
+	
+	private void updateNodeInfo(Node v) {
+		v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
+		v.setVal(getNodeVal(v));
+		v.setMaxVal(getNodeMaxVal(v));
+		v.setEmax(findEMax_Rec(v));
+	}
+
+	public int getNodeMaxVal(Node x) {
+		if(x.equals(this.nil)) {//base case
+			return x.getP(); //which is 0
+		}
+		int caseOne = getNodeMaxVal(x.getLeft());
+		int caseTwo = x.getLeft().getVal() + x.getP();
+		int caseThree = caseTwo + getNodeMaxVal(x.getRight());
+		x.setMaxVal(max(caseOne, caseTwo, caseThree));
+		return x.getMaxVal();
+	}
+
+	private int getNodeVal(Node input) {
+		if(input.equals(this.nil)) {
+			return input.getP();
+		}
+		input.setVal(getNodeVal(input.getLeft()) + input.getP() + getNodeVal(input.getRight()));
+		return input.getVal();
+	}
+	
+	private int max(int one, int two, int three) {
+		int temp = Math.max(one, two);
+		return Math.max(temp, three);
+	}
+
+	public Endpoint findEMax_Rec(Node v) {
+		if(v.equals(this.nil)) { //base case
+			return this.nil.getEndpoint();
+		}
+		int caseOne = v.getLeft().getVal();
+		int caseTwo = v.getLeft().getVal() + v.getP();
+		int caseThree = caseTwo + v.getRight().getVal();
+		
+		int maxNum = max(caseOne, caseTwo, caseThree);
+		if(maxNum == caseOne) {
+			v.getLeft().setEmax(findEMax_Rec(v.getLeft()));
+			return v.getLeft().getEmax();
+		}
+		if(maxNum == caseTwo) {
+			v.setEmax(v.getEndpoint());
+			return v.getEndpoint();
+		}
+		else {
+			v.getRight().setEmax(findEMax_Rec(v.getRight()));
+			return v.getRight().getEmax();
+		}
+	}
+	
 	/**
 	 * From CLRS
 	 * @param u
@@ -249,10 +285,6 @@ public class RBTree{
 		v.setParent(u.getParent());
 	}
 	
-	/**
-	 * From CLRS
-	 * @param z
-	 */
 	private void RBDelete(Node z) {
 		Node y = z;
 		Node x = this.nil;
@@ -344,14 +376,13 @@ public class RBTree{
 			}
 		}
 	}
+
 	
 	//BST Methods
-	
 	/** From CLRS
 	 * Return a reference to the node y in the subtree rooted at x
 	 * such that y.key == k. Return null if no such y exists.
 	 */
-	
 	private Node searchIterative(Node x, int k) {
 		Node currNode = this.root;
 		while(!currNode.equals(this.nil)) {
@@ -372,8 +403,7 @@ public class RBTree{
 	 * Return a reference to the node in the subtree rooted at x
 	 * that contains the minimum key-value
 	 */
-	
-	private Node minimum(Node x) {
+	public Node minimum(Node x) {
 		while(!x.getLeft().equals(this.nil)) {
 			x = x.getLeft();
 		}
@@ -386,7 +416,7 @@ public class RBTree{
 	 * @param x
 	 * @return
 	 */
-	private Node maximum(Node x) {
+	public Node maximum(Node x) {
 		while(!x.getRight().equals(this.nil)) {
 			x = x.getRight();
 		}
@@ -400,7 +430,7 @@ public class RBTree{
 	 * @param x
 	 * @return
 	 */
-	private Node successor(Node x) {
+	public Node successor(Node x) {
 		if(!x.getRight().equals(this.nil)) {
 			return minimum(x.getRight());
 		}
@@ -435,7 +465,7 @@ public class RBTree{
 	 * @param x
 	 * @return
 	 */
-	private Node predecessor(Node x) {
+	public Node predecessor(Node x) {
 		if(!(x.getRight().equals(this.nil))) {
 			return maximum(x.getLeft());
 		}

@@ -2,6 +2,8 @@ package main.java;
 
 import java.util.ArrayList;
 
+//TODO: Professor mentioned there will be test with mulitple same endpoints
+//
 public class Intervals {
 	
 	private int currID = 0;//Not sure how to handle a 'global' counter

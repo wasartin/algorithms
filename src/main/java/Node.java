@@ -4,49 +4,63 @@ public class Node{
 	
 	public static final int RED = 0;
 	public static final int BLACK = 1;
-	
+
+	private static final String FORMAT = "\n"
+			+ "Color:%5s"
+			+ "\n" 
+			+ "KEY:   %s          Parent: %s" 
+			+ "\n"
+			+ "Value: %-8d ||  MaxValue: %d          LeftChild: %s"
+			+ "\n"
+			+ "Emax:  %s          RightChild: %s"
+			+ "\n"
+			+ "Height:%d, Size: %d";
+
 	/**
 	 * The tree is sorted by endpoints. the Key is the endpoint.
 	 */
-	private int key; //this is 'e', 
+	private Endpoint key; //this is 'e', 
 	private int p; //this is 'p(e)'
-	private Endpoint e;
 	private int color;
 	private Node parent;
 	private Node left;
 	private Node right;
-	private Endpoint eMax;//TODO needs to be O(1)
-	public int val; //TODO needs to be O(1)
-	public int maxVal; //TODO needs to be O(1)
-	private int size; //number of internal nodes of this subtree
+	
+	private int height;
+	private int size;
+	private Endpoint eMax;
+	public int val; 
+	public int maxVal; 
 	
 	public Node() {
-		//?
 		color = RED; //all new nodes are red
 		size = 1;
-		maxVal = val = 0;
+		p = maxVal = val = 0;
 	}
-	
-	//Not sure how to handle the nil node yet, a -1 for key?
+
 	public Node(Endpoint e) {
-		this.e = e;
-		this.key = e.getValue();
-		p = e.getPValue();
-		color = RED; //all new nodes are red, this is probably a bad way to do this.
-		size = 1;
-		val = e.getPValue();
-		
+		this(null, e, RED, 1);
+		if(e.getPValue() == 0 && e.getValue() == -1) {//For nil node
+			this.setColor(BLACK);
+			this.setSize(0); 
+			this.setHeight(0);
+		}
 	}
 	
-	public Node(Node Parent, Endpoint e, int color, int size) {
+	public Node(Node parent, Endpoint e, int color, int size) {
 		this.parent = parent;
-		this.e = e;
-		this.key = e.getValue();
+		this.key = e;
+		eMax = e;
 		p = e.getPValue();
+		this.color = color;
 		this.size = size;
+		maxVal = val = e.getPValue();
+		//height = 1;//height of everyNode except the nil node is 1
+		height = 1;
 	}
 	
-	/**
+	/** 
+	 * @Required
 	 * Returns the parent of this node.
 	 * @return
 	 */
@@ -57,7 +71,9 @@ public class Node{
 	public void setParent(Node parent) {
 		this.parent = parent;
 	}
+	
 	/**
+	 * @Required
 	 * Returns the left child.
 	 * @return
 	 */
@@ -68,8 +84,10 @@ public class Node{
 	public void setLeft(Node left) {
 		this.left = left;
 	}
-	/**Returns the right child.
-	 * 
+
+	/**
+	 * @Required
+	 * Returns the right child.
 	 * @return
 	 */
 	public Node getRight() {
@@ -80,6 +98,7 @@ public class Node{
 		this.right = right;
 	}
 	/**
+	 * @Required for project
 	 * TODO check if this is right. 
 	 * i.e., do we just do int for this, or 
 	 * stick with the generic
@@ -87,22 +106,19 @@ public class Node{
 	 * @return 'e', which is the key
 	 */
 	public int getKey() {
-		return this.key;
+		return this.key.getValue();
 	}
 	
-	public void setKey(int key) {
-		this.key = key;
-	}
-	
-	/** Returns the value of the function p based on this endpoint.
-	 * 
+	/** 
+	 * @Required for project
+	 * Returns the value of the function p based on this endpoint.
 	 * @return
 	 */
 	public int getP() {
 		return this.p;
 	}
 	
-	/**
+	/**@Required for project
 	 * Returns the val of the node as described in this assignment.
 	 * Which is->
 	 * 	the sum of the p-values of the nodes in the subtree rooted
@@ -116,26 +132,14 @@ public class Node{
 	 */
 	public int getVal() {
 		return val;
-		//return getValue(this);
 	}
 	
 	public void setVal(int x) {
 		this.val = x;
 	}
-	
-	/**TODO this is wrong, getValue needs to be O(1)
-	 * Helper method for getVal(), recursive
-	 * @param x
-	 * @return
-	 */
-//	private int getValue(Node x) {
-//		if(x.getP() == 0) {//NIL NODE, this is the base case
-//			return x.getP();
-//		}
-//		return x.getP() + getValue(x.getLeft()) + getValue(x.getRight());
-//	}
-	
-	/** TODO: This is wrong, maxVal needs to be found in O(1)
+
+	/** 
+	 * @Required for project
 	 * Returns the maxval of the node as described in this assignment.
 	 * Which is ->
 	 * 	the max value obtained by the expression
@@ -160,41 +164,22 @@ public class Node{
 	 */
 	public int getMaxVal() { 
 		return maxVal;
-		
-//		int caseOne = getMaxVal(this.getLeft());
-//		int caseTwo = this.getLeft().getVal() + this.getP();
-//		int caseThree = caseTwo + getMaxVal(this.getRight()); 
-//		return max(caseOne, caseTwo, caseThree);
 	}
 	
 	public void setMaxVal(int max) {
 		this.maxVal = max;
 	}
 	
-	public int getMaxVal(Node x) {
-		if(x.getP() == 0) {
-			return 0;
-		}
-		int caseOne = getMaxVal(x.getLeft());
-		int caseTwo = x.getLeft().getVal() + x.getP();
-		int caseThree = caseTwo + getMaxVal(x.getRight());
-		return max(caseOne, caseTwo, caseThree);
-	}
-	
-	private int max(int one, int two, int three) {
-		int temp = Math.max(one, two);
-		return Math.max(temp, three);
-	}
-	
-	/**
+	/** 
+	 * @Required for project, needs to be O(1)
 	 * Returns the Endpoint object that this node represents.
 	 * @return
 	 */
 	public Endpoint getEndpoint() {
-		return e;
+		return key;
 	}
 	
-	/**
+	/** @Required for project
 	 * Returns an Endpoint object that represents emax. Calling this
 	 * method on the root* node will give the Endpoint object whose getValue() provides a
 	 * point of maximum overlap.
@@ -204,48 +189,17 @@ public class Node{
 	 * 	over all i such that lv <= i <= rv.
 	 * @return
 	 */
-	//This value is dynamic, which is why it is not an instance variable
 	public Endpoint getEmax() { //the child that has the highest maxval
 		return eMax;
-		//return getEmax(this);
 	}
-	
-	private Endpoint getEmax(Node x) {
-		if(x.getP() == 0) { //base case, at the NIL Node
-			return new Endpoint(0, 0);
-		}
-		Endpoint currMax = x.getEndpoint();
-		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
-			getEmax(x.getLeft());
-		}
-		else if(x.getRight().getMaxVal() >= x.getMaxVal()) {
-			getEmax(x.getRight());
-		}
-		else {
-			return currMax;
-		}
-		return currMax;
-	}
-//	private Endpoint getEmax(Node x) {
-//		if(x.getP() == 0) { //base case, at the NIL Node
-//			return null;
-//		}
-//		Endpoint currMax = x.getEndpoint();
-//		if(x.getLeft().getMaxVal() >= x.getMaxVal()) {
-//			getEmax(x.getLeft());
-//		}
-//		else {
-//			return currMax;
-//		}
-//		return currMax;
-//	}
+
 	public void setEmax(Endpoint e) {
 		this.eMax = e;
 	}
 	
-	
 	/**
-	 * : Returns 0 if red. Returns 1 if black
+	 * @Required for project
+	 * Returns 0 if red. Returns 1 if black
 	 * @return
 	 */
 	public int getColor() {
@@ -261,22 +215,59 @@ public class Node{
 	 * @return
 	 */
 	public int getSize() {
-		return getNumOfInternalNodes(this);
+		return size;
 	}
 	
 	public void setSize(int size) {
 		this.size = size;
 	}
 	
-	/**
-	 * TODO: Probably delete, b/c I think get size needs to be a constant.
-	 * @param x
-	 * @return
-	 */
-	private int getNumOfInternalNodes(Node x) {
+	public int getHeight() {
+		return height;
+		
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
+	public int getNumOfNodes() {
+		return getNumOfNodes(this);
+	}
+	
+	private int getNumOfNodes(Node x) {
 		if(x.getEndpoint().getPValue() == 0) {//base case
 			return 1;
 		}
-		return 1 + getNumOfInternalNodes(x.getLeft()) + getNumOfInternalNodes(x.getRight()); //this node, plus all of its left and right children
+		return 1 + getNumOfNodes(x.getLeft()) + getNumOfNodes(x.getRight());
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof Node){
+			Node temp = (Node) other;
+			if(temp.getEndpoint().equals(this.getEndpoint()) && (this.getColor() == temp.getColor())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1)? "Nil Node" : "Key:" 
+				+ this.getKey() + ", Color:" + ((this.getColor() == RED) ? "Red" : "Black");
+	}
+	
+	public String structuredToString() {
+		return String.format(FORMAT, ((this.getColor() == RED) ? "Red" : "Black"), this.getEndpoint().toString(), 
+				this.getParent().toString(), this.getVal(), this.getMaxVal(), this.getLeft().toString(), 
+				this.getEmax().toString(), this.getRight().toString(), this.getHeight(), this.getSize());
+	}
+	
+	//A method just for testing
+	public boolean isNilNode() {
+		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1) ? true : false;
+	}
+	
 }
