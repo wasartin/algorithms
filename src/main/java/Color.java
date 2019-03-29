@@ -1,6 +1,6 @@
 package main.java;
 
+//TODO
 public enum Color {
-	RED,
-	BLACK
+
 }
