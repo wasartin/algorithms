@@ -15,6 +15,7 @@ public class RBTreeTest {
 	//This is the tree from the spec sheet
 	public static RBTree rbt1;
 	
+	
 	RBTree tree;
 	Node node1;
     Node node2;
@@ -103,6 +104,7 @@ public class RBTreeTest {
 	 */
 	@Test
 	public void RBTreePropertyFive_Success() {
+		Assert.assertTrue(rbt1.getBlackHeight() == 3);
 		Assert.assertTrue(rbt1.getBlackHeight(rbt1.getRoot()) == 3);
 		Assert.assertTrue(rbt1.getBlackHeight(rbt1.getRoot().getLeft()) == 2);
 		Assert.assertTrue(rbt1.getBlackHeight(rbt1.getRoot().getRight()) == 2);
@@ -134,6 +136,48 @@ public class RBTreeTest {
 		Assert.assertTrue(seven.equals(rbt1.getRoot().getRight().getRight()));
 		Assert.assertTrue(eight.equals(rbt1.getRoot().getRight().getRight().getRight()));	
 		Assert.assertTrue(nilNode.equals(rbt1.getRoot().getParent()));
+	}
+	
+	/**
+	 * @Required for project
+	 * All the NilNodes are referencing the same node.
+	 */
+	@Test
+	public void nilNodes() {
+		ArrayList<Node> inOrder = rbt1.getNodesInOrder(rbt1.getRoot());
+		for(int i = 0; i < inOrder.size(); i++) {
+			Node temp = inOrder.get(i);
+			if(temp.getParent().isNilNode()) {
+				Assert.assertTrue(temp.getParent() == rbt1.getNILNode());
+			}
+			if(temp.getLeft().isNilNode()) {
+				Assert.assertTrue(temp.getLeft() == rbt1.getNILNode());
+			}
+			if(temp.getRight().isNilNode()) {
+				Assert.assertTrue(temp.getRight() == rbt1.getNILNode());
+			}
+		}
+	}
+	
+	/**
+	 * @Required for project
+	 */
+	@Test
+	public void GetSizeTest_Success() {
+		Assert.assertTrue(rbt1.getSize() == 8);
+		RBTree emptyTree = new RBTree();
+		Assert.assertTrue(emptyTree.getSize() == 0);
+	}
+	
+	/**
+	 * @Required for proejct
+	 * 
+	 */
+	@Test
+	public void GetHeightTest_Success() {
+		Assert.assertTrue(rbt1.getHeight() == 4);
+		RBTree emptyTree = new RBTree();
+		Assert.assertTrue(emptyTree.getHeight() == 0);
 	}
 	
 	@Test

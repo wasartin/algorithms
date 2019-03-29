@@ -38,21 +38,24 @@ public class NodeTest {
 		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
 	}
 	
-	//LEFT OFF HERE
-	//Currently, getSize of a node returns the number of internal nodes.
-	//pretty sure there is a method for the maximum num of nodes in a tree just by internal nodes.
+	//TODO: get size to correctly return the number of nodes.
 	@Test
 	public void sizeOfNode() {
-		System.out.println("root.getSize() :" + rbt1.getRoot().getSize());
-		System.out.println("Num of nodes in root: " + rbt1.getRoot().getNumOfNodes());
-		System.out.println("MaxNodes: " +rbt1.getRoot().getMaxNodes());
-		Assert.assertTrue(rbt1.getRoot().getSize() == 17); //this is counting nil nodes
+		int[] correctValues_rbt1 = {1, 3, 1, 8, 1, 4, 2, 1};
+		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		for(int i = 0; i < x.size(); i++) {
+			Assert.assertTrue(x.get(i).getSize() == correctValues_rbt1[i]);
+		}
 	}
 	
 	@Test
 	public void heightOfNodes() {
-		System.out.println("Height of the tree: " + rbt1.getRoot().getHeight());
-		Assert.assertTrue(rbt1.getRoot().getHeight() == 4);
+		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		int[] correctHeightValues = {1, 2, 1, 4, 1, 3, 2, 1};
+		for(int i = 0; i < x.size(); i++) {
+			System.out.println("      actual: " + x.get(i).getHeight() + ", expected: " + correctHeightValues[i]);
+			Assert.assertTrue(x.get(i).getHeight() == correctHeightValues[i]);
+		}
 	}
 	
 	@Test
@@ -60,19 +63,12 @@ public class NodeTest {
 		int[] correctValues = {1, 3, 1, 0, -1, -2, -2, -1};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
-			//System.out.println(x.get(i).toString());
 			Assert.assertTrue(x.get(i).getVal() == correctValues[i]);
 		}
-		
-		Node max = rbt1.maximum(rbt1.getRoot());
-	//	System.out.println("11's left:" + max.getLeft().toString());
-	//	System.out.println("11's right:" + max.getRight().toString());
-	//	System.out.println("11 node info:" + max.toString());
 	}
 	
 	@Test
 	public void getMaxValue() {
-	//	System.out.println("Root maxVal expected: 3, actual:  " + rbt1.getRoot().getMaxVal());
 		Assert.assertTrue(rbt1.getRoot().getMaxVal() == 3);
 		int[] correctMaxVals = {1, 3, 1, 3, 0, 0, 0, 0};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
@@ -91,8 +87,6 @@ public class NodeTest {
 		Endpoint[] eMax = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
-		//	System.out.println("Current Node:" + x.get(i).toString());
-		//	System.out.println("expected: " + eMax[i].getValue() + ", acutal: " + x.get(i).getEmax().getValue());
 			Assert.assertTrue(x.get(i).getEmax().equals(eMax[i]));
 		}
 	}

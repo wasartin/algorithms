@@ -10,12 +10,16 @@ public class RBTree{
 	private Node root;
 	private Node nil;
 
+	/**
+	 * @Required
+	 */
 	public RBTree() {
 		nil = new Node(new Endpoint(-1, 0));
 		root = nil;
 	}
 	
 	/**
+	 * @Required
 	 * Returns the root node.
 	 * @return
 	 */
@@ -27,13 +31,17 @@ public class RBTree{
 		this.root = root;
 	}
 	
-	/**Returns the nil node.
+	/**
+	 * @Required
+	 * Returns the nil node.
 	 * Note. A red-black tree T must contain exactly one instance of T.nil.
 	 * @return
 	 */
-	public Node getNILNode() { return nil; }
+	public Node getNILNode() { return this.nil; }
 	
-	/**
+	/** 
+	 * @Required
+	 * @Runtime O(1)
 	 * Returns the number of internal nodes in the tree.
 	 * @return
 	 */
@@ -41,24 +49,15 @@ public class RBTree{
 		return root.getSize();
 	}
 	
-	/**
+	/** @Required - 
+	 * 	@Runtime O(1)
 	 *  Returns the height of the tree.
 	 *  The height is the maximum number of edges from the root to its descendant leaves. 
 	 *  Do not forget the sentinal Node in a RBTree
 	 * @return
 	 */
 	public int getHeight() {
-		return getHeight(this.root);
-	}
-	
-//	private int getHeight(Node x) {
-//		if(x.equals(this.nil)) {
-//			return -1;
-//		}
-//		return Math.max(getHeight(x.getLeft()), getHeight(x.getRight())) + 1; //Maximum descendent leaves + 1 for the nil node.
-//	}
-	private int getHeight(Node x) {
-		return (x.getHeight());
+		return this.getRoot().getHeight();
 	}
 	
 	public int getBlackHeight() {
@@ -83,7 +82,8 @@ public class RBTree{
 		Node y = this.nil;
 		Node x = this.root;
 		while(!x.equals(this.nil)) {
-			x.setSize(x.getSize() + 1); //this doesn't consider nilNodes
+			x.setSize(x.getSize() + 1); 					//1st phase update (Mentioned in CLRS 14.1)
+			x.setHeight(x.getHeight() + 1);					
 			y = x;
 			if(z.getKey() < x.getKey()) {
 				x = x.getLeft();
@@ -104,9 +104,8 @@ public class RBTree{
 		}
 		z.setLeft(this.nil);
 		z.setRight(this.nil);
-		z.setColor(RED);
 		RBInsertFixup(z);
-		z.setEmax(findEMax_Rec(z));
+		z.setEmax(findEMax_Rec(z));//Cheap fix for now. (b/c this is also called in Left & right rotate)
 	}
 	
 	/** From CLRS
@@ -176,8 +175,7 @@ public class RBTree{
 		}
 		y.setLeft(x);
 		x.setParent(y);
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
+
 		updateNodesInfo(x, y);
 	}
 	
@@ -204,25 +202,22 @@ public class RBTree{
 		}
 		y.setRight(x);
 		x.setParent(y);
-		y.setSize(x.getSize());
-		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);
-		updateNodesInfo(x, y); //TODO refactor this shit
+
+		updateNodesInfo(x, y);
 	}
 
 	private void updateNodesInfo(Node x, Node y) {
+		y.setSize(x.getSize());											//second phase update (Mentioned in CLRS 14.1)
+		x.setSize(x.getLeft().getSize() + x.getRight().getSize() + 1);	//second phase update (Mentioned in CLRS 14.1)
 		updateNodeInfo(x);
 		updateNodeInfo(y);
 	}
 	
 	private void updateNodeInfo(Node v) {
-		//TODO: SET HEIGHT HERE>, floor of (logbase 2 n)
-		v.setHeight((int) Math.floor((Math.log(v.getSize()) / Math.log(2))));
+		v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
 		v.setVal(getNodeVal(v));
 		v.setMaxVal(getNodeMaxVal(v));
 		v.setEmax(findEMax_Rec(v));
-//		if(!v.getParent().equals(this.nil)) {
-//			v.getParent().setSize(v.getParent().getLeft().getSize() + v.getParent().getRight().getSize() + 1);
-//		}
 	}
 
 	public int getNodeMaxVal(Node x) {
@@ -289,6 +284,7 @@ public class RBTree{
 		}
 		v.setParent(u.getParent());
 	}
+	
 	private void RBDelete(Node z) {
 		Node y = z;
 		Node x = this.nil;

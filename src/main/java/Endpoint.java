@@ -6,6 +6,7 @@ public class Endpoint {
 	public static final int LEFT_POINT = 1;
 	public static final int NIL_POINT = 0;
 	
+	private static final String FORMAT = "[Point:%3d || %9s]";
 	private int value;
 	private int pValue;
 	
@@ -41,5 +42,10 @@ public class Endpoint {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format(FORMAT, this.getValue(), ((this.getPValue() == LEFT_POINT)? "Left(+1)" : "Right(-1)"));
 	}
 }

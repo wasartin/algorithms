@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+//TODO: Professor mentioned there will be test with mulitple same endpoints
 public class IntervalsTest {
 	
 	@Rule
