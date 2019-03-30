@@ -476,4 +476,13 @@ public class RBTree{
 		}
 		return y;
 	}
+	
+	public void print(String prefix, Node n, boolean isLeft) {
+	    if (!n.isNilNode()) {
+	        print(prefix + "     ", n.getRight(), false);
+	        System.out.println (prefix + ("|-- ") + n.simpleString());
+	        print(prefix + "     ", n.getLeft(), true);
+	    }
+	}
+
 }

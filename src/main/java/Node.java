@@ -259,6 +259,11 @@ public class Node{
 				+ this.getKey() + ", Color:" + ((this.getColor() == RED) ? "Red" : "Black");
 	}
 	
+	public String simpleString() {
+		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1)? "Nil" : this.getKey() 
+				+ ":" + ((this.getColor() == RED) ? "R" : "B");
+	}
+	
 	public String structuredToString() {
 		return String.format(FORMAT, ((this.getColor() == RED) ? "Red" : "Black"), this.getEndpoint().toString(), 
 				this.getParent().toString(), this.getVal(), this.getMaxVal(), this.getLeft().toString(), 
@@ -269,5 +274,6 @@ public class Node{
 	public boolean isNilNode() {
 		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1) ? true : false;
 	}
+	
 	
 }

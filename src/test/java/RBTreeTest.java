@@ -199,4 +199,15 @@ public class RBTreeTest {
 		
 	}
 	
+	@Test
+	public void deleteCase1_Success() {
+		RBTree case1 = new RBTree();
+		
+	}
+	
+	@Test
+	public void print() {
+		rbt1.print("", rbt1.getRoot(), false);
+	}
+	
 }
