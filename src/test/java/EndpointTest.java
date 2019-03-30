@@ -4,6 +4,7 @@ package test.java;
 import org.junit.rules.ExpectedException;
 import main.java.Endpoint;
 import main.java.Intervals;
+import main.java.Position;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,11 +14,6 @@ import org.junit.Before;
 import org.junit.Rule;
 
 public class EndpointTest {
-	
-	//TODO: make an ENUM
-	public static final int RIGHT_POINT = -1;
-	public static final int LEFT_POINT = 1;
-	public static final int NIL_POINT = 0;
 	
 	@Rule
 	public final ExpectedException thrown = ExpectedException.none();
@@ -29,9 +25,9 @@ public class EndpointTest {
 	
 	@Test
 	public void constructorTest_Success() {
-		Endpoint left = new Endpoint(1, 1);
-		Endpoint right = new Endpoint(2, -1);
-		Endpoint nil = new Endpoint(-1, 0);
+		Endpoint left = new Endpoint(1, Position.LEFT);
+		Endpoint right = new Endpoint(2, Position.RIGHT);
+		Endpoint nil = new Endpoint(-1, Position.NIL);
 	}
 	
 	@Test
@@ -63,9 +59,9 @@ public class EndpointTest {
 		Endpoint left = new Endpoint(1, 1);
 		Endpoint right = new Endpoint(2, -1);
 		Endpoint nil = new Endpoint(-1, 0);
-		Assert.assertTrue(left.getPValue() == LEFT_POINT);
-		Assert.assertTrue(right.getPValue() == RIGHT_POINT);
-		Assert.assertTrue(nil.getPValue() == NIL_POINT);
+		Assert.assertTrue(left.getPValue() == Position.LEFT);
+		Assert.assertTrue(right.getPValue() == Position.RIGHT);
+		Assert.assertTrue(nil.getPValue() == Position.NIL);
 	}
 
 }

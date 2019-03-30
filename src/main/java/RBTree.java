@@ -12,7 +12,7 @@ public class RBTree{
 	 * @Required
 	 */
 	public RBTree() {
-		nil = new Node(new Endpoint(-1, 0));
+		nil = new Node(new Endpoint(-1, Position.NIL));
 		root = nil;
 	}
 	

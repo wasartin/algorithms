@@ -2,20 +2,20 @@ package main.java;
 
 public class Endpoint {
 	
-	public static final int RIGHT_POINT = -1;
-	public static final int LEFT_POINT = 1;
-	public static final int NIL_POINT = 0;
-	
 	private static final String FORMAT = "[Point:%3d || %9s]";
 	private int value;
-	private int pValue;
+	private Position pValue;
 	
 	public Endpoint() {
-		
 	}
 	
+	
 	public Endpoint(int value, int p) {
-		if(p > 1 || p < -1) {
+		this(value, Position.getValueOf(p));
+	}
+	
+	public Endpoint(int value, Position p) {
+		if(p.equals(Position.ERROR)) {
 			throw new IllegalArgumentException("The value of p can only be -1 (right end point), 1 (left endpoint), and 0 (nil node)");
 		}
 		this.value = value;
@@ -30,7 +30,8 @@ public class Endpoint {
 	public int getValue() {
 		return value;
 	}
-	public int getPValue() {
+	
+	public Position getPValue() {
 		return pValue;
 	}
 	
@@ -47,6 +48,6 @@ public class Endpoint {
 	
 	@Override
 	public String toString() {
-		return String.format(FORMAT, this.getValue(), ((this.getPValue() == LEFT_POINT)? "Left(+1)" : "Right(-1)"));
+		return String.format(FORMAT, this.getValue(), ((this.getPValue() == Position.LEFT)? "Left(+1)" : "Right(-1)"));
 	}
 }

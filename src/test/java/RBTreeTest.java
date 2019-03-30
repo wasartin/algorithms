@@ -9,6 +9,7 @@ import org.junit.Test;
 import main.java.Color;
 import main.java.Endpoint;
 import main.java.Node;
+import main.java.Position;
 import main.java.RBTree;
 
 public class RBTreeTest {
@@ -18,25 +19,23 @@ public class RBTreeTest {
 	
 	//TODO: make more trees to test
 	
-	public final static Node nilNode = new Node(new Endpoint(-1, 0));
-	public final static int LEFT = 1;
-	public final static int RIGHT = -1;
+	public final static Node nilNode = new Node(new Endpoint(-1, Position.NIL));
 
 	@Before
 	public void setUp() {
 		rbt1 = new RBTree();
 		
-		rbt1.RBInsert(new Node(new Endpoint(0, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(0, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(4, Position.RIGHT)));
 		
-		rbt1.RBInsert(new Node(new Endpoint(1, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(6, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(1, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(6, Position.RIGHT)));
 		
-		rbt1.RBInsert(new Node(new Endpoint(3, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(9, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(3, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(9, Position.RIGHT)));
 		
-		rbt1.RBInsert(new Node(new Endpoint(7, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(7, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(11, Position.RIGHT)));
 	
 	}
 		/**
@@ -110,14 +109,14 @@ public class RBTreeTest {
 	
 	@Test
 	public void RBTreeInsert_Success() {
-		Node one = new Node(nilNode, new Endpoint(4, RIGHT), Color.BLACK, 17);
-		Node two = new Node(one, new Endpoint(1, LEFT), Color.RED, 7);
-		Node three = new Node(one, new Endpoint(7, LEFT), Color.RED, 9);
-		Node four = new Node(two, new Endpoint(0, LEFT), Color.BLACK, 3);
-		Node five = new Node(two, new Endpoint(3, LEFT), Color.BLACK, 3);
-		Node six = new Node(three, new Endpoint(6, RIGHT), Color.BLACK, 3);
-		Node seven = new Node(three, new Endpoint(9, RIGHT), Color.BLACK, 5);
-		Node eight = new Node(seven, new Endpoint(11, RIGHT), Color.RED, 3);
+		Node one = new Node(nilNode, new Endpoint(4, Position.RIGHT), Color.BLACK, 17);
+		Node two = new Node(one, new Endpoint(1, Position.LEFT), Color.RED, 7);
+		Node three = new Node(one, new Endpoint(7, Position.LEFT), Color.RED, 9);
+		Node four = new Node(two, new Endpoint(0, Position.LEFT), Color.BLACK, 3);
+		Node five = new Node(two, new Endpoint(3, Position.LEFT), Color.BLACK, 3);
+		Node six = new Node(three, new Endpoint(6, Position.RIGHT), Color.BLACK, 3);
+		Node seven = new Node(three, new Endpoint(9, Position.RIGHT), Color.BLACK, 5);
+		Node eight = new Node(seven, new Endpoint(11, Position.RIGHT), Color.RED, 3);
 		
 		Assert.assertTrue(one.equals(rbt1.getRoot()));
 		Assert.assertTrue(two.equals(rbt1.getRoot().getLeft()));
@@ -174,14 +173,14 @@ public class RBTreeTest {
 	
 	@Test
 	public void minimum_Success() {
-		Node minOfRoot = new Node(nilNode, new Endpoint(0, LEFT), Color.BLACK, 3);
+		Node minOfRoot = new Node(nilNode, new Endpoint(0, Position.LEFT), Color.BLACK, 3);
 		Assert.assertTrue(rbt1.minimum(rbt1.getRoot()).equals(minOfRoot));
 		Assert.assertTrue(rbt1.minimum(rbt1.getRoot().getLeft().getLeft()).equals(minOfRoot));
 	}
 	
 	@Test
 	public void maximum_Success() {
-		Node maxOfRoot = new Node(nilNode, new Endpoint(11, RIGHT), Color.RED, 3);
+		Node maxOfRoot = new Node(nilNode, new Endpoint(11, Position.RIGHT), Color.RED, 3);
 		Assert.assertTrue(rbt1.maximum(rbt1.getRoot()).equals(maxOfRoot));
 		Assert.assertTrue(rbt1.maximum(rbt1.getRoot().getRight().getRight().getRight()).equals(maxOfRoot));
 	}
@@ -200,11 +199,11 @@ public class RBTreeTest {
 	public void deleteCase1_Success() {
 		RBTree case1 = new RBTree();
 		
-		Node a = new Node(new Endpoint(0, LEFT));
-		Node b = new Node(new Endpoint(1, LEFT));
-		Node c = new Node(new Endpoint(6, RIGHT));
+		Node a = new Node(new Endpoint(0, Position.LEFT));
+		Node b = new Node(new Endpoint(1, Position.LEFT));
+		Node c = new Node(new Endpoint(6, Position.RIGHT));
 		case1.RBInsert(a);
-		case1.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		case1.RBInsert(new Node(new Endpoint(4, Position.RIGHT)));
 		case1.RBInsert(b);
 		case1.RBInsert(c);
 		case1.RBDelete(case1.getRoot().getRight());
@@ -223,11 +222,11 @@ public class RBTreeTest {
 	public void deleteCase2_Success() {
 		RBTree case2 = new RBTree();
 		
-		Node a = new Node(new Endpoint(0, LEFT));
-		Node b = new Node(new Endpoint(1, LEFT));
-		Node c = new Node(new Endpoint(6, RIGHT));
+		Node a = new Node(new Endpoint(0, Position.LEFT));
+		Node b = new Node(new Endpoint(1, Position.LEFT));
+		Node c = new Node(new Endpoint(6, Position.RIGHT));
 		case2.RBInsert(a);
-		case2.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		case2.RBInsert(new Node(new Endpoint(4, Position.RIGHT)));
 		case2.RBInsert(b);
 		case2.RBInsert(c);
 		case2.RBDelete(case2.getRoot().getRight());

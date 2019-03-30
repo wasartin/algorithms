@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import main.java.Endpoint;
 import main.java.Node;
+import main.java.Position;
 import main.java.RBTree;
 
 public class NodeTest {
@@ -16,26 +17,23 @@ public class NodeTest {
 	//This is the tree from the spec sheet
 	public static RBTree rbt1;
 	
-	public final static int LEFT = 1;
-	public final static int RIGHT = -1;
-	
-	public final static Node nilNode = new Node(new Endpoint(-1, 0));
+	public final static Node nilNode = new Node(new Endpoint(-1, Position.NIL));
 
 	@Before
 	public void setUp() {
 		rbt1 = new RBTree();
 		
-		rbt1.RBInsert(new Node(new Endpoint(0, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(0, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(4, Position.RIGHT)));
 		
-		rbt1.RBInsert(new Node(new Endpoint(1, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(6, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(1, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(6, Position.RIGHT)));
 		
-		rbt1.RBInsert(new Node(new Endpoint(3, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(9, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(3, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(9, Position.RIGHT)));
 		
-		rbt1.RBInsert(new Node(new Endpoint(7, LEFT)));
-		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
+		rbt1.RBInsert(new Node(new Endpoint(7, Position.LEFT)));
+		rbt1.RBInsert(new Node(new Endpoint(11, Position.RIGHT)));
 	}
 
 	@Test
@@ -52,8 +50,16 @@ public class NodeTest {
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		int[] correctHeightValues = {1, 2, 1, 4, 1, 3, 2, 1};
 		for(int i = 0; i < x.size(); i++) {
-			System.out.println("      actual: " + x.get(i).getHeight() + ", expected: " + correctHeightValues[i]);
 			Assert.assertTrue(x.get(i).getHeight() == correctHeightValues[i]);
+		}
+	}
+	
+	@Test
+	public void getPTest() {
+		int[] correctValues_rbt1 = {1, 1, 1, -1, -1, 1, -1, -1};
+		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		for(int i = 0; i < x.size(); i++) {
+			Assert.assertTrue(x.get(i).getP() == correctValues_rbt1[i]);
 		}
 	}
 	
@@ -78,9 +84,9 @@ public class NodeTest {
 	
 	@Test
 	public void getEmaxs() {
-		Endpoint e1 = new Endpoint(0, LEFT);
-		Endpoint e3 = new Endpoint(3, LEFT);
-		Endpoint e6 = new Endpoint(7, LEFT);
+		Endpoint e1 = new Endpoint(0, Position.LEFT);
+		Endpoint e3 = new Endpoint(3, Position.LEFT);
+		Endpoint e6 = new Endpoint(7, Position.LEFT);
 		
 		Endpoint[] eMax = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());

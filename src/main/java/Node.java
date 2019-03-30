@@ -17,7 +17,6 @@ public class Node{
 	 * The tree is sorted by endpoints. the Key is the endpoint.
 	 */
 	private Endpoint key; //this is 'e', 
-	private int p; //this is 'p(e)'
 	private Color color;
 	private Node parent;
 	private Node left;
@@ -32,12 +31,12 @@ public class Node{
 	public Node() {
 		color = Color.RED; //all new nodes are red
 		size = 1;
-		p = maxVal = val = 0;
+		maxVal = val = 0;
 	}
 
 	public Node(Endpoint e) {
 		this(null, e, Color.RED, 1);
-		if(e.getPValue() == 0 && e.getValue() == -1) {//For nil node
+		if(e.getPValue() == Position.NIL && e.getValue() == -1) {//For nil node
 			this.setColor(Color.BLACK);
 			this.setSize(0); 
 			this.setHeight(0);
@@ -52,11 +51,9 @@ public class Node{
 		this.parent = parent;
 		this.key = e;
 		eMax = e;
-		p = e.getPValue();
 		this.color = color;
 		this.size = size;
-		maxVal = val = e.getPValue();
-		//height = 1;//height of everyNode except the nil node is 1
+		maxVal = val = 0;
 		height = 1;
 	}
 	
@@ -116,7 +113,7 @@ public class Node{
 	 * @return
 	 */
 	public int getP() {
-		return this.p;
+		return getEndpoint().getPValue().value;
 	}
 	
 	/**@Required for project
@@ -245,7 +242,7 @@ public class Node{
 	}
 	
 	private int getNumOfNodes(Node x) {
-		if(x.getEndpoint().getPValue() == 0) {//base case
+		if(x.getEndpoint().getPValue() == Position.NIL) {//base case
 			return 1;
 		}
 		return 1 + getNumOfNodes(x.getLeft()) + getNumOfNodes(x.getRight());
@@ -264,12 +261,12 @@ public class Node{
 	
 	@Override
 	public String toString() {
-		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1)? "Nil Node" : "Key:" 
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == -1)? "Nil Node" : "Key:" 
 				+ this.getKey() + ", Color:" + ((this.getColorEnum() == Color.RED) ? "Red" : "Black");
 	}
 	
 	public String simpleString() {
-		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1)? "Nil" : this.getKey() 
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == -1)? "Nil" : this.getKey() 
 				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B");
 	}
 	
@@ -281,7 +278,7 @@ public class Node{
 	
 	//A method just for testing
 	public boolean isNilNode() {
-		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1) ? true : false;
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == -1) ? true : false;
 	}
 	
 	
