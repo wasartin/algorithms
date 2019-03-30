@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class RBTree{
-	public static final int RED = 0;
-	public static final int BLACK = 1;
 	
 	private Node root;
 	private Node nil;
@@ -68,7 +66,7 @@ public class RBTree{
 		if(x.equals(this.nil)) {
 			return 1;
 		}
-		if(x.getColor() == BLACK){
+		if(x.getColor() == Color.BLACK.ordinal()){
 			return 1 + Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
 		}
 		return Math.max(getBlackHeight(x.getLeft()), getBlackHeight(x.getRight())); 
@@ -113,13 +111,13 @@ public class RBTree{
 	 */
 	private void RBInsertFixup(Node z) {
 		Node y = null;
-		while(z.getParent().getColor() == RED) {
+		while(z.getParent().getColor() == Color.RED.ordinal()) {
 			if(z.getParent().equals(z.getParent().getParent().getLeft())) {
 				y = z.getParent().getParent().getRight();	
-				if(y.getColor() == RED) { 							//Case 1
-					z.getParent().setColor(BLACK);
-					y.setColor(BLACK);
-					z.getParent().getParent().setColor(RED);
+				if(y.getColor() == Color.RED.ordinal()) { 							//Case 1
+					z.getParent().setColor(Color.BLACK.ordinal());
+					y.setColor(Color.BLACK);
+					z.getParent().getParent().setColor(Color.RED);
 					z = z.getParent().getParent();
 				}
 				else {
@@ -127,17 +125,17 @@ public class RBTree{
 						z = z.getParent();
 						leftRotate(z);
 					}
-					z.getParent().setColor(BLACK);					//case 3
-					z.getParent().getParent().setColor(RED);
+					z.getParent().setColor(Color.BLACK);					//case 3
+					z.getParent().getParent().setColor(Color.RED);
 					rightRotate(z.getParent().getParent());
 				}
 			}
 			else {													//Same as previous if statement, but left and right are flipped
 				y = z.getParent().getParent().getLeft();
-				if(y.getColor() == RED) { 						
-					z.getParent().setColor(BLACK);
-					y.setColor(BLACK);
-					z.getParent().getParent().setColor(RED);
+				if(y.getColor() == Color.RED.ordinal()) { 						
+					z.getParent().setColor(Color.BLACK);
+					y.setColor(Color.BLACK);
+					z.getParent().getParent().setColor(Color.RED);
 					z = z.getParent().getParent();
 				}
 				else {
@@ -145,13 +143,13 @@ public class RBTree{
 						z = z.getParent();
 						rightRotate(z);
 					}
-					z.getParent().setColor(BLACK);
-					z.getParent().getParent().setColor(RED);
+					z.getParent().setColor(Color.BLACK);
+					z.getParent().getParent().setColor(Color.RED);
 					leftRotate(z.getParent().getParent());
 				}
 			}
 		}
-		this.root.setColor(BLACK);
+		this.root.setColor(Color.BLACK);
 	}
 	
 	/** From CLRS
@@ -314,72 +312,72 @@ public class RBTree{
 			y.getLeft().setParent(y);
 			y.setColor(z.getColor());
 		}
-		if(yOriginalColor == BLACK) {
+		if(yOriginalColor == Color.BLACK.ordinal()) {
 			RBDeleteFixUp(x);
 		}
 	}
 	
 	private void RBDeleteFixUp(Node x) {
-		while(!(x.equals(this.root)) && x.getColor() == BLACK){
+		while(!(x.equals(this.root)) && x.getColor() == Color.BLACK.ordinal()){
 			if(x.equals(x.getParent().getLeft())) {
 				Node w = x.getParent().getRight();
-				if(w.getColor() == RED) { 					//Case 1
-					w.setColor(BLACK);
-					x.getParent().setColor(RED);
+				if(w.getColor() == Color.RED.ordinal()) { 					//Case 1
+					w.setColor(Color.BLACK.ordinal());
+					x.getParent().setColor(Color.RED.ordinal());
 					leftRotate(x.getParent());
 					w = x.getParent().getRight();
 				}
-				if(w.getLeft().getColor() == BLACK && w.getRight().getColor() == BLACK) { // Case 2
-					w.setColor(RED);						//Case 2
+				if(w.getLeft().getColor() == Color.BLACK.ordinal() && w.getRight().getColor() == Color.BLACK.ordinal()) { // Case 2
+					w.setColor(Color.RED.ordinal());						//Case 2
 					x = x.getParent();
 				}
 				else { //Case 3 & 4
-					if(w.getRight().getColor() == BLACK) {
-						w.getLeft().setColor(BLACK);		//Case 3
-						w.setColor(RED);
+					if(w.getRight().getColor() == Color.BLACK.ordinal()) {
+						w.getLeft().setColor(Color.BLACK);		//Case 3
+						w.setColor(Color.RED);
 						rightRotate(w);
 						w = x.getParent().getRight();
 					}
 					w.setColor(x.getParent().getColor());	//Case 4
-					x.getParent().setColor(BLACK);
-					w.getRight().setColor(BLACK);
+					x.getParent().setColor(Color.BLACK);
+					w.getRight().setColor(Color.BLACK);
 					leftRotate(x.getParent());
 					x = this.root;
 				}
 			}
 			else { //same as then clause with right and left changed
 				Node w = x.getParent().getLeft();	
-				if(w.getColor() == RED) { 					//Case 1
-					w.setColor(BLACK);
-					x.getParent().setColor(RED);
+				if(w.getColor() == Color.RED.ordinal()) { 					//Case 1
+					w.setColor(Color.BLACK);
+					x.getParent().setColor(Color.RED);
 					rightRotate(x.getParent());
 					w = x.getParent().getLeft();
 				}
-				if(w.getRight().getColor() == BLACK && w.getLeft().getColor() == BLACK) { 
-					w.setColor(RED); 						// Case 2
+				if(w.getRight().getColor() == Color.BLACK.ordinal() && w.getLeft().getColor() == Color.BLACK.ordinal()) { 
+					w.setColor(Color.RED); 						// Case 2
 					x = x.getParent();
 				}
 				else { //Case 3 & 4
-					if(w.getLeft().getColor() == BLACK) {
-						w.getRight().setColor(BLACK);		//Case 3
-						w.setColor(RED);
+					if(w.getLeft().getColor() == Color.BLACK.ordinal()) {
+						w.getRight().setColor(Color.BLACK);		//Case 3
+						w.setColor(Color.RED);
 						leftRotate(w);
 						w = x.getParent().getLeft();
 					}
 					w.setColor(x.getParent().getColor());	//Case 4
-					x.getParent().setColor(BLACK);
-					w.getLeft().setColor(BLACK);
+					x.getParent().setColor(Color.BLACK);
+					w.getLeft().setColor(Color.BLACK);
 					rightRotate(x.getParent());
 					x = this.root;
 				}
 			}
 		}
-		x.setColor(BLACK);
+		x.setColor(Color.BLACK);
 	}
 
 	
 	//BST Methods
-	/** From CLRS
+	/** From CLRS We might need this for delete by ID
 	 * Return a reference to the node y in the subtree rooted at x
 	 * such that y.key == k. Return null if no such y exists.
 	 */

@@ -1,9 +1,6 @@
 package main.java;
 
 public class Node{
-	
-	public static final int RED = 0;
-	public static final int BLACK = 1;
 
 	private static final String FORMAT = "\n"
 			+ "Color:%5s"
@@ -21,7 +18,7 @@ public class Node{
 	 */
 	private Endpoint key; //this is 'e', 
 	private int p; //this is 'p(e)'
-	private int color;
+	private Color color;
 	private Node parent;
 	private Node left;
 	private Node right;
@@ -33,21 +30,25 @@ public class Node{
 	public int maxVal; 
 	
 	public Node() {
-		color = RED; //all new nodes are red
+		color = Color.RED; //all new nodes are red
 		size = 1;
 		p = maxVal = val = 0;
 	}
 
 	public Node(Endpoint e) {
-		this(null, e, RED, 1);
+		this(null, e, Color.RED, 1);
 		if(e.getPValue() == 0 && e.getValue() == -1) {//For nil node
-			this.setColor(BLACK);
+			this.setColor(Color.BLACK);
 			this.setSize(0); 
 			this.setHeight(0);
 		}
 	}
 	
 	public Node(Node parent, Endpoint e, int color, int size) {
+		this(parent, e, Color.values()[color], size);
+	}
+	
+	public Node(Node parent, Endpoint e, Color color, int size) {
 		this.parent = parent;
 		this.key = e;
 		eMax = e;
@@ -203,11 +204,19 @@ public class Node{
 	 * @return
 	 */
 	public int getColor() {
-		return color;
+		return this.color.ordinal();
+	}
+	
+	public Color getColorEnum() {
+		return this.color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public void setColor(int color) {
-		this.color = color;
+		this.color = Color.values()[color];
 	}
 	
 	/**
@@ -256,16 +265,16 @@ public class Node{
 	@Override
 	public String toString() {
 		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1)? "Nil Node" : "Key:" 
-				+ this.getKey() + ", Color:" + ((this.getColor() == RED) ? "Red" : "Black");
+				+ this.getKey() + ", Color:" + ((this.getColorEnum() == Color.RED) ? "Red" : "Black");
 	}
 	
 	public String simpleString() {
 		return (this.getEndpoint().getPValue() == 0 && this.getEndpoint().getValue() == -1)? "Nil" : this.getKey() 
-				+ ":" + ((this.getColor() == RED) ? "R" : "B");
+				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B");
 	}
 	
 	public String structuredToString() {
-		return String.format(FORMAT, ((this.getColor() == RED) ? "Red" : "Black"), this.getEndpoint().toString(), 
+		return String.format(FORMAT, ((this.getColorEnum() == Color.RED) ? "Red" : "Black"), this.getEndpoint().toString(), 
 				this.getParent().toString(), this.getVal(), this.getMaxVal(), this.getLeft().toString(), 
 				this.getEmax().toString(), this.getRight().toString(), this.getHeight(), this.getSize());
 	}

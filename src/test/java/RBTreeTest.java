@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.java.Color;
 import main.java.Endpoint;
 import main.java.Node;
 import main.java.RBTree;
@@ -20,10 +21,6 @@ public class RBTreeTest {
 	public final static Node nilNode = new Node(new Endpoint(-1, 0));
 	public final static int LEFT = 1;
 	public final static int RIGHT = -1;
-	
-	//TODO: make an enum
-	public final static int RED = 0;
-	public final static int BLACK = 1;
 
 	@Before
 	public void setUp() {
@@ -49,7 +46,7 @@ public class RBTreeTest {
 		public void RBTreePropertyOne_Success() {
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
-			Assert.assertTrue(x.get(i).getColor() == RED || x.get(i).getColor() == BLACK);
+			Assert.assertTrue(x.get(i).getColor() == Color.RED.ordinal() || x.get(i).getColor() == Color.BLACK.ordinal());
 		}
 	}
 	
@@ -58,7 +55,7 @@ public class RBTreeTest {
 	 */
 	@Test
 	public void RBTreePropertyTwo_Success() {
-		Assert.assertTrue(rbt1.getRoot().getColor() == BLACK);
+		Assert.assertTrue(rbt1.getRoot().getColor() == Color.BLACK.ordinal());
 	}
 	
 	/**
@@ -67,7 +64,7 @@ public class RBTreeTest {
 	 */
 	@Test
 	public void RBTreePropertyThree_Success() {
-		Assert.assertTrue(rbt1.getRoot().getParent().getColor() == BLACK);
+		Assert.assertTrue(rbt1.getRoot().getParent().getColor() == Color.BLACK.ordinal());
 		Assert.assertTrue(rbt1.getRoot().getParent() == rbt1.getRoot().getLeft().getLeft().getLeft());
 		Assert.assertTrue(rbt1.getRoot().getParent() == rbt1.getRoot().getLeft().getLeft().getRight());
 		Assert.assertTrue(rbt1.getRoot().getParent() == rbt1.getRoot().getLeft().getRight().getRight());
@@ -87,8 +84,8 @@ public class RBTreeTest {
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		for(int i = 0; i < x.size(); i++) {
 			Node temp = x.get(i);
-			if(temp.getColor() == RED) {
-				Assert.assertTrue(temp.getLeft().getColor() == BLACK && temp.getRight().getColor() == BLACK);
+			if(temp.getColor() == Color.RED.ordinal()) {
+				Assert.assertTrue(temp.getLeft().getColor() == Color.BLACK.ordinal() && temp.getRight().getColor() == Color.BLACK.ordinal());
 			}
 		}
 	}
@@ -113,14 +110,14 @@ public class RBTreeTest {
 	
 	@Test
 	public void RBTreeInsert_Success() {
-		Node one = new Node(nilNode, new Endpoint(4, RIGHT), BLACK, 17);
-		Node two = new Node(one, new Endpoint(1, LEFT), RED, 7);
-		Node three = new Node(one, new Endpoint(7, LEFT), RED, 9);
-		Node four = new Node(two, new Endpoint(0, LEFT), BLACK, 3);
-		Node five = new Node(two, new Endpoint(3, LEFT), BLACK, 3);
-		Node six = new Node(three, new Endpoint(6, RIGHT), BLACK, 3);
-		Node seven = new Node(three, new Endpoint(9, RIGHT), BLACK, 5);
-		Node eight = new Node(seven, new Endpoint(11, RIGHT), RED, 3);
+		Node one = new Node(nilNode, new Endpoint(4, RIGHT), Color.BLACK, 17);
+		Node two = new Node(one, new Endpoint(1, LEFT), Color.RED, 7);
+		Node three = new Node(one, new Endpoint(7, LEFT), Color.RED, 9);
+		Node four = new Node(two, new Endpoint(0, LEFT), Color.BLACK, 3);
+		Node five = new Node(two, new Endpoint(3, LEFT), Color.BLACK, 3);
+		Node six = new Node(three, new Endpoint(6, RIGHT), Color.BLACK, 3);
+		Node seven = new Node(three, new Endpoint(9, RIGHT), Color.BLACK, 5);
+		Node eight = new Node(seven, new Endpoint(11, RIGHT), Color.RED, 3);
 		
 		Assert.assertTrue(one.equals(rbt1.getRoot()));
 		Assert.assertTrue(two.equals(rbt1.getRoot().getLeft()));
@@ -177,14 +174,14 @@ public class RBTreeTest {
 	
 	@Test
 	public void minimum_Success() {
-		Node minOfRoot = new Node(nilNode, new Endpoint(0, LEFT), BLACK, 3);
+		Node minOfRoot = new Node(nilNode, new Endpoint(0, LEFT), Color.BLACK, 3);
 		Assert.assertTrue(rbt1.minimum(rbt1.getRoot()).equals(minOfRoot));
 		Assert.assertTrue(rbt1.minimum(rbt1.getRoot().getLeft().getLeft()).equals(minOfRoot));
 	}
 	
 	@Test
 	public void maximum_Success() {
-		Node maxOfRoot = new Node(nilNode, new Endpoint(11, RIGHT), RED, 3);
+		Node maxOfRoot = new Node(nilNode, new Endpoint(11, RIGHT), Color.RED, 3);
 		Assert.assertTrue(rbt1.maximum(rbt1.getRoot()).equals(maxOfRoot));
 		Assert.assertTrue(rbt1.maximum(rbt1.getRoot().getRight().getRight().getRight()).equals(maxOfRoot));
 	}
@@ -213,9 +210,32 @@ public class RBTreeTest {
 		case1.RBDelete(case1.getRoot().getRight());
 		
 		ArrayList<Node> acutalNodes = case1.getNodesInOrder(case1.getRoot());
-		a.setColor(BLACK);
-		b.setColor(BLACK);
-		c.setColor(BLACK);
+		a.setColor(Color.BLACK);
+		b.setColor(Color.BLACK);
+		c.setColor(Color.BLACK);
+		Node [] expected = {a, b, c};
+		for(int i = 0; i < acutalNodes.size(); i++) {
+			Assert.assertTrue(acutalNodes.get(i).equals(expected[i]));
+		}
+	}
+	
+	@Test
+	public void deleteCase2_Success() {
+		RBTree case2 = new RBTree();
+		
+		Node a = new Node(new Endpoint(0, LEFT));
+		Node b = new Node(new Endpoint(1, LEFT));
+		Node c = new Node(new Endpoint(6, RIGHT));
+		case2.RBInsert(a);
+		case2.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		case2.RBInsert(b);
+		case2.RBInsert(c);
+		case2.RBDelete(case2.getRoot().getRight());
+		
+		ArrayList<Node> acutalNodes = case2.getNodesInOrder(case2.getRoot());
+		a.setColor(Color.BLACK);
+		b.setColor(Color.BLACK);
+		c.setColor(Color.BLACK);
 		Node [] expected = {a, b, c};
 		for(int i = 0; i < acutalNodes.size(); i++) {
 			Assert.assertTrue(acutalNodes.get(i).equals(expected[i]));
