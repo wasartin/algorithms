@@ -203,11 +203,28 @@ public class RBTreeTest {
 	public void deleteCase1_Success() {
 		RBTree case1 = new RBTree();
 		
+		Node a = new Node(new Endpoint(0, LEFT));
+		Node b = new Node(new Endpoint(1, LEFT));
+		Node c = new Node(new Endpoint(6, RIGHT));
+		case1.RBInsert(a);
+		case1.RBInsert(new Node(new Endpoint(4, RIGHT)));
+		case1.RBInsert(b);
+		case1.RBInsert(c);
+		case1.RBDelete(case1.getRoot().getRight());
+		
+		ArrayList<Node> acutalNodes = case1.getNodesInOrder(case1.getRoot());
+		a.setColor(BLACK);
+		b.setColor(BLACK);
+		c.setColor(BLACK);
+		Node [] expected = {a, b, c};
+		for(int i = 0; i < acutalNodes.size(); i++) {
+			Assert.assertTrue(acutalNodes.get(i).equals(expected[i]));
+		}
 	}
 	
 	@Test
 	public void print() {
-		rbt1.print("", rbt1.getRoot(), false);
+		//rbt1.printTree();
 	}
 	
 }

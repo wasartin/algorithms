@@ -285,7 +285,7 @@ public class RBTree{
 		v.setParent(u.getParent());
 	}
 	
-	private void RBDelete(Node z) {
+	public void RBDelete(Node z) {
 		Node y = z;
 		Node x = this.nil;
 		int yOriginalColor = y.getColor();
@@ -370,11 +370,11 @@ public class RBTree{
 					x.getParent().setColor(BLACK);
 					w.getLeft().setColor(BLACK);
 					rightRotate(x.getParent());
-					x = this.root; //This is probably wrong b/c each node
-						//is it's own subtree.
+					x = this.root;
 				}
 			}
 		}
+		x.setColor(BLACK);
 	}
 
 	
@@ -477,12 +477,22 @@ public class RBTree{
 		return y;
 	}
 	
-	public void print(String prefix, Node n, boolean isLeft) {
-	    if (!n.isNilNode()) {
-	        print(prefix + "     ", n.getRight(), false);
+	
+	public void printTree() {
+		print("", this.getRoot());
+	}
+	private void print(String prefix, Node n) {
+	    if (!n.isNilNode()) {	
+	        print(prefix + "     ", n.getRight());
 	        System.out.println (prefix + ("|-- ") + n.simpleString());
-	        print(prefix + "     ", n.getLeft(), true);
+	        print(prefix + "     ", n.getLeft());
 	    }
+	}
+	
+	//TODO
+	public boolean propertyFive() {
+		
+		return false;
 	}
 
 }
