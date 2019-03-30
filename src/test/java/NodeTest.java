@@ -37,8 +37,7 @@ public class NodeTest {
 		rbt1.RBInsert(new Node(new Endpoint(7, LEFT)));
 		rbt1.RBInsert(new Node(new Endpoint(11, RIGHT)));
 	}
-	
-	//TODO: get size to correctly return the number of nodes.
+
 	@Test
 	public void sizeOfNode() {
 		int[] correctValues_rbt1 = {1, 3, 1, 8, 1, 4, 2, 1};
@@ -77,7 +76,6 @@ public class NodeTest {
 		}
 	}
 	
-	//TODO
 	@Test
 	public void getEmaxs() {
 		Endpoint e1 = new Endpoint(0, LEFT);

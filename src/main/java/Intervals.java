@@ -6,9 +6,8 @@ import java.util.ArrayList;
 //
 public class Intervals {
 	
-	private int currID = 0;//Not sure how to handle a 'global' counter
+	private int currID = 0;
 	private RBTree rbtree;
-	//Keep an arrayList of intervals? idk how else to do the id thing
 	private ArrayList<Interval> intervalList; //the id of an interval can now just be it's position
 	
 	//Made public for testing
@@ -93,9 +92,6 @@ public class Intervals {
 		return (i.getStart().getValue() < i.getEnd().getValue()) || (j.getEnd().getValue() < i.getStart().getValue());
 	}
 	
-	
-
-	
 	public Interval getInterval(int position) {
 		if(position < 1) {
 			throw new IllegalArgumentException("Interval starts at 1");
@@ -140,23 +136,6 @@ public class Intervals {
 	 */
 	public RBTree getRBTree() {
 		return rbtree;
-	}
-	
-	
-	/**TODO: put this in the test class
-	 * This is a suggested way on how to add intervals and call POM()
-	 * 
-	 * @param args
-	 */
-	public static void main(String [] args) {
-		int[][] points = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
-		Intervals intv = new Intervals();
-		
-		for(int i=0; i<points.length; i++) {
-			//System.out.println("Inserting: "+ Arrays.toString(points[i]));
-			intv.intervalInsert(points[i][0], points[i][1]);
-		}
-		System.out.println("POM is: "+ intv.findPOM()); //Should return 3.
 	}
 	
 }

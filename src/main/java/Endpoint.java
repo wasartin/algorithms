@@ -11,11 +11,12 @@ public class Endpoint {
 	private int pValue;
 	
 	public Endpoint() {
+		
 	}
 	
 	public Endpoint(int value, int p) {
 		if(p > 1 || p < -1) {
-			throw new IllegalArgumentException("The value of p can only be -1 (right end point), 1 (left endpoint), and 0 (nil node");
+			throw new IllegalArgumentException("The value of p can only be -1 (right end point), 1 (left endpoint), and 0 (nil node)");
 		}
 		this.value = value;
 		this.pValue = p;
