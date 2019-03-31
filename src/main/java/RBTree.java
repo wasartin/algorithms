@@ -79,7 +79,7 @@ public class RBTree{
 	public void RBInsert(Node z) {
 		Node y = this.nil;
 		Node x = this.root;
-		while(!x.equals(this.nil)) {
+		while(!x.isNilNode()) {
 			x.setSize(x.getSize() + 1); 					//1st phase update (Mentioned in CLRS 14.1)
 			x.setHeight(x.getHeight() + 1);					
 			y = x;
@@ -91,7 +91,7 @@ public class RBTree{
 			}
 		}
 		z.setParent(y);
-		if(y.equals(this.nil)) {
+		if(y.isNilNode()) {
 			this.root = z;
 		}
 		else if(z.getKey() < y.getKey()) {
@@ -163,11 +163,11 @@ public class RBTree{
 	private void leftRotate(Node x) {
 		Node y = x.getRight();
 		x.setRight(y.getLeft());
-		if(!y.getLeft().equals(nil)) {
+		if(!y.getLeft().isNilNode()) {
 			y.getLeft().setParent(x);
 		}
 		y.setParent(x.getParent());
-		if(x.getParent().equals(nil)) {
+		if(x.getParent().isNilNode()) {
 			root = y;
 		}
 		else if(x.equals(x.getParent().getLeft())) {
@@ -190,11 +190,11 @@ public class RBTree{
 	private void rightRotate(Node x) {
 		Node y = x.getLeft();
 		x.setLeft(y.getRight());
-		if(!y.getRight().equals(nil)) {
+		if(!y.getRight().isNilNode()) {
 			y.getRight().setParent(x);
 		}
 		y.setParent(x.getParent());
-		if(x.getParent().equals(nil)) {
+		if(x.getParent().isNilNode()) {
 			root = y;
 		}
 		else if(x.equals(x.getParent().getRight())) {
@@ -224,7 +224,7 @@ public class RBTree{
 	}
 
 	public int getNodeMaxVal(Node x) {
-		if(x.equals(this.nil)) {//base case
+		if(x.isNilNode()) {//base case
 			return x.getP(); //which is 0
 		}
 		int caseOne = getNodeMaxVal(x.getLeft());
@@ -248,7 +248,7 @@ public class RBTree{
 	}
 
 	public Endpoint findEMax_Rec(Node v) {
-		if(v.equals(this.nil)) { //base case
+		if(v.isNilNode()) { //base case
 			return this.nil.getEndpoint();
 		}
 		int caseOne = v.getLeft().getVal();
@@ -276,7 +276,7 @@ public class RBTree{
 	 * @param v
 	 */
 	private void RBTransplant(Node u, Node v) {
-		if(u.getParent().equals(this.nil)) {
+		if(u.getParent().isNilNode()) {
 			this.root = v;
 		}
 		else if(u.equals(u.getParent().getLeft())) {
@@ -292,30 +292,42 @@ public class RBTree{
 		Node y = z;
 		Node x = this.nil;
 		int yOriginalColor = y.getColor();
-		if(z.getLeft().equals(this.nil)) {
+		if(z.getLeft().isNilNode()) {			//Case 1 (delete right child)
 			x = z.getRight();
 			RBTransplant(z, z.getRight());
 		}
-		else if(z.getRight().equals(this.nil)) {
+		else if(z.getRight().isNilNode()) {		// case 2 (just delete Left Child)
 			x = z.getLeft();
 			RBTransplant(z, z.getLeft());
 		}
-		else {
+		else {									//Case 3 and 4
 			y = minimum(z.getRight());
 			yOriginalColor  = y.getColor();
 			x = y.getRight();
-			if(y.getParent().equals(z)) {
+			if(y.getParent().equals(z)) {		//case 4 only
 				x.setParent(y);
 			}
-			else {
+			else {								//case 4
 				RBTransplant(y, y.getRight());
 				y.setRight(z.getRight());
 				y.getRight().setParent(y);
 			}
-			RBTransplant(z, y);
+			RBTransplant(z, y);					//case 3 & 4 (in case 3 & 4, the size will change)
 			y.setLeft(z.getLeft());
 			y.getLeft().setParent(y);
 			y.setColor(z.getColor());
+			//update size here?
+//			y.setSize(Math.max(y.getLeft().getSize(), y.getRight().getSize()) + 1);
+//			Node percolateUp = y;
+//			while(!percolateUp.isNilNode()) {
+//				percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
+//				percolateUp = percolateUp.getParent();
+//			}
+		}
+		Node percolateUp = x;
+		while(!percolateUp.isNilNode()) {
+			percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
+			percolateUp = percolateUp.getParent();
 		}
 		if(yOriginalColor == Color.BLACK.ordinal()) {
 			RBDeleteFixUp(x);
@@ -326,9 +338,9 @@ public class RBTree{
 		while(!(x.equals(this.root)) && x.getColor() == Color.BLACK.ordinal()){
 			if(x.equals(x.getParent().getLeft())) {
 				Node w = x.getParent().getRight();
-				if(w.getColor() == Color.RED.ordinal()) { 					//Case 1
-					w.setColor(Color.BLACK.ordinal());
-					x.getParent().setColor(Color.RED.ordinal());
+				if(w.getColor() == Color.RED.ordinal()) { 					//Case 1 (x's silbing w is RED)
+					w.setColor(Color.BLACK);
+					x.getParent().setColor(Color.RED);
 					leftRotate(x.getParent());
 					w = x.getParent().getRight();
 				}
