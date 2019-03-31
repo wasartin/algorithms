@@ -103,7 +103,12 @@ public class RBTree{
 		z.setLeft(this.nil);
 		z.setRight(this.nil);
 		RBInsertFixup(z);
-		z.setEmax(findEMax_Rec(z));//Cheap fix for now. (b/c this is also called in Left & right rotate)
+		z.setEmax(findEMax_Rec(z));
+		Node a = y;
+		while(!a.isNilNode()) { //
+			a.setHeight(Math.max(a.getLeft().getHeight(), a.getRight().getHeight()) + 1);
+			a = a.getParent();
+		}
 	}
 	
 	/** From CLRS

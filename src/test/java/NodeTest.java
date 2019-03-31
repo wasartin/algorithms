@@ -1,6 +1,8 @@
 package test.java;
 
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 
 import org.junit.Assert;
@@ -40,6 +42,7 @@ public class NodeTest {
 	public void sizeOfNode() {
 		int[] correctValues_rbt1 = {1, 3, 1, 8, 1, 4, 2, 1};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
 			Assert.assertTrue(x.get(i).getSize() == correctValues_rbt1[i]);
 		}
@@ -48,9 +51,10 @@ public class NodeTest {
 	@Test
 	public void heightOfNodes() {
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
-		int[] correctHeightValues = {1, 2, 1, 4, 1, 3, 2, 1};
+		int[] correctValues_rbt1 = {1, 2, 1, 4, 1, 3, 2, 1};
+		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
-			Assert.assertTrue(x.get(i).getHeight() == correctHeightValues[i]);
+			Assert.assertTrue(x.get(i).getHeight() == correctValues_rbt1[i]);
 		}
 	}
 	
@@ -58,6 +62,7 @@ public class NodeTest {
 	public void getPTest() {
 		int[] correctValues_rbt1 = {1, 1, 1, -1, -1, 1, -1, -1};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
 			Assert.assertTrue(x.get(i).getP() == correctValues_rbt1[i]);
 		}
@@ -65,20 +70,22 @@ public class NodeTest {
 	
 	@Test
 	public void value() {
-		int[] correctValues = {1, 3, 1, 0, -1, -2, -2, -1};
+		int[] correctValues_rbt1 = {1, 3, 1, 0, -1, -2, -2, -1};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
-			Assert.assertTrue(x.get(i).getVal() == correctValues[i]);
+			Assert.assertTrue(x.get(i).getVal() == correctValues_rbt1[i]);
 		}
 	}
 	
 	@Test
 	public void getMaxValue() {
 		Assert.assertTrue(rbt1.getRoot().getMaxVal() == 3);
-		int[] correctMaxVals = {1, 3, 1, 3, 0, 0, 0, 0};
+		int[] correctValues_rbt1 = {1, 3, 1, 3, 0, 0, 0, 0};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
-			Assert.assertTrue(x.get(i).getMaxVal() == correctMaxVals[i]);
+			Assert.assertTrue(x.get(i).getMaxVal() == correctValues_rbt1[i]);
 		}
 	}
 	
@@ -88,10 +95,11 @@ public class NodeTest {
 		Endpoint e3 = new Endpoint(3, Position.LEFT);
 		Endpoint e6 = new Endpoint(7, Position.LEFT);
 		
-		Endpoint[] eMax = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
+		Endpoint[] correctValues_rbt1 = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
-			Assert.assertTrue(x.get(i).getEmax().equals(eMax[i]));
+			Assert.assertTrue(x.get(i).getEmax().equals(correctValues_rbt1[i]));
 		}
 	}
 

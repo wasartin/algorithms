@@ -1,5 +1,7 @@
 package test.java;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 
 import org.junit.Assert;
@@ -213,6 +215,7 @@ public class RBTreeTest {
 		b.setColor(Color.BLACK);
 		c.setColor(Color.BLACK);
 		Node [] expected = {a, b, c};
+		assertTrue(acutalNodes.size() == expected.length);
 		for(int i = 0; i < acutalNodes.size(); i++) {
 			Assert.assertTrue(acutalNodes.get(i).equals(expected[i]));
 		}
@@ -236,6 +239,7 @@ public class RBTreeTest {
 		b.setColor(Color.BLACK);
 		c.setColor(Color.BLACK);
 		Node [] expected = {a, b, c};
+		assertTrue(acutalNodes.size() == expected.length);
 		for(int i = 0; i < acutalNodes.size(); i++) {
 			Assert.assertTrue(acutalNodes.get(i).equals(expected[i]));
 		}
