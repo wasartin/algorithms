@@ -227,19 +227,18 @@ public class RBTree{
 			v.setSize(v.getLeft().getSize() + v.getRight().getSize() + 1);
 			v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
 			v.setVal(getNodeVal_Iter(v));
-			v.setMaxVal(getNodeMaxVal(v));
+			v.setMaxVal(getNodeMaxVal_Iter(v));
 			v.setEmax(findEmax(v));
 		}
 	}
 	
-	//This is rec.... this isn't right
-	public int getNodeMaxVal(Node x) {
+	public int getNodeMaxVal_Iter(Node x) {
 		if(x.isNilNode()) {//base case
 			return x.getP(); //which is 0
 		}
-		int caseOne = getNodeMaxVal(x.getLeft());
+		int caseOne = x.getLeft().getMaxVal();
 		int caseTwo = x.getLeft().getVal() + x.getP();
-		int caseThree = caseTwo + getNodeMaxVal(x.getRight());
+		int caseThree = caseTwo + x.getRight().getMaxVal();
 		x.setMaxVal(max(caseOne, caseTwo, caseThree));
 		return x.getMaxVal();
 	}
@@ -250,43 +249,12 @@ public class RBTree{
 		}
 		return input.getLeft().getVal() + input.getP() + input.getRight().getVal();
 	}
-	
-//	private int getNodeVal_Rec(Node input) {
-//		if(input.isNilNode()) {
-//			return input.getP();
-//		}
-//		input.setVal(getNodeVal_Rec(input.getLeft()) + input.getP() + getNodeVal_Rec(input.getRight()));
-//		return input.getVal();
-//	}
-	
+
 	private int max(int one, int two, int three) {
 		int temp = Math.max(one, two);
 		return Math.max(temp, three);
 	}
 
-//	public Endpoint findEMax_Rec(Node v) {
-//		if(v.isNilNode()) { //base case
-//			return nil.getEndpoint();
-//		}
-//		int caseOne = v.getLeft().getVal();
-//		int caseTwo = v.getLeft().getVal() + v.getP();
-//		int caseThree = caseTwo + v.getRight().getVal();
-//		
-//		int maxNum = max(caseOne, caseTwo, caseThree);
-//		if(maxNum == caseOne) {
-//			v.getLeft().setEmax(findEMax_Rec(v.getLeft()));
-//			return v.getLeft().getEmax();
-//		}
-//		if(maxNum == caseTwo) {
-//			v.setEmax(v.getEndpoint());
-//			return v.getEndpoint();
-//		}
-//		else {
-//			v.getRight().setEmax(findEMax_Rec(v.getRight()));
-//			return v.getRight().getEmax();
-//		}
-//	}
-	
 	public Endpoint findEmax(Node v) {
 		Endpoint result = new Endpoint();
 		int caseOne = v.getLeft().getMaxVal(); 			// Max points is i the Left subtree
@@ -307,8 +275,8 @@ public class RBTree{
 	
 	/**
 	 * From CLRS
-	 * @param u
-	 * @param v
+	 * @param u the node to be deleted
+	 * @param v the node taking it's place
 	 */
 	private void RBTransplant(Node u, Node v) {
 		if(u.getParent().isNilNode()) {
@@ -321,6 +289,7 @@ public class RBTree{
 			u.getParent().setRight(v);
 		}
 		v.setParent(u.getParent());
+		updateNodeInfo(v);
 	}
 	
 	public void RBDelete(Node z) {
@@ -351,20 +320,14 @@ public class RBTree{
 			y.setLeft(z.getLeft());
 			y.getLeft().setParent(y);
 			y.setColor(z.getColor());
-			//Really shouldn't have to do this
-//			Node percolateUp = y;
-//			while(!percolateUp.isNilNode()) {
-//				percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
-//				percolateUp = percolateUp.getParent();
-//			}
+		}
+		if(yOriginalColor == Color.BLACK.ordinal()) {
+			RBDeleteFixUp(x);
 		}
 		Node percolateUp = x;
 		while(!percolateUp.isNilNode()) {
 			percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
 			percolateUp = percolateUp.getParent();
-		}
-		if(yOriginalColor == Color.BLACK.ordinal()) {
-			RBDeleteFixUp(x);
 		}
 	}
 	
@@ -423,6 +386,7 @@ public class RBTree{
 				}
 			}
 		}
+		updateNodeInfo(x);
 		x.setColor(Color.BLACK);
 	}
 

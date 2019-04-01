@@ -286,7 +286,7 @@ public class OtherRedBlackTreeTests {
         tree2.RBInsert(node6_t2);
         tree2.printTree();
         assertEquals(tree2.getRoot().getRight().getLeft().getHeight(), 1);
-        assertEquals(tree2.getHeight(), 3);  // Rotation keeps height at 3 //?
+        assertEquals(tree2.getHeight(), 3);  // Rotation keeps height at 3 
     }
     
     @Test
@@ -299,8 +299,11 @@ public class OtherRedBlackTreeTests {
         tree3.RBInsert(node1_t3);
         
         // Delete root.left
+        tree3.printTree();
+        
         tree3.RBDelete(node2_t3);
 
+        System.out.println("\nDeleted 2\n");
         // Test tree3 keys
         assertEquals(3, tree3.getRoot().getKey());
         assertEquals(1, tree3.getRoot().getLeft().getKey());
@@ -323,6 +326,7 @@ public class OtherRedBlackTreeTests {
         assertEquals(Color.BLACK, tree3.getRoot().getRight().getColorEnum());
 
         // Test size
+        tree3.printTree();
         assertEquals(3, tree3.getSize());
     }
 
@@ -502,6 +506,7 @@ public class OtherRedBlackTreeTests {
 
         // Delete root.left
         tree3.RBDelete(node1_t3);
+        System.out.println("\nDelete 3\n");
 
         // Test tree3 keys
         assertEquals(2, tree3.getRoot().getKey());
