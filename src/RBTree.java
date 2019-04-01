@@ -1,4 +1,4 @@
-package main.java;
+
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -69,7 +69,7 @@ public class RBTree{
 	}
 	
 	public int getBlackHeight(Node x) {
-		if(x.equals(this.nil)) {
+		if(x.equals(nil)) {
 			return 1;
 		}
 		if(x.getColor() == Color.BLACK.ordinal()){
@@ -83,7 +83,7 @@ public class RBTree{
 	 * @param x
 	 */
 	public void RBInsert(Node z) {
-		Node y = this.nil;
+		Node y = nil;
 		Node x = this.root;
 		while(!x.isNilNode()) {
 			x.setSize(x.getSize() + 1); 					//1st phase update (Mentioned in CLRS 14.1)
@@ -106,17 +106,14 @@ public class RBTree{
 		else {
 			y.setRight(z);
 		}
-		z.setLeft(this.nil);
-		z.setRight(this.nil);
-		updateNodeInfo(z);
+		z.setLeft(nil);
+		z.setRight(nil);
 		RBInsertFixup(z);
 		updateNodeInfo(z);
-		//z.setEmax(findEmax(z));
 		Node a = y;
 		while(!a.isNilNode()) { 
 			updateNodeInfo(a);
 			a = a.getParent();
-
 		}
 	}
 	
@@ -225,19 +222,17 @@ public class RBTree{
 		updateNodeInfo(y);
 	}
 	
-	private void updateNodeInfo(Node v) {//now if a node is changing, then every parent should be changed.
+	private void updateNodeInfo(Node v) {
 		if(!v.isNilNode()) {
 			v.setSize(v.getLeft().getSize() + v.getRight().getSize() + 1);
 			v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
 			v.setVal(getNodeVal_Iter(v));
 			v.setMaxVal(getNodeMaxVal(v));
-			v.setEmax(findEmax(v)); //change
-			//updateNodeInfo(v.getParent());
+			v.setEmax(findEmax(v));
 		}
-
 	}
 	
-	//TODO: left off here
+	//This is rec.... this isn't right
 	public int getNodeMaxVal(Node x) {
 		if(x.isNilNode()) {//base case
 			return x.getP(); //which is 0
@@ -256,13 +251,13 @@ public class RBTree{
 		return input.getLeft().getVal() + input.getP() + input.getRight().getVal();
 	}
 	
-	private int getNodeVal_Rec(Node input) {
-		if(input.isNilNode()) {
-			return input.getP();
-		}
-		input.setVal(getNodeVal_Rec(input.getLeft()) + input.getP() + getNodeVal_Rec(input.getRight()));
-		return input.getVal();
-	}
+//	private int getNodeVal_Rec(Node input) {
+//		if(input.isNilNode()) {
+//			return input.getP();
+//		}
+//		input.setVal(getNodeVal_Rec(input.getLeft()) + input.getP() + getNodeVal_Rec(input.getRight()));
+//		return input.getVal();
+//	}
 	
 	private int max(int one, int two, int three) {
 		int temp = Math.max(one, two);
@@ -271,7 +266,7 @@ public class RBTree{
 
 //	public Endpoint findEMax_Rec(Node v) {
 //		if(v.isNilNode()) { //base case
-//			return this.nil.getEndpoint();
+//			return nil.getEndpoint();
 //		}
 //		int caseOne = v.getLeft().getVal();
 //		int caseTwo = v.getLeft().getVal() + v.getP();
@@ -293,29 +288,16 @@ public class RBTree{
 //	}
 	
 	public Endpoint findEmax(Node v) {
-		//either left node, right node, or self
 		Endpoint result = new Endpoint();
-		
-		if(v.getLeft().isNilNode() && v.getRight().isNilNode()) {
-			if(v.getP() == Position.RIGHT.value) {
-				result = nil.getEndpoint();
-				return result;
-			}
-			else {
-				result = v.getEndpoint();
-				return result;
-			}
-		}
 		int caseOne = v.getLeft().getMaxVal(); 			// Max points is i the Left subtree
 		int caseTwo = v.getLeft().getVal() + v.getP(); 	//This is the max point
-		int caseThree = caseTwo + v.getRight().getMaxVal();		//Max point is in right subtree	 .... Error here... should be right
+		int caseThree = caseTwo + v.getRight().getMaxVal();		//Max point is in right subtree	
 		int max = max(caseOne, caseTwo, caseThree);
-		//cheat I know
 		if(max == caseOne) {
 			result = v.getLeft().getEmax();
 		}
 		if(max == caseTwo) {
-			result = v.getEmax();//new change
+			result = v.getEmax();
 		}
 		else if(max == caseThree) {
 			result = v.getRight().getEmax();
@@ -343,7 +325,7 @@ public class RBTree{
 	
 	public void RBDelete(Node z) {
 		Node y = z;
-		Node x = this.nil;
+		Node x = nil;
 		int yOriginalColor = y.getColor();
 		if(z.getLeft().isNilNode()) {			//Case 1 (delete right child)
 			x = z.getRight();
@@ -369,13 +351,12 @@ public class RBTree{
 			y.setLeft(z.getLeft());
 			y.getLeft().setParent(y);
 			y.setColor(z.getColor());
-			//update size here?
-//			y.setSize(Math.max(y.getLeft().getSize(), y.getRight().getSize()) + 1);
-			Node percolateUp = y;
-			while(!percolateUp.isNilNode()) {
-				percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
-				percolateUp = percolateUp.getParent();
-			}
+			//Really shouldn't have to do this
+//			Node percolateUp = y;
+//			while(!percolateUp.isNilNode()) {
+//				percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
+//				percolateUp = percolateUp.getParent();
+//			}
 		}
 		Node percolateUp = x;
 		while(!percolateUp.isNilNode()) {
@@ -453,7 +434,7 @@ public class RBTree{
 	 */
 	private Node searchIterative(Node x, int k) {
 		Node currNode = this.root;
-		while(!currNode.equals(this.nil)) {
+		while(!currNode.equals(nil)) {
 			if(currNode.getKey() == k) {
 				return currNode;
 			}
@@ -464,7 +445,7 @@ public class RBTree{
 				currNode = currNode.getRight();
 			}
 		}
-		return this.nil;
+		return nil;
 	}
 	
 	/** From CLRS
@@ -472,7 +453,7 @@ public class RBTree{
 	 * that contains the minimum key-value
 	 */
 	public Node minimum(Node x) {
-		while(!x.getLeft().equals(this.nil)) {
+		while(!x.getLeft().equals(nil)) {
 			x = x.getLeft();
 		}
 		return x;
@@ -485,7 +466,7 @@ public class RBTree{
 	 * @return
 	 */
 	public Node maximum(Node x) {
-		while(!x.getRight().equals(this.nil)) {
+		while(!x.getRight().equals(nil)) {
 			x = x.getRight();
 		}
 		return x;
@@ -499,11 +480,11 @@ public class RBTree{
 	 * @return
 	 */
 	public Node successor(Node x) {
-		if(!x.getRight().equals(this.nil)) {
+		if(!x.getRight().equals(nil)) {
 			return minimum(x.getRight());
 		}
 		Node y = x.getParent();
-		while(!(y.equals(this.nil)) && x.equals(y.getRight())){
+		while(!(y.equals(nil)) && x.equals(y.getRight())){
 			x = y;
 			y = y.getParent();
 		}
@@ -555,12 +536,6 @@ public class RBTree{
 	        System.out.println (prefix + ("|-- ") + n.moreInfoString());
 	        print(prefix + "     ", n.getLeft());
 	    }
-	}
-	
-	//TODO
-	public boolean propertyFive() {
-		
-		return false;
 	}
 
 }

@@ -1,4 +1,4 @@
-package test.java;
+
 
 
 import static org.junit.Assert.assertTrue;
@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import main.java.Endpoint;
-import main.java.Node;
-import main.java.Position;
-import main.java.RBTree;
 
 /**
  * 
@@ -79,7 +74,6 @@ public class NodeTest {
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
-			//System.out.println("Expected: " + correctValues_rbt1[i] + ", actual: " +x.get(i).getVal());
 			Assert.assertTrue(x.get(i).getVal() == correctValues_rbt1[i]);
 		}
 	}
@@ -95,7 +89,6 @@ public class NodeTest {
 		}
 	}
 	
-	 // LO EMAX doesn't work
 	@Test
 	public void getEmaxs() {
 		Endpoint e1 = new Endpoint(0, Position.LEFT);
@@ -105,10 +98,7 @@ public class NodeTest {
 		Endpoint[] correctValues_rbt1 = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		assertTrue(x.size() == correctValues_rbt1.length);
-		//System.out.println("Root's right child: " + rbt1.getRoot().getRight().structuredToString());
 		for(int i = 0; i < x.size(); i++) {
-			System.out.println(x.get(i).structuredToString());
-			System.out.println("correctVal: " + correctValues_rbt1[i] + ", actual: " + x.get(i).getEmax());
 			Assert.assertTrue(x.get(i).getEmax().equals(correctValues_rbt1[i]));
 		}
 	}

@@ -1,5 +1,3 @@
-package test.java;
-
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -7,12 +5,6 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import main.java.Color;
-import main.java.Endpoint;
-import main.java.Node;
-import main.java.Position;
-import main.java.RBTree;
 
 /**
  * 
@@ -249,10 +241,4 @@ public class RBTreeTest {
 			Assert.assertTrue(acutalNodes.get(i).equals(expected[i]));
 		}
 	}
-	
-	@Test
-	public void print() {
-		//rbt1.printTree();
-	}
-	
 }

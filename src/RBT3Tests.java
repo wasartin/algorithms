@@ -1,13 +1,9 @@
-package test.java;
+
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import main.java.Color;
-import main.java.Intervals;
-import main.java.RBTree;
 
 public class RBT3Tests {
 
@@ -227,13 +223,12 @@ public class RBT3Tests {
 		assertEquals(0, rt1.getRoot().getLeft().getLeft().getEmax().getValue());
 		assertEquals(3, rt1.getRoot().getLeft().getRight().getEmax().getValue()); 
 		assertEquals(7, rt1.getRoot().getRight().getEmax().getValue()); 
-		assertEquals(0, rt1.getRoot().getRight().getLeft().getEmax().getValue()); 
-		assertEquals(9, rt1.getRoot().getRight().getRight().getEmax().getValue()); 				//ERROR
+		assertEquals(rt1.getNILNode().getKey(), rt1.getRoot().getRight().getLeft().getEmax().getValue()); //nil node
+		assertEquals(rt1.getNILNode().getKey(), rt1.getRoot().getRight().getRight().getEmax().getValue()); 				//ERROR, how is this not the nil?
 		assertEquals(RBTree.getNILNode().getKey(), rt1.getRoot().getRight().getRight().getRight().getEmax().getValue()); 	
 
 	}
-
-
+	
 	@Test
 	public void testPOM() {
 		i1.intervalInsert(0, 4); 

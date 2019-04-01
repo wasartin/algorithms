@@ -1,11 +1,4 @@
-package test.java;
-
-
 import org.junit.rules.ExpectedException;
-import main.java.Endpoint;
-import main.java.Intervals;
-import main.java.Position;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
