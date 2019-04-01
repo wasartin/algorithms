@@ -1,9 +1,5 @@
-
-
 /**
- * 
  * @author Will Sartin & Josh Ramon
- *
  */
 import java.util.ArrayList;
 
@@ -12,6 +8,7 @@ public class Intervals {
 	private int currID = 0;
 	private RBTree rbtree;
 	private ArrayList<Interval> intervalList; //the id of an interval can now just be it's position, but can't alter positions
+	private Interval deleted;
 	
 	//Made public for testing
 	/**
@@ -53,6 +50,7 @@ public class Intervals {
 	public Intervals() {
 		rbtree = new RBTree();
 		intervalList = new ArrayList<>();
+		deleted = new Interval(new Endpoint(0, Position.NIL), new Endpoint(0, Position.NIL));
 	}
 	
 	/**
@@ -78,24 +76,11 @@ public class Intervals {
 		updateRBTree(toAdd);
 	}
 	
-	//TODO: delete, this is just a temp method used for testing
-	public void updateRBTree(Interval toAdd) {
+	private void updateRBTree(Interval toAdd) {
 		Node newNodeOne = new Node(toAdd.getStart());
 		Node newNodeTwo = new Node(toAdd.getEnd());
 		rbtree.RBInsert(newNodeOne);
 		rbtree.RBInsert(newNodeTwo);
-	}
-	
-	/**TODO: Don't know if we need this, it was just in 14.3 of CLRS (which is pretty much our project)
-	 * returns a pointer to an element x in the interval tree T
-	 * such that x:int overlaps interval i, or a pointer to the sentinel T:nil if no such
-	 * element is in the set.
-	 */
-	private Node intervalSearch(RBTree T, Interval i) {
-		//TODO
-		Node x = T.getRoot();
-		//while(!x.equals(T.getNilNode()) && )
-		return T.getNILNode();
 	}
 
 	private Interval getInterval(int position) {
@@ -128,15 +113,21 @@ public class Intervals {
 	 * @return
 	 */
 	public boolean intervalDelete(int intervalID) {
+		Interval selected = null;
 		try {
-			Interval selected = getInterval(intervalID);
+			selected = getInterval(intervalID);
 		}catch(Exception e){
 			return false;
 		}
-		
-		
-		//Once deleted, put in Nil in those spots
-		return false;
+		Node leftPointToDelete = rbtree.searchIterative(selected.getStart().getValue());
+		Node rightPointToDelete = rbtree.searchIterative(selected.getEnd().getValue());
+		if(leftPointToDelete.isNilNode() || rightPointToDelete.isNilNode()) {
+			return false;
+		}
+		this.rbtree.RBDelete(leftPointToDelete);
+		this.rbtree.RBDelete(rightPointToDelete);
+		intervalList.set(intervalID - 1, deleted);
+		return true;
 	}
 	
 	/**
@@ -164,5 +155,4 @@ public class Intervals {
 	public int getID() {
 		return this.intervalList.size() + 1;
 	}
-	
 }

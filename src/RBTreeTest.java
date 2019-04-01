@@ -15,9 +15,7 @@ public class RBTreeTest {
 	
 	//This is the tree from the spec sheet
 	public static RBTree rbt1;
-	
-	//TODO: make more trees to test
-	
+
 	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
 
 	@Before
@@ -35,7 +33,6 @@ public class RBTreeTest {
 		
 		rbt1.RBInsert(new Node(new Endpoint(7, Position.LEFT)));
 		rbt1.RBInsert(new Node(new Endpoint(11, Position.RIGHT)));
-	
 	}
 		/**
 		 * Every Node is either red or black
@@ -182,16 +179,6 @@ public class RBTreeTest {
 		Node maxOfRoot = new Node(nilNode, new Endpoint(11, Position.RIGHT), Color.RED, 3);
 		Assert.assertTrue(rbt1.maximum(rbt1.getRoot()).equals(maxOfRoot));
 		Assert.assertTrue(rbt1.maximum(rbt1.getRoot().getRight().getRight().getRight()).equals(maxOfRoot));
-	}
-	
-	@Test
-	public void successor_Success() {
-		
-	}
-	
-	@Test
-	public void predessor_Success() {
-		
 	}
 	
 	@Test

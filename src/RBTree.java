@@ -224,20 +224,27 @@ public class RBTree{
 			v.setSize(v.getLeft().getSize() + v.getRight().getSize() + 1);
 			v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
 			v.setVal(getNodeVal_Iter(v));
-			v.setMaxVal(getNodeMaxVal_Iter(v));
+			v.setMaxVal(getNodeMaxVal(v));
 			v.setEmax(findEmax(v));
 		}
 	}
 	
-	public int getNodeMaxVal_Iter(Node x) {
+	public int getNodeMaxVal(Node x) {
 		if(x.isNilNode()) {//base case
 			return x.getP(); //which is 0
 		}
 		int caseOne = x.getLeft().getMaxVal();
 		int caseTwo = x.getLeft().getVal() + x.getP();
 		int caseThree = caseTwo + x.getRight().getMaxVal();
-		x.setMaxVal(max(caseOne, caseTwo, caseThree));
-		return x.getMaxVal();
+		if(x.getLeft().getKey() == x.getRight().getKey()) {
+			if(x.getLeft().getEndpoint().getPValue() == Position.LEFT) {
+				return Math.max(caseOne, caseTwo);
+			}
+			else if(x.getRight().getEndpoint().getPValue() == Position.LEFT) {
+				return caseThree;
+			}
+		}
+		return max(caseOne, caseTwo, caseThree);
 	}
 
 	private int getNodeVal_Iter(Node input) {
@@ -266,6 +273,14 @@ public class RBTree{
 		}
 		else if(max == caseThree) {
 			result = v.getRight().getEmax();
+		}
+		if(v.getLeft().getKey() == v.getRight().getKey() && !v.getLeft().isNilNode()) {//NEW
+			if(v.getLeft().getEndpoint().getPValue() == Position.LEFT) {
+				result = (Math.max(v.getLeft().getMaxVal(), v.getMaxVal()) == v.getLeft().getMaxVal()) ? v.getLeft().getEndpoint() : v.getEndpoint();
+			}
+			else if(v.getRight().getEndpoint().getPValue() == Position.LEFT) {
+				result = v.getRight().getEndpoint();
+			}
 		}
 		return result;
 	}
@@ -390,13 +405,13 @@ public class RBTree{
 	 * Return a reference to the node y in the subtree rooted at x
 	 * such that y.key == k. Return null if no such y exists.
 	 */
-	private Node searchIterative(Node x, int k) {
+	public Node searchIterative(int k) {
 		Node currNode = this.root;
 		while(!currNode.equals(nil)) {
 			if(currNode.getKey() == k) {
 				return currNode;
 			}
-			else if(currNode.getKey() < k) {
+			else if(k < currNode.getKey()) {
 				currNode = currNode.getLeft();
 			}
 			else {
@@ -449,6 +464,9 @@ public class RBTree{
 		return y;
 	}
 	
+	/*
+	 * Helper method for testing 
+	 */
 	public ArrayList<Node> getNodesInOrder(Node x){
 		ArrayList<Node> toReturn = new ArrayList<>();
 		Stack<Node> s = new Stack<>();

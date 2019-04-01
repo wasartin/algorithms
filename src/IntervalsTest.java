@@ -10,12 +10,32 @@ import org.junit.rules.ExpectedException;
 /**
  * 
  * @author Will Sartin & Josh Ramon
+ * Also includes tests found in the piazza post with JUNIT
  *
  */
 public class IntervalsTest {
 	
 	@Rule
 	public final ExpectedException thrown = ExpectedException.none();
+	
+	public static Intervals intervalEX;
+	public Intervals intervals;
+	
+	//TODO: make more trees to test
+	
+	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
+
+	@Before
+	public void setUp() {
+		intervalEX = new Intervals();
+		
+        intervals = new Intervals();
+        
+		int points[][] = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
+		for(int i=0; i<points.length; i++) {
+			intervalEX.intervalInsert(points[i][0], points[i][1]);
+		}
+	}
 
 	@Test
 	public void intervalInsert_Fail1() throws IllegalArgumentException {
@@ -27,14 +47,59 @@ public class IntervalsTest {
 	
 	@Test
 	public void findPOM_Success() {
-		int points[][] = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
-		Intervals intv = new Intervals();
-		for(int i=0; i<points.length; i++) {
-			intv.intervalInsert(points[i][0], points[i][1]);
-		}
 		int expectedPOM = 3;
-		int actualPOM = intv.findPOM();
+		int actualPOM = intervalEX.findPOM();
 		Assert.assertEquals(expectedPOM, actualPOM);
+	}
+	
+	@Test
+	public void findPOM_Success2() {
+		Intervals i = new Intervals();
+
+		i.intervalInsert(1, 50);
+		i.intervalInsert(2, 49);
+		i.intervalInsert(3, 48);
+		i.intervalInsert(4, 47);
+		i.intervalInsert(5, 46);
+		i.intervalInsert(99, 100);
+		i.intervalInsert(99, 100);
+		i.intervalInsert(99, 100);
+		i.intervalInsert(101, 102);
+
+		assertEquals(i.findPOM(), 5);
+	}
+	
+	@Test
+	public void findPOM_Success3() {
+		Intervals i = new Intervals();
+
+		i.intervalInsert(4, 5);
+		i.intervalInsert(0, 5);
+		i.intervalInsert(5, 7);
+		assertEquals(i.findPOM(), 4);
+	}
+	
+	@Test
+	public void findPOM_Success4() {
+		Intervals i = new Intervals();
+
+		i.intervalInsert(4, 5);
+		i.intervalInsert(5, 7);
+		i.intervalInsert(3, 8);
+
+		assertEquals(i.findPOM(), 5);
+	}
+	
+	@Test
+	public void findPOM_Success5() {
+		Intervals i = new Intervals();
+
+		i.intervalInsert(1, 2);
+		i.intervalInsert(2, 4);
+		i.intervalInsert(1, 7);
+		i.intervalInsert(2, 4);
+
+		assertEquals(i.findPOM(), 2);
 	}
 	
 	@Test
@@ -51,29 +116,20 @@ public class IntervalsTest {
 		Assert.assertFalse("Indexing start at 1", intv.intervalDelete(0));
 	}
 	
-	@Test //TODOL:
+	@Test 
 	public void intervalDelete_Fail3(){
 		Intervals intv = new Intervals();
 		intv.intervalInsert(1, 4);
-		Assert.assertFalse("This index has already been deleted", intv.intervalDelete(0));
+		intv.intervalDelete(1);
+		Assert.assertFalse("This has already been deleted", intv.intervalDelete(1));
 	}
 	
 	@Test
-	public void intervalDelete_Fail4(){
-		Intervals intv = new Intervals();
-		intv.intervalInsert(1, 4);
-		Assert.assertFalse("Indexing start at 1", intv.intervalDelete(0));
+	public void intervalDelete_Success1() {		
+		Assert.assertTrue(intervalEX.intervalDelete(1));
+		RBTree t = intervalEX.getRBTree();
+		Assert.assertTrue(t.getSize() == 6);
 	}
-	
-	// Person from Piazza
-    // Instance variables
-    private Intervals intervals;
-
-    @Before
-    public void initialize() {
-        intervals = new Intervals();
-    }
-
     @Test
     public void testIntervalInsert() {
 
@@ -86,11 +142,9 @@ public class IntervalsTest {
         assertTrue(tree.getRoot().getLeft().isNilNode());
 
         // Set up example from documentation
-        intervals = new Intervals();
-        insertIntervalsFromExample();
 
         // Test all nodes were inserted
-        tree = intervals.getRBTree();
+        tree = intervalEX.getRBTree();
         assertEquals(tree.getSize(), 8);
 
         // Test left subtree
@@ -108,8 +162,7 @@ public class IntervalsTest {
 
     @Test
     public void testNodeValCalculation() {
-        insertIntervalsFromExample();
-        RBTree tree = intervals.getRBTree();
+        RBTree tree = intervalEX.getRBTree();
 
         // Test left subtree
         assertEquals(tree.getRoot().getVal(), 0);
@@ -126,8 +179,7 @@ public class IntervalsTest {
 
     @Test
     public void testNodeMaxvalCalculation() {
-        insertIntervalsFromExample();
-        RBTree tree = intervals.getRBTree();
+        RBTree tree = intervalEX.getRBTree();
 
         // Test left subtree
         assertEquals(3, tree.getRoot().getMaxVal());
@@ -144,8 +196,7 @@ public class IntervalsTest {
 
     @Test
     public void testNodeEmaxCalculation() { //ERROR currently here
-        insertIntervalsFromExample();
-        RBTree tree = intervals.getRBTree();
+        RBTree tree = intervalEX.getRBTree();
         Endpoint nilEndpoint = tree.getNILNode().getEndpoint();
 
         // Test left subtree
@@ -163,7 +214,6 @@ public class IntervalsTest {
 
     @Test
     public void testFindPOM() {
-
         // Simple test
         intervals.intervalInsert(1, 3);
         intervals.intervalInsert(2, 4);
@@ -173,11 +223,6 @@ public class IntervalsTest {
         intervals.intervalInsert(6, 8);
        
         assertEquals(6, intervals.findPOM());
-
-        // Test from example
-        intervals = new Intervals();
-        insertIntervalsFromExample();
-        assertEquals(3, intervals.findPOM());
     }
 
     @Test
@@ -187,10 +232,4 @@ public class IntervalsTest {
         assertTrue(intervals.getRBTree().getRoot().isNilNode());
     }
 
-    private void insertIntervalsFromExample() {
-        int[][] points = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
-        for(int i=0; i<points.length; i++) {
-            intervals.intervalInsert(points[i][0], points[i][1]);
-        }
-    }
 }
