@@ -13,6 +13,11 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.Rule;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class EndpointTest {
 	
 	@Rule
@@ -27,7 +32,7 @@ public class EndpointTest {
 	public void constructorTest_Success() {
 		Endpoint left = new Endpoint(1, Position.LEFT);
 		Endpoint right = new Endpoint(2, Position.RIGHT);
-		Endpoint nil = new Endpoint(-1, Position.NIL);
+		Endpoint nil = new Endpoint(0, Position.NIL);
 	}
 	
 	@Test
@@ -48,17 +53,17 @@ public class EndpointTest {
 	public void getValueTest() {
 		Endpoint left = new Endpoint(1, 1);
 		Endpoint right = new Endpoint(2, -1);
-		Endpoint nil = new Endpoint(-1, 0);
+		Endpoint nil = new Endpoint(0, 0);
 		Assert.assertTrue(left.getValue() == 1);
 		Assert.assertTrue(right.getValue() == 2);
-		Assert.assertTrue(nil.getValue() == -1);
+		Assert.assertTrue(nil.getValue() == 0);
 	}
 	
 	@Test
 	public void getPValueTest() {
 		Endpoint left = new Endpoint(1, 1);
 		Endpoint right = new Endpoint(2, -1);
-		Endpoint nil = new Endpoint(-1, 0);
+		Endpoint nil = new Endpoint(0, 0);
 		Assert.assertTrue(left.getPValue() == Position.LEFT);
 		Assert.assertTrue(right.getPValue() == Position.RIGHT);
 		Assert.assertTrue(nil.getPValue() == Position.NIL);

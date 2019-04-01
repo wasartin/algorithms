@@ -1,5 +1,10 @@
 package main.java;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class Node{
 
 	private static final String FORMAT = "\n"
@@ -36,7 +41,7 @@ public class Node{
 
 	public Node(Endpoint e) {
 		this(null, e, Color.RED, 1);
-		if(e.getPValue() == Position.NIL && e.getValue() == -1) {//For nil node
+		if(e.getPValue() == Position.NIL && e.getValue() == 0) {//For nil node
 			this.setColor(Color.BLACK);
 			this.setSize(0); 
 			this.setHeight(0);
@@ -261,13 +266,19 @@ public class Node{
 	
 	@Override
 	public String toString() {
-		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == -1)? "Nil Node" : "Key:" 
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil Node" : "Key:" 
 				+ this.getKey() + ", Color:" + ((this.getColorEnum() == Color.RED) ? "Red" : "Black");
 	}
 	
 	public String simpleString() {
-		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == -1)? "Nil" : this.getKey() 
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil" : this.getKey() 
 				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B");
+	}
+	
+	public String moreInfoString() {
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil" : this.getKey() 
+				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B") + ", Val:" + this.getVal() + ", maxVal:" + this.getMaxVal()
+				+ ", Emax:" + this.getEmax().toString();
 	}
 	
 	public String structuredToString() {
@@ -278,7 +289,7 @@ public class Node{
 	
 	//A method just for testing
 	public boolean isNilNode() {
-		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == -1) ? true : false;
+		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0) ? true : false;
 	}
 	
 	

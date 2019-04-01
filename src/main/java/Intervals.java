@@ -1,5 +1,10 @@
 package main.java;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 import java.util.ArrayList;
 
 //TODO: Professor mentioned there will be test with mulitple same endpoints
@@ -36,6 +41,11 @@ public class Intervals {
 		
 		public Endpoint getEnd() {
 			return this.end;
+		}
+		
+		@Override
+		public String toString() {
+			return "{Start:" + this.getStart().toString() + " End:" + this.getEnd().toString() + "}";
 		}
 	}
 	
@@ -122,8 +132,8 @@ public class Intervals {
 	 * @return
 	 */
 	public int findPOM() {
-		if(rbtree.getRoot().equals(rbtree.getNILNode())) {
-			return -1;
+		if(rbtree.getRoot().isNilNode()) {
+			return 0;
 		}
 		return rbtree.getRoot().getEmax().getValue();
 	}

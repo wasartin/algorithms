@@ -3,16 +3,22 @@ package main.java;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class RBTree{
 	
 	private Node root;
-	private Node nil;
+	//I think it makes sense to make this static. That way it's only made once, and it always exists. 
+	//even w/o a tree being made
+	private static Node nil = new Node(new Endpoint(0, Position.NIL));
 
 	/**
 	 * @Required
 	 */
 	public RBTree() {
-		nil = new Node(new Endpoint(-1, Position.NIL));
 		root = nil;
 	}
 	
@@ -35,7 +41,7 @@ public class RBTree{
 	 * Note. A red-black tree T must contain exactly one instance of T.nil.
 	 * @return
 	 */
-	public Node getNILNode() { return this.nil; }
+	public static Node getNILNode() { return nil; }
 	
 	/** 
 	 * @Required
@@ -102,12 +108,15 @@ public class RBTree{
 		}
 		z.setLeft(this.nil);
 		z.setRight(this.nil);
+		updateNodeInfo(z);
 		RBInsertFixup(z);
-		z.setEmax(findEMax_Rec(z));
+		updateNodeInfo(z);
+		//z.setEmax(findEmax(z));
 		Node a = y;
-		while(!a.isNilNode()) { //
-			a.setHeight(Math.max(a.getLeft().getHeight(), a.getRight().getHeight()) + 1);
+		while(!a.isNilNode()) { 
+			updateNodeInfo(a);
 			a = a.getParent();
+
 		}
 	}
 	
@@ -216,13 +225,19 @@ public class RBTree{
 		updateNodeInfo(y);
 	}
 	
-	private void updateNodeInfo(Node v) {
-		v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
-		v.setVal(getNodeVal(v));
-		v.setMaxVal(getNodeMaxVal(v));
-		v.setEmax(findEMax_Rec(v));
-	}
+	private void updateNodeInfo(Node v) {//now if a node is changing, then every parent should be changed.
+		if(!v.isNilNode()) {
+			v.setSize(v.getLeft().getSize() + v.getRight().getSize() + 1);
+			v.setHeight(Math.max(v.getLeft().getHeight(), v.getRight().getHeight()) + 1);
+			v.setVal(getNodeVal_Iter(v));
+			v.setMaxVal(getNodeMaxVal(v));
+			v.setEmax(findEmax(v)); //change
+			//updateNodeInfo(v.getParent());
+		}
 
+	}
+	
+	//TODO: left off here
 	public int getNodeMaxVal(Node x) {
 		if(x.isNilNode()) {//base case
 			return x.getP(); //which is 0
@@ -234,11 +249,18 @@ public class RBTree{
 		return x.getMaxVal();
 	}
 
-	private int getNodeVal(Node input) {
-		if(input.equals(this.nil)) {
+	private int getNodeVal_Iter(Node input) {
+		if(input.isNilNode()) {
+			return 0;
+		}
+		return input.getLeft().getVal() + input.getP() + input.getRight().getVal();
+	}
+	
+	private int getNodeVal_Rec(Node input) {
+		if(input.isNilNode()) {
 			return input.getP();
 		}
-		input.setVal(getNodeVal(input.getLeft()) + input.getP() + getNodeVal(input.getRight()));
+		input.setVal(getNodeVal_Rec(input.getLeft()) + input.getP() + getNodeVal_Rec(input.getRight()));
 		return input.getVal();
 	}
 	
@@ -247,27 +269,58 @@ public class RBTree{
 		return Math.max(temp, three);
 	}
 
-	public Endpoint findEMax_Rec(Node v) {
-		if(v.isNilNode()) { //base case
-			return this.nil.getEndpoint();
-		}
-		int caseOne = v.getLeft().getVal();
-		int caseTwo = v.getLeft().getVal() + v.getP();
-		int caseThree = caseTwo + v.getRight().getVal();
+//	public Endpoint findEMax_Rec(Node v) {
+//		if(v.isNilNode()) { //base case
+//			return this.nil.getEndpoint();
+//		}
+//		int caseOne = v.getLeft().getVal();
+//		int caseTwo = v.getLeft().getVal() + v.getP();
+//		int caseThree = caseTwo + v.getRight().getVal();
+//		
+//		int maxNum = max(caseOne, caseTwo, caseThree);
+//		if(maxNum == caseOne) {
+//			v.getLeft().setEmax(findEMax_Rec(v.getLeft()));
+//			return v.getLeft().getEmax();
+//		}
+//		if(maxNum == caseTwo) {
+//			v.setEmax(v.getEndpoint());
+//			return v.getEndpoint();
+//		}
+//		else {
+//			v.getRight().setEmax(findEMax_Rec(v.getRight()));
+//			return v.getRight().getEmax();
+//		}
+//	}
+	
+	public Endpoint findEmax(Node v) {
+		//either left node, right node, or self
+		Endpoint result = new Endpoint();
 		
-		int maxNum = max(caseOne, caseTwo, caseThree);
-		if(maxNum == caseOne) {
-			v.getLeft().setEmax(findEMax_Rec(v.getLeft()));
-			return v.getLeft().getEmax();
+		if(v.getLeft().isNilNode() && v.getRight().isNilNode()) {
+			if(v.getP() == Position.RIGHT.value) {
+				result = nil.getEndpoint();
+				return result;
+			}
+			else {
+				result = v.getEndpoint();
+				return result;
+			}
 		}
-		if(maxNum == caseTwo) {
-			v.setEmax(v.getEndpoint());
-			return v.getEndpoint();
+		int caseOne = v.getLeft().getMaxVal(); 			// Max points is i the Left subtree
+		int caseTwo = v.getLeft().getVal() + v.getP(); 	//This is the max point
+		int caseThree = caseTwo + v.getRight().getMaxVal();		//Max point is in right subtree	 .... Error here... should be right
+		int max = max(caseOne, caseTwo, caseThree);
+		//cheat I know
+		if(max == caseOne) {
+			result = v.getLeft().getEmax();
 		}
-		else {
-			v.getRight().setEmax(findEMax_Rec(v.getRight()));
-			return v.getRight().getEmax();
+		if(max == caseTwo) {
+			result = v.getEmax();//new change
 		}
+		else if(max == caseThree) {
+			result = v.getRight().getEmax();
+		}
+		return result;
 	}
 	
 	/**
@@ -318,11 +371,11 @@ public class RBTree{
 			y.setColor(z.getColor());
 			//update size here?
 //			y.setSize(Math.max(y.getLeft().getSize(), y.getRight().getSize()) + 1);
-//			Node percolateUp = y;
-//			while(!percolateUp.isNilNode()) {
-//				percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
-//				percolateUp = percolateUp.getParent();
-//			}
+			Node percolateUp = y;
+			while(!percolateUp.isNilNode()) {
+				percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
+				percolateUp = percolateUp.getParent();
+			}
 		}
 		Node percolateUp = x;
 		while(!percolateUp.isNilNode()) {
@@ -481,25 +534,25 @@ public class RBTree{
 	 * @return
 	 */
 	public Node predecessor(Node x) {
-		if(!(x.getRight().equals(this.nil))) {
+		if(!(x.getRight().isNilNode())) {
 			return maximum(x.getLeft());
 		}
 		Node y = x.getParent();
-		while(!(y.equals(this.nil)) && x.equals(y.getLeft())){
+		while(!(y.isNilNode()) && x.equals(y.getLeft())){
 			x = y;
 			y = y.getParent();
 		}
 		return y;
 	}
 	
-	
 	public void printTree() {
 		print("", this.getRoot());
 	}
+	
 	private void print(String prefix, Node n) {
 	    if (!n.isNilNode()) {	
 	        print(prefix + "     ", n.getRight());
-	        System.out.println (prefix + ("|-- ") + n.simpleString());
+	        System.out.println (prefix + ("|-- ") + n.moreInfoString());
 	        print(prefix + "     ", n.getLeft());
 	    }
 	}

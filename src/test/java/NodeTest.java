@@ -14,12 +14,17 @@ import main.java.Node;
 import main.java.Position;
 import main.java.RBTree;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class NodeTest {
 
 	//This is the tree from the spec sheet
 	public static RBTree rbt1;
 	
-	public final static Node nilNode = new Node(new Endpoint(-1, Position.NIL));
+	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
 
 	@Before
 	public void setUp() {
@@ -74,6 +79,7 @@ public class NodeTest {
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
+			//System.out.println("Expected: " + correctValues_rbt1[i] + ", actual: " +x.get(i).getVal());
 			Assert.assertTrue(x.get(i).getVal() == correctValues_rbt1[i]);
 		}
 	}
@@ -82,13 +88,14 @@ public class NodeTest {
 	public void getMaxValue() {
 		Assert.assertTrue(rbt1.getRoot().getMaxVal() == 3);
 		int[] correctValues_rbt1 = {1, 3, 1, 3, 0, 0, 0, 0};
-		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
+		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot()); //node 6 should be 1
 		assertTrue(x.size() == correctValues_rbt1.length);
 		for(int i = 0; i < x.size(); i++) {
 			Assert.assertTrue(x.get(i).getMaxVal() == correctValues_rbt1[i]);
 		}
 	}
 	
+	 // LO EMAX doesn't work
 	@Test
 	public void getEmaxs() {
 		Endpoint e1 = new Endpoint(0, Position.LEFT);
@@ -98,7 +105,10 @@ public class NodeTest {
 		Endpoint[] correctValues_rbt1 = {e1, e3, e3, e3, nilNode.getEndpoint(), e6, nilNode.getEndpoint(), nilNode.getEndpoint()};
 		ArrayList<Node> x = rbt1.getNodesInOrder(rbt1.getRoot());
 		assertTrue(x.size() == correctValues_rbt1.length);
+		//System.out.println("Root's right child: " + rbt1.getRoot().getRight().structuredToString());
 		for(int i = 0; i < x.size(); i++) {
+			System.out.println(x.get(i).structuredToString());
+			System.out.println("correctVal: " + correctValues_rbt1[i] + ", actual: " + x.get(i).getEmax());
 			Assert.assertTrue(x.get(i).getEmax().equals(correctValues_rbt1[i]));
 		}
 	}

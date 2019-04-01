@@ -3,6 +3,11 @@ package main.java;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public enum Position{
 	    RIGHT(-1),
 	    NIL(0),

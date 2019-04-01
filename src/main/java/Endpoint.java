@@ -1,5 +1,10 @@
 package main.java;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class Endpoint {
 	
 	private static final String FORMAT = "[Point:%3d || %9s]";

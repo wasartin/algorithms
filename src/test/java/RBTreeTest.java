@@ -14,6 +14,11 @@ import main.java.Node;
 import main.java.Position;
 import main.java.RBTree;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class RBTreeTest {
 	
 	//This is the tree from the spec sheet
@@ -21,7 +26,7 @@ public class RBTreeTest {
 	
 	//TODO: make more trees to test
 	
-	public final static Node nilNode = new Node(new Endpoint(-1, Position.NIL));
+	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
 
 	@Before
 	public void setUp() {

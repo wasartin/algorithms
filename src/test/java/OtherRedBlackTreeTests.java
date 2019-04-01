@@ -19,6 +19,11 @@ import main.java.Node;
 import main.java.Position;
 import main.java.RBTree;
 
+/**
+ * 
+ * @author Will Sartin & Josh Ramon
+ *
+ */
 public class OtherRedBlackTreeTests {
 
     // Insert
@@ -371,6 +376,10 @@ public class OtherRedBlackTreeTests {
         // Test size
         System.out.println("4, Actual: " + tree3.getSize());
         tree3.printTree();
+        ArrayList<Node> x = tree3.getNodesInOrder(tree3.getRoot());
+        for(int i = 0; i < x.size(); i++) {
+        	System.out.println(x.get(i).structuredToString());
+        }
         assertEquals(4, tree3.getSize());
     }
 
@@ -491,7 +500,7 @@ public class OtherRedBlackTreeTests {
     }
 
     @Test
-    public void siblingAndBothChildrenBlackTest() {
+    public void siblingAndBothChildrenBlackTest() {	//ERROR HERE
 
         // Create tree3
         tree3.RBInsert(node2_t3);
