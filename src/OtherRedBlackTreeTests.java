@@ -12,7 +12,7 @@ import org.junit.Test;
 
 /**
  * 
- * @author Will Sartin & Josh Ramon
+ * @author By people from the Piazza JUNIT post
  *
  */
 public class OtherRedBlackTreeTests {

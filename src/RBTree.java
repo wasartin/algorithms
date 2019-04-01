@@ -110,11 +110,8 @@ public class RBTree{
 		z.setRight(nil);
 		RBInsertFixup(z);
 		updateNodeInfo(z);
-		Node a = y;
-		while(!a.isNilNode()) { 
-			updateNodeInfo(a);
-			a = a.getParent();
-		}
+		Node goingUp = y;
+		percolateUp(goingUp);
 	}
 	
 	/** From CLRS
@@ -324,11 +321,8 @@ public class RBTree{
 		if(yOriginalColor == Color.BLACK.ordinal()) {
 			RBDeleteFixUp(x);
 		}
-		Node percolateUp = x;
-		while(!percolateUp.isNilNode()) {
-			percolateUp.setSize(percolateUp.getLeft().getSize() + percolateUp.getRight().getSize() + 1);
-			percolateUp = percolateUp.getParent();
-		}
+		Node goingUp = x;
+		percolateUp(goingUp);
 	}
 	
 	private void RBDeleteFixUp(Node x) {
@@ -488,6 +482,19 @@ public class RBTree{
 			y = y.getParent();
 		}
 		return y;
+	}
+	
+	/**
+	 * Private helper method used to update Node Info in Insert and Delete.
+	 * This only goes up the tree til it hits the root's parent (nil).
+	 * 
+	 * @param v
+	 */
+	private void percolateUp(Node v) {
+		while(!v.isNilNode()) { 
+			updateNodeInfo(v);
+			v = v.getParent();
+		}
 	}
 	
 	public void printTree() {

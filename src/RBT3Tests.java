@@ -1,10 +1,13 @@
-
-
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * 
+ * @author By people from the Piazza JUNIT post
+ *
+ */
 public class RBT3Tests {
 
 	// Instance variables
@@ -217,7 +220,6 @@ public class RBT3Tests {
 		i1.intervalInsert(3, 9);
 		i1.intervalInsert(7, 11);
 		rt1 = i1.getRBTree();
-		rt1.printTree();
 		assertEquals(3, rt1.getRoot().getEmax().getValue());
 		assertEquals(3, rt1.getRoot().getLeft().getEmax().getValue());
 		assertEquals(0, rt1.getRoot().getLeft().getLeft().getEmax().getValue());
@@ -240,16 +242,16 @@ public class RBT3Tests {
 
 	}
 	
-//	@Test
-//	public void testID() {
-//		assertEquals(1, i1.ID);
-//		i1.intervalInsert(0, 4); 
-//		assertEquals(2, i1.ID);
-//		i1.intervalInsert(1, 6); 
-//		assertEquals(3, i1.ID);
-//		i1.intervalInsert(3, 9);
-//		assertEquals(4, i1.ID);
-//		i1.intervalInsert(7, 11);
-//		assertEquals(5, i1.ID);
-//	}
+	@Test
+	public void testID() {
+		assertEquals(1, i1.getID());
+		i1.intervalInsert(0, 4); 
+		assertEquals(2, i1.getID());
+		i1.intervalInsert(1, 6); 
+		assertEquals(3, i1.getID());
+		i1.intervalInsert(3, 9);
+		assertEquals(4, i1.getID());
+		i1.intervalInsert(7, 11);
+		assertEquals(5, i1.getID());
+	}
 }

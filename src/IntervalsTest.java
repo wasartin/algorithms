@@ -37,6 +37,35 @@ public class IntervalsTest {
 		Assert.assertEquals(expectedPOM, actualPOM);
 	}
 	
+	@Test
+	public void intervalDelete_Fail1(){
+		Intervals intv = new Intervals();
+		intv.intervalInsert(1, 4);
+		Assert.assertFalse("Exception thrown and caught, this is out of bounds of the current collection of Intervals", intv.intervalDelete(2));
+	}
+	
+	@Test
+	public void intervalDelete_Fail2(){
+		Intervals intv = new Intervals();
+		intv.intervalInsert(1, 4);
+		Assert.assertFalse("Indexing start at 1", intv.intervalDelete(0));
+	}
+	
+	@Test //TODOL:
+	public void intervalDelete_Fail3(){
+		Intervals intv = new Intervals();
+		intv.intervalInsert(1, 4);
+		Assert.assertFalse("This index has already been deleted", intv.intervalDelete(0));
+	}
+	
+	@Test
+	public void intervalDelete_Fail4(){
+		Intervals intv = new Intervals();
+		intv.intervalInsert(1, 4);
+		Assert.assertFalse("Indexing start at 1", intv.intervalDelete(0));
+	}
+	
+	// Person from Piazza
     // Instance variables
     private Intervals intervals;
 
@@ -158,10 +187,6 @@ public class IntervalsTest {
         assertTrue(intervals.getRBTree().getRoot().isNilNode());
     }
 
-    /**
-     * Helper method to insert the points from the example
-     * in the documentation
-     */
     private void insertIntervalsFromExample() {
         int[][] points = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
         for(int i=0; i<points.length; i++) {

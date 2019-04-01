@@ -1,5 +1,3 @@
-//
-//
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertTrue;
 //
@@ -10,6 +8,11 @@
 //
 //import Intervals.Interval;
 //
+/**
+ * 
+ * @author By people from the Piazza JUNIT post
+ *
+ */
 //public class RBT4Tests {
 //
 //	private static final int SIZE = 100000;
