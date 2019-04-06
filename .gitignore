@@ -1,0 +1,40 @@
+/.metadata/
+/target/
+*/target/*
+!.mvn/wrapper/maven-wrapper.jar
+#ignore
+*.log
+*.gz
+### STS ###
+.metadata
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.bin
+bin/
+.recommenders
+.metadata
+*.apk
+*.ap_
+*.gz
+.log
+business/application.log*
+
+### MAC ###
+.DS_Store
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+### IntelliJ ###
+*.iml
+/.idea/
