@@ -98,4 +98,75 @@ public class CommunicationsMonitor {
 		return null;
 	}
 	
+	/**
+	 * CLRS pseudocode code.
+	 * private for now
+	 * Finds shortest path from source node to all other connected nodes
+	 * @param G
+	 * @param s
+	 */
+//	private void BFS(Graph G, Vertex s) {
+//		for(Vertex u : V) {
+//			u.setColor(Color.WHITE);
+//			u.setDistance(Integer.MAX_VALUE);
+//			u.setPredecessor(null);
+//		}
+//		s.setColor(Color.GRAY);
+//		s.setDistance(0);
+//		s.setPredecessor(null);
+//		Queue Q = new Queue();
+//		Enqueue(Q, s);
+//		while(!Q.isEmpty()) {
+//			Vertex u = Q.dequeue();
+//			for(Vertex v : G.Adj[u]) {
+//				if(v.getColor() == Color.WHITE) {
+//					v.setColor(Color.GRAY);
+//					v.setDistance();
+//					v.setPredecessor(u);
+//					Enqueue(Q, v);
+//				}
+//			u.setColor(Color.BLACK;
+//			}
+//		}
+//	}
+	
+	
+	
+	/**
+	 * CLRS
+	 * Creates depth-first forest
+	 * ALso timestamps each vertex. 
+	 * 			v.d when first discovered
+	 * 			v.f when it is blackened (when v is done examing adj list)
+	 * 			Between the numbers 1 and 2 |V|
+	 * 			For every vertex u,
+	 * 				u.d < u.f
+	 */
+//	private void DFS(Graph G) {						//O(V + E)				
+//		for(Vertex u : G.V) {						//O(|V|)
+//			u.setColor(Color.WHITE);
+//			u.setPredecessor(null);
+//		}
+//		this.time = 0;
+//		for(Vertex u : G.V) {						//O(|V|)
+//			if(u.getColor() == Color.WHITE) {
+//				DFSVisit(G, u);						//O(|E|)
+//			}
+//		}
+//	}
+//	
+//	private void DFSVisit(Graph G, Vertex u) {
+//		this.time = this.time++;
+//		u.setDistance(time);							//Discovery Time
+//		u.setColor(Color.GRAY);
+//		for each vertex in the adjlist Edge (u, v)		//Implement the ADJ list first				//O(|E|)
+//			if(v.getColor() == Color.WHITE) {
+//				v.setPredecessor(u);
+//				DFSVisit(G, v);
+//			}
+//		u.setColor(Color.BLACK);
+//		time++;
+//		u.setFinished(time);							Finishing Time
+//	}
+	
 }
