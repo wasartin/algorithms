@@ -169,4 +169,11 @@ public class CommunicationsMonitor {
 //		u.setFinished(time);							Finishing Time
 //	}
 	
+	
+	/**
+	 * Helper method just to visualize the graph
+	 */
+	public void printAdjacenyList() {
+		//TODO
+	}
 }
