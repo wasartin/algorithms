@@ -11,7 +11,8 @@ import java.util.List;
 public class CommunicationsMonitor {
 	
 	//AjacencyList instance variable
-	HashMap<Integer, List<ComputerNode>> adjacenyList;
+	private HashMap<Integer, List<ComputerNode>> adjacenyList;
+	private boolean createdGraph;
 	
 	/**
 	 * @Required
@@ -20,6 +21,7 @@ public class CommunicationsMonitor {
 	public CommunicationsMonitor() {
 		//TODO
 		adjacenyList = new HashMap<>();
+		createdGraph = false;
 	}
 	
 	/**
@@ -33,7 +35,11 @@ public class CommunicationsMonitor {
 	 * @param timestamp
 	 */
 	public void addCommunication(int c1, int c2, int timestamp) {
+		if(!createdGraph) {
+			
+		}
 		//TODO
+		//sort triples by non-decreasing timestamp
 	}
 	
 	/**
@@ -43,6 +49,7 @@ public class CommunicationsMonitor {
 	 */
 	public void createGraph() {
 		//TODO
+		createdGraph = true;//Now addCommunication(...) cannot be run
 	}
 	
 
@@ -82,6 +89,8 @@ public class CommunicationsMonitor {
 	 * represents by ComputerNode objects, that specify that Ci has communicated
 	 * with other computers at times t1, t2,...,tk. The list for each computer must
 	 * be ordered by time: i.e., t1 < t2 < ... < tk
+	 * 
+	 * Notes: Key = Computer, Value = its List of neighbors
 	 * @return
 	 */
 	public HashMap<Integer, List<ComputerNode>> getComputerMapping(){
