@@ -3,12 +3,15 @@ import java.util.List;
 
 /**
  * 
- * @author watis
+ * @author William Sartin
  *
  *The CommunicationsMonitor class represents the graph G build to answer infection
  *queries. It has the following methods.
  */
 public class CommunicationsMonitor {
+	
+	//AjacencyList instance variable
+	HashMap<Integer, List<ComputerNode>> adjacenyList;
 	
 	/**
 	 * @Required
@@ -16,6 +19,7 @@ public class CommunicationsMonitor {
 	 */
 	public CommunicationsMonitor() {
 		//TODO
+		adjacenyList = new HashMap<>();
 	}
 	
 	/**
@@ -74,15 +78,14 @@ public class CommunicationsMonitor {
 	 * @Required
 	 * Returns a HashMap that represents the mapping between an Integer and a list
 	 * of ComputerNode objects. The Integer represents the ID of some computer Ci, 
-	 * while the lsit consists of pairs (ci, t1), (ci, t2), ... , (ci, tk), 
+	 * while the list consists of pairs (ci, t1), (ci, t2), ... , (ci, tk), 
 	 * represents by ComputerNode objects, that specify that Ci has communicated
-	 * with otehr computers at times t1, t2,...,tk. The list for each computer must
+	 * with other computers at times t1, t2,...,tk. The list for each computer must
 	 * be ordered by time: i.e., t1 < t2 < ... < tk
 	 * @return
 	 */
 	public HashMap<Integer, List<ComputerNode>> getComputerMapping(){
-		//TODO
-		return null;
+		return adjacenyList;
 	}
 	
 	/**
@@ -94,7 +97,11 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	List<ComputerNode> getComputerMapping(int c){
-		//TODO
+		if(c > adjacenyList.size()) {
+			throw new IllegalArgumentException("Selected id is out of bounds of current adjacenyList. The current size is:" + adjacenyList.size()
+			+ ", You requested:" + c);
+		}
+		adjacenyList.get(c);
 		return null;
 	}
 	
@@ -175,5 +182,6 @@ public class CommunicationsMonitor {
 	 */
 	public void printAdjacenyList() {
 		//TODO
+		
 	}
 }

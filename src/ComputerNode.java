@@ -2,11 +2,15 @@ import java.util.List;
 
 /**
  * 
- * @author watis
+ * @author Will Sartin
  * The ComputerNode class represents the nodes of the graph G, 
  * which are pairs (ci, t)
  */
 public class ComputerNode {
+	
+	private int id;
+	private int timestamp;
+	List<ComputerNode> neighbors;
 
 	public ComputerNode() {
 		
@@ -18,8 +22,11 @@ public class ComputerNode {
 	 * @return
 	 */
 	public int getID() {
-		//TODO
-		return -1;
+		return id;
+	}
+	
+	public void setID(int id) {
+		this.id = id;
 	}
 	
 	/**
@@ -28,8 +35,11 @@ public class ComputerNode {
 	 * @return
 	 */
 	public int getTimestamp() {
-		//TDOD
-		return -1;
+		return timestamp;
+	}
+	
+	public void setTimestamp(int timestamp) {
+		this.timestamp = timestamp;
 	}
 	
 	/**
@@ -39,8 +49,20 @@ public class ComputerNode {
 	 * @return
 	 */
 	List<ComputerNode> getOutNeighbors(){
-		//TODO
-		return null;
+		return neighbors;
 	}
+	
+	public boolean addNeighbor(ComputerNode vertex) {
+		//if this node is already connected, then return false;
+		if(neighbors.contains(vertex)) return false;
+		neighbors.add(vertex);
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Vertex:" + id;
+	}
+	
 	
 }
