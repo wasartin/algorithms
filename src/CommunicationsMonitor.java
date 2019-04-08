@@ -49,10 +49,10 @@ public class CommunicationsMonitor {
 	 */
 	public void createGraph() {
 		//TODO
+		//I know this is horrible programming
 		createdGraph = true;//Now addCommunication(...) cannot be run
 	}
 	
-
 	/**
 	 * 	 * @Required
 	 * Determines whether computers c2 could be infected by time y if computer c1 
