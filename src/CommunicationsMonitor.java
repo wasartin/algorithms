@@ -27,7 +27,7 @@ public class CommunicationsMonitor {
 		adjacenyList = new HashMap<>();
 		createdGraph = false;
 	}
-	
+
 	/**
 	 * @Required
 	 * Takes as input two integer c1, c2, and a timestamp. This triple represents the
@@ -52,12 +52,7 @@ public class CommunicationsMonitor {
 	 */
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
-		Collections.sort(commList, new Comparator<Communication>() {
-		    @Override
-		    public int compare(Communication comm1, Communication comm2) {  
-		        return Integer.signum(comm1.getTimestamp() - comm2.getTimestamp());  
-		    }
-		});
+		commList.sort(Communication::compareTo);
 	}
 	
 	/**
