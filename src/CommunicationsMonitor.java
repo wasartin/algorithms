@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,7 +14,8 @@ public class CommunicationsMonitor {
 	//AjacencyList instance variable
 	private HashMap<Integer, List<ComputerNode>> adjacenyList;
 	private boolean createdGraph;
-	
+	List<Communication> commList;
+
 	/**
 	 * @Required
 	 * Constructor with no parameters
@@ -36,10 +38,10 @@ public class CommunicationsMonitor {
 	 */
 	public void addCommunication(int c1, int c2, int timestamp) {
 		if(!createdGraph) {
-			
+			commList = new ArrayList<Communication>();
+			commList.add(new Communication(c1, c2, timestamp));
 		}
-		//TODO
-		//sort triples by non-decreasing timestamp
+		//sort triples by increasing timestamp (maybe for createGraph?)
 	}
 	
 	/**
