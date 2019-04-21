@@ -1,12 +1,5 @@
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.fail;
 /**
  * 
  * @author Will Sartin
@@ -14,6 +7,7 @@ import org.junit.Test;
  */
 class ComputerNodeTest {
 
+	@SuppressWarnings("deprecation")
 	@Test
 	void test() {
 		fail("Not yet implemented");
