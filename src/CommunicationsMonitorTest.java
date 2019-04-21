@@ -1,12 +1,11 @@
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.fail;
 /**
-
 /**
  * 
  * @author Will Sartin
@@ -18,7 +17,7 @@ public class CommunicationsMonitorTest {
 	public void test() {
 		fail("Not yet implemented");
 	}
-	
+
 	@Test
 	public void exampleOne_fromSpecSheet() {
 		/*

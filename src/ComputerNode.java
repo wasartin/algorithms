@@ -12,9 +12,16 @@ public class ComputerNode {
 	private int id;
 	private int timestamp;
 	List<ComputerNode> neighbors;
+	Color color;
 
 	public ComputerNode() {
 		neighbors = new ArrayList<>();
+	}
+	
+	public ComputerNode(int id, int timestamp) {
+		this();
+		this.id = id;
+		this.timestamp = timestamp;
 	}
 	
 	/**
@@ -41,6 +48,14 @@ public class ComputerNode {
 	
 	public void setTimestamp(int timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
+	public Color getColor() {
+		return this.color;
 	}
 	
 	/**
