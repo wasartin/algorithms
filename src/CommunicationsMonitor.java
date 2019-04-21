@@ -53,6 +53,24 @@ public class CommunicationsMonitor {
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
 		commList.sort(Communication::compareTo);
+		for(Communication c : commList) {
+			ComputerNode cn1, cn2;
+
+			if(!adjacenyList.containsKey(c.c1)) {
+				cn1 = new ComputerNode(c.c1, c.timestamp);
+			} else {
+				cn1 = new ComputerNode()
+			}
+
+			if(!adjacenyList.containsKey(c.c2)) {
+
+			}
+
+
+			//			if(!adjacenyList.containsKey(c.c1) && (!adjacenyList.get(c.c1).contains(c.c2))) {
+//
+//			}
+		}
 	}
 	
 	/**
