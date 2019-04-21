@@ -26,6 +26,7 @@ public class CommunicationsMonitor {
 	public CommunicationsMonitor() {
 		//TODO
 		adjacenyList = new HashMap<>();
+		computerMapping = new ArrayList<ComputerNode>();
 		createdGraph = false;
 	}
 
@@ -53,9 +54,30 @@ public class CommunicationsMonitor {
 	 */
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
+		//Scan triplets in sorted order
 		commList.sort(Communication::compareTo);
-		
-		
+		for(Communication link : commList) {
+			//Create Nodes if they do not exist
+			ComputerNode cn1, cn2;
+
+			if(!adjacenyList.containsKey(link.getC1())) {
+				cn1 = new ComputerNode(link.getC1(), link.getTimestamp());
+			} else {
+				cn1 = computerMapping.get(link.getC1());
+			}
+			if(!adjacenyList.containsKey(link.getC2())) {
+				cn1 = new ComputerNode(link.getC2(), link.getTimestamp());
+			}else {
+				cn2 = computerMapping.get(link.getC2());
+			}
+			//Add edge from cn1 to cn2
+			//Add edge from cn2 to cn1
+			//Append ref to Cn1 to list for Cn1
+			//Append ref to Cn2 to lsit for Cn2
+			//If (cn1, cn2, Tk) is not the first triple involving cn1, then add a directed edge from (cni, t) to (cn1, tk)
+				//Where t is the timestamp of the preceding element (the previously last one) in the list for Cn1
+			//Do the same thing for cn2
+		}
 	}
 	
 	/**
