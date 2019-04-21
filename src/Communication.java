@@ -8,5 +8,8 @@ public class Communication {
         this.timestamp = timestamp;
     }
     
+    public int getTimestamp() {
+    	return this.timestamp;
+    }
 
 }

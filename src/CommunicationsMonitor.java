@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,7 +52,12 @@ public class CommunicationsMonitor {
 	 */
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
-		
+		Collections.sort(commList, new Comparator<Communication>() {
+		    @Override
+		    public int compare(Communication comm1, Communication comm2) {  
+		        return Integer.signum(comm1.getTimestamp() - comm2.getTimestamp());  
+		    }
+		});
 	}
 	
 	/**
