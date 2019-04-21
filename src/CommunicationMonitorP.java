@@ -1,15 +1,16 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommunicationsMonitorTest {
+public class CommunicationMonitorP {
 
     CommunicationsMonitor cm;
-    ArrayList<Triplet> communications;
+    ArrayList<Communication> communications;
 
     @BeforeAll
     public void before() {
@@ -18,7 +19,7 @@ public class CommunicationsMonitorTest {
         cm.addCommunication(2, 4, 8);
         cm.addCommunication(3, 4, 8);
         cm.addCommunication(1, 4, 12);
-        communications = (ArrayList<Triplet>) cm.getCommunications();
+        communications = (ArrayList<Communication>) cm.getCommunications();
     }
 
     @Test
