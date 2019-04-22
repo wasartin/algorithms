@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,8 @@ public class CommunicationsMonitorTest {
 	 * Random Guy code starts here
 	 */
 	
-    CommunicationsMonitor cm;
-    ArrayList<Communication> communications;
+    private CommunicationsMonitor cm;
+    private ArrayList<Communication> communications;
 
     @BeforeAll
     public void before() {
@@ -33,6 +34,12 @@ public class CommunicationsMonitorTest {
         cm.addCommunication(1, 4, 12);
         communications = (ArrayList<Communication>) cm.getCommunications();
     }
+    
+    @Test
+    public void computerMappingToStringTest() {
+    	System.out.println(cm.computerMappingToString());
+    }
+
 
     @Test
     public void testComputerNodeEquality() {

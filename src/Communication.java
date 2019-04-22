@@ -1,4 +1,4 @@
-public class Communication implements Comparable {
+public class Communication implements Comparable<Integer> {
 
     int c1, c2, timestamp;
 
@@ -12,8 +12,7 @@ public class Communication implements Comparable {
     public int getC2() { return this.c2; }
     public int getTimestamp() { return this.timestamp; }
 
-    public int compareTo(Object compareComm) {
-        int comparetimestamp = ((Communication)compareComm).getTimestamp();
-        return this.timestamp - comparetimestamp;
-    }
+	public int compareTo(Integer other) {;
+        return this.timestamp - other;
+	}
 }

@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class CommunicationsMonitor {
 	
-	//AjacencyList instance variable
 	private HashMap<Integer, List<ComputerNode>> computerMapping;
 	private boolean createdGraph;
 	List<Communication> commList;
@@ -23,7 +22,6 @@ public class CommunicationsMonitor {
 	 * Constructor with no parameters
 	 */
 	public CommunicationsMonitor() {
-		//TODO
 		computerMapping = new HashMap<>();
 		createdGraph = false;
 	}
@@ -53,29 +51,37 @@ public class CommunicationsMonitor {
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
 		//Scan triplets in sorted order
-		commList.sort(Communication::compareTo);
+		//commList.sort(Integer::compareTo);
 		for(Communication link : commList) {
 			//Create Nodes if they do not exist
-			ComputerNode cn1, cn2;
-
-			if(!computerMapping.containsKey(link.getC1())) {
-				cn1 = new ComputerNode(link.getC1(), link.getTimestamp());
-			} else {
-		//		cn1 = adjacenyList.get(link.getC1());
+			ComputerNode compNode1, compNode2;
+			compNode1 = new ComputerNode(link.getC1(), link.getTimestamp());
+			compNode2 = new ComputerNode(link.getC2(), link.getTimestamp());
+			if(!computerMapping.containsKey(link.getC1())) {//Add new computerNode
+				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
+				tempList.add(compNode1);
+				computerMapping.put(link.getC1(), tempList);//add to List<ComputerNode> inside of hashMap
+			} else {//Add the node to the Computer Mapping (the new time link) to the Computer Mapping
+				List<ComputerNode> tempList = getComputerMapping(link.getC1());
+				tempList.add(compNode1);
+				computerMapping.put(link.getC1(), tempList);
 			}
 			if(!computerMapping.containsKey(link.getC2())) {
-				cn1 = new ComputerNode(link.getC2(), link.getTimestamp());
-			}else {
-				//cn2 = adjacenyList.get(link.getC2());
+				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
+				tempList.add(compNode2);
+				computerMapping.put(link.getC2(), tempList);
+			}else {//Add the node to the Computer Mapping (the new time link) to the Computer Mapping
+				List<ComputerNode> tempList = getComputerMapping(link.getC2());
+				tempList.add(compNode2);
+				computerMapping.put(link.getC2(), tempList);
 			}
-			//Add edge from cn1 to cn2
-			//Add edge from cn2 to cn1
-			//Append ref to Cn1 to list for Cn1
-			//Append ref to Cn2 to lsit for Cn2
-			//If (cn1, cn2, Tk) is not the first triple involving cn1, then add a directed edge from (cni, t) to (cn1, tk)
-				//Where t is the timestamp of the preceding element (the previously last one) in the list for Cn1
-			//Do the same thing for cn2
+			addEdge(compNode1, compNode2);
 		}
+	}
+	
+	private void addEdge(ComputerNode one, ComputerNode two) {
+		one.addNeighbor(two);
+		two.addNeighbor(one);
 	}
 	
 	/**
@@ -135,8 +141,7 @@ public class CommunicationsMonitor {
 			throw new IllegalArgumentException("Selected id is out of bounds of current adjacenyList. The current size is:" + computerMapping.size()
 			+ ", You requested:" + c);
 		}
-		computerMapping.get(c);
-		return null;
+		return computerMapping.get(c);
 	}
 	
 	public List<Communication> getCommunications(){
@@ -221,6 +226,19 @@ public class CommunicationsMonitor {
 	 */
 	public void printAdjacenyList() {
 		//TODO
-		
 	}
+
+    public String computerMappingToString() {
+    	String result = "";;
+    	for(int i = 0; i < computerMapping.size(); i++) {
+    		result += String.valueOf(i) + ": ";
+    		List<ComputerNode> currList = computerMapping.get(i);
+    		for(ComputerNode node : currList) {
+    			result += node.toString();
+    		}
+    		result += "\n";
+    	}
+    	return result;
+    }
+    
 }
