@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -24,6 +25,7 @@ public class CommunicationsMonitor {
 	public CommunicationsMonitor() {
 		computerMapping = new HashMap<>();
 		createdGraph = false;
+		commList = new ArrayList<Communication>();
 	}
 
 	/**
@@ -38,7 +40,6 @@ public class CommunicationsMonitor {
 	 */
 	public void addCommunication(int c1, int c2, int timestamp) {
 		if(!createdGraph) {
-			commList = new ArrayList<Communication>();
 			commList.add(new Communication(c1, c2, timestamp));
 		}
 	}
@@ -51,7 +52,12 @@ public class CommunicationsMonitor {
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
 		//Scan triplets in sorted order
-		//commList.sort(Integer::compareTo);
+		Collections.sort(commList, new Comparator<Communication>() {
+		    @Override
+		    public int compare(Communication comm1, Communication comm2) {  
+		        return Integer.signum(comm1.getTimestamp() - comm2.getTimestamp());  
+		    }
+		});
 		for(Communication link : commList) {
 			//Create Nodes if they do not exist
 			ComputerNode compNode1, compNode2;
@@ -60,8 +66,8 @@ public class CommunicationsMonitor {
 			if(!computerMapping.containsKey(link.getC1())) {//Add new computerNode
 				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
 				tempList.add(compNode1);
-				computerMapping.put(link.getC1(), tempList);//add to List<ComputerNode> inside of hashMap
-			} else {//Add the node to the Computer Mapping (the new time link) to the Computer Mapping
+				computerMapping.put(link.getC1(), tempList);
+			} else {
 				List<ComputerNode> tempList = getComputerMapping(link.getC1());
 				tempList.add(compNode1);
 				computerMapping.put(link.getC1(), tempList);
@@ -70,7 +76,7 @@ public class CommunicationsMonitor {
 				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
 				tempList.add(compNode2);
 				computerMapping.put(link.getC2(), tempList);
-			}else {//Add the node to the Computer Mapping (the new time link) to the Computer Mapping
+			}else {
 				List<ComputerNode> tempList = getComputerMapping(link.getC2());
 				tempList.add(compNode2);
 				computerMapping.put(link.getC2(), tempList);
@@ -137,8 +143,8 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	List<ComputerNode> getComputerMapping(int c){
-		if(c > computerMapping.size()) {
-			throw new IllegalArgumentException("Selected id is out of bounds of current adjacenyList. The current size is:" + computerMapping.size()
+		if(!computerMapping.containsKey(c)) {
+			throw new IllegalArgumentException("Selected id is not found in the Computer Mapping. actual: " + computerMapping.keySet().toString()
 			+ ", You requested:" + c);
 		}
 		return computerMapping.get(c);
@@ -224,17 +230,38 @@ public class CommunicationsMonitor {
 	/**
 	 * Helper method just to visualize the graph
 	 */
-	public void printAdjacenyList() {
-		//TODO
-	}
+//	public String adjacenyListToString() {
+//    	String result = "";
+//    	for(Integer i : computerMapping.keySet()) {
+//    		result += String.valueOf(i) + ": ";
+//    		List<ComputerNode> currList = computerMapping.get(i);
+//    		for(int j = 0; j < currList.size(); j++) {
+//    			List<ComputerNode> neighbors = currList.get(j).getOutNeighbors();
+//    			for(int k = 0; k < neighbors.size(); k++) {
+//        			ComputerNode currNode = currList.get(j);
+//    			}
+//
+//        		result += currNode.toString();
+//        		if(j < currList.size() - 1) {
+//        			result += "->";
+//        		}
+//    		}
+//    		result += "\n";
+//    	}
+//    	return result;
+//	}
 
     public String computerMappingToString() {
     	String result = "";;
-    	for(int i = 0; i < computerMapping.size(); i++) {
+    	for(Integer i : computerMapping.keySet()) {
     		result += String.valueOf(i) + ": ";
     		List<ComputerNode> currList = computerMapping.get(i);
-    		for(ComputerNode node : currList) {
-    			result += node.toString();
+    		for(int j = 0; j < currList.size(); j++) {
+    			ComputerNode currNode = currList.get(j);
+        		result += currNode.toString();
+        		if(j < currList.size() - 1) {
+        			result += "->";
+        		}
     		}
     		result += "\n";
     	}

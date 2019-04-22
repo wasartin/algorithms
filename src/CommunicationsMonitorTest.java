@@ -2,7 +2,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,11 +21,11 @@ public class CommunicationsMonitorTest {
 	 * Random Guy code starts here
 	 */
 	
-    private CommunicationsMonitor cm;
-    private ArrayList<Communication> communications;
+    private static CommunicationsMonitor cm;
+    private static ArrayList<Communication> communications;
 
     @BeforeAll
-    public void before() {
+    public static void before() {
         cm = new CommunicationsMonitor();
         cm.addCommunication(1, 2, 4);
         cm.addCommunication(2, 4, 8);
@@ -37,7 +36,14 @@ public class CommunicationsMonitorTest {
     
     @Test
     public void computerMappingToStringTest() {
+    	cm.createGraph();
     	System.out.println(cm.computerMappingToString());
+    }
+    
+    @Test
+    public void adjacenyList_I_ThinkTest() {
+    	cm.createGraph();
+    	System.out.println(cm.adjacenyListToString());
     }
 
 

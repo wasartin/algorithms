@@ -1,6 +1,7 @@
-public class Communication implements Comparable<Integer> {
+public class Communication{
 
     int c1, c2, timestamp;
+    public static final String FORMAT = "link [c%d:c%d] at %d";
 
     public Communication(int c1, int c2, int timestamp) {
         this.c1 = c1;
@@ -12,7 +13,13 @@ public class Communication implements Comparable<Integer> {
     public int getC2() { return this.c2; }
     public int getTimestamp() { return this.timestamp; }
 
-	public int compareTo(Integer other) {;
-        return this.timestamp - other;
-	}
+//    @Override
+//    public String toString() {
+//    	return "c:" + c1 + " <=> c:" + c2 + " at " + timestamp;
+//    }
+    
+    @Override
+    public String toString() {
+    	return String.format(FORMAT, c1, c2, timestamp);
+    }
 }
