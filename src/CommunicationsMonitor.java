@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 
- * @author William Sartin
+ * @author William Sartin & Josh Ramon
  *
  *The CommunicationsMonitor class represents the graph G build to answer infection
  *queries. It has the following methods.
@@ -14,9 +14,8 @@ import java.util.List;
 public class CommunicationsMonitor {
 	
 	//AjacencyList instance variable
-	private HashMap<Integer, List<ComputerNode>> adjacenyList;
+	private HashMap<Integer, List<ComputerNode>> computerMapping;
 	private boolean createdGraph;
-	List<ComputerNode> computerMapping;
 	List<Communication> commList;
 
 	/**
@@ -25,8 +24,7 @@ public class CommunicationsMonitor {
 	 */
 	public CommunicationsMonitor() {
 		//TODO
-		adjacenyList = new HashMap<>();
-		computerMapping = new ArrayList<ComputerNode>();
+		computerMapping = new HashMap<>();
 		createdGraph = false;
 	}
 
@@ -60,15 +58,15 @@ public class CommunicationsMonitor {
 			//Create Nodes if they do not exist
 			ComputerNode cn1, cn2;
 
-			if(!adjacenyList.containsKey(link.getC1())) {
+			if(!computerMapping.containsKey(link.getC1())) {
 				cn1 = new ComputerNode(link.getC1(), link.getTimestamp());
 			} else {
-				cn1 = computerMapping.get(link.getC1());
+		//		cn1 = adjacenyList.get(link.getC1());
 			}
-			if(!adjacenyList.containsKey(link.getC2())) {
+			if(!computerMapping.containsKey(link.getC2())) {
 				cn1 = new ComputerNode(link.getC2(), link.getTimestamp());
 			}else {
-				cn2 = computerMapping.get(link.getC2());
+				//cn2 = adjacenyList.get(link.getC2());
 			}
 			//Add edge from cn1 to cn2
 			//Add edge from cn2 to cn1
@@ -121,7 +119,7 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public HashMap<Integer, List<ComputerNode>> getComputerMapping(){
-		return adjacenyList;
+		return computerMapping;
 	}
 	
 	/**
@@ -133,11 +131,11 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	List<ComputerNode> getComputerMapping(int c){
-		if(c > adjacenyList.size()) {
-			throw new IllegalArgumentException("Selected id is out of bounds of current adjacenyList. The current size is:" + adjacenyList.size()
+		if(c > computerMapping.size()) {
+			throw new IllegalArgumentException("Selected id is out of bounds of current adjacenyList. The current size is:" + computerMapping.size()
 			+ ", You requested:" + c);
 		}
-		adjacenyList.get(c);
+		computerMapping.get(c);
 		return null;
 	}
 	

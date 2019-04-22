@@ -3,7 +3,7 @@ import java.util.List;
 
 /**
  * 
- * @author Will Sartin
+ * @author Will Sartin & Josh Ramon
  * The ComputerNode class represents the nodes of the graph G, 
  * which are pairs (ci, t)
  */
