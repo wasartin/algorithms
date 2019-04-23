@@ -17,6 +17,8 @@ public class CommunicationsMonitor {
 	private HashMap<Integer, List<ComputerNode>> computerMapping;
 	private boolean createdGraph;
 	List<Communication> commList;
+	
+	private HashMap<Integer, List<ComputerNode>> timeMapping;
 
 	/**
 	 * @Required
@@ -26,6 +28,8 @@ public class CommunicationsMonitor {
 		computerMapping = new HashMap<>();
 		createdGraph = false;
 		commList = new ArrayList<Communication>();
+		
+		timeMapping = new HashMap<>();
 	}
 
 	/**
@@ -260,6 +264,91 @@ public class CommunicationsMonitor {
     	String result = "";
     	for(Communication link : commList) {
     		result += link + "\n";
+    	}
+    	return result;
+    }
+    
+    public void createTimeMapping() {
+		createdGraph = true;//Now addCommunication(...) cannot be run
+		//Scan triplets in sorted order
+		Collections.sort(commList, new Comparator<Communication>() {
+		    @Override
+		    public int compare(Communication comm1, Communication comm2) {  
+		        return Integer.signum(comm1.getTimestamp() - comm2.getTimestamp());  
+		    }
+		});
+		
+		for(Communication link : commList) {
+			//Create Nodes if they do not exist
+			ComputerNode compNode1 = new ComputerNode(link.getC1(), link.getTimestamp());
+			ComputerNode compNode2 = new ComputerNode(link.getC2(), link.getTimestamp());
+			addEdge(compNode1, compNode2);
+			int currTime = link.getTimestamp();
+			if(!timeMapping.containsKey(currTime)) {//Add new computerNode
+				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
+				tempList.add(compNode1);
+				tempList.add(compNode2);
+				timeMapping.put(currTime, tempList);
+			} else {//this time interaction already exists, and we need to add nodes if necessary
+				List<ComputerNode> connectionsAtTimeT = timeMapping.get(currTime);
+				//Add node if new, if not new, update neighbors
+				if(connectionsAtTimeT.contains(compNode1)) {
+					int indexOfComp = connectionsAtTimeT.indexOf(compNode1);
+					ComputerNode inLink = connectionsAtTimeT.get(indexOfComp);
+					inLink.addNeighbor(compNode2);
+					connectionsAtTimeT.set(indexOfComp, inLink);
+					timeMapping.put(currTime, connectionsAtTimeT);
+				}else {//add new
+					connectionsAtTimeT.add(compNode1);
+					timeMapping.put(currTime, connectionsAtTimeT);
+				}
+				if(connectionsAtTimeT.contains(compNode2)) {
+					int indexOfComp = connectionsAtTimeT.indexOf(compNode2);
+					ComputerNode inLink = connectionsAtTimeT.get(indexOfComp);
+					inLink.addNeighbor(compNode1);
+					connectionsAtTimeT.set(indexOfComp, inLink);
+					timeMapping.put(currTime, connectionsAtTimeT);
+				}else {
+					connectionsAtTimeT.add(compNode2);
+					timeMapping.put(currTime, connectionsAtTimeT);
+				}
+			}
+		}
+    }
+    
+    
+    public List<ComputerNode> weirdQueryInfection(int indexInfect, int indexTarget, int infectTime, int targetTime) {
+    	List<ComputerNode> result = new ArrayList<ComputerNode>();
+    	ArrayList <Integer> times = new ArrayList<>();
+    	for(Integer k : timeMapping.keySet()) {
+    		times.add(k);
+    	}
+    	result.add(new ComputerNode(indexInfect, infectTime));
+    	
+    	int xNot = times.get(0);
+    	int i = 0;
+    	while(xNot < infectTime) {
+    		if(i == times.size()) return null;
+    		xNot = times.get(i++);
+    	}//Now xNot is at least x.
+    	int yNot = times.get(times.size() - 1);
+    	int j = times.get(times.size() - 1);
+    	while(yNot > targetTime) {
+    		if(j < 0) return null;
+    		yNot = times.get(j--);
+    	}//Now we have at most y
+    	while(xNot <= yNot) {
+    		List<ComputerNode> currList = timeMapping.get(xNot);
+    		for(ComputerNode currNode : currList) {
+    			if(!result.contains(currNode)) {
+    				result.add(currNode);
+    			}
+    			if(currNode.getID() == indexTarget) {
+    				xNot = yNot + yNot;
+    				break;
+    			}
+    		}
+    		xNot++;
     	}
     	return result;
     }
