@@ -66,30 +66,12 @@ public class CommunicationsMonitor {
 			if(!computerMapping.containsKey(link.getC1())) {//Add new computerNode
 				addNewNodeToMapping(compNode1);
 			} else {//Computer has been referenced before, append to mapping
-				List<ComputerNode> tempList = getComputerMapping(link.getC1());
-				if(!tempList.contains(compNode1)) {
-					ComputerNode prevNode = tempList.get(tempList.size() - 1);
-					prevNode.addNeighbor((compNode1));
-					tempList.add(compNode1);
-					computerMapping.put(link.getC1(), tempList);
-				}else {
-					ComputerNode tempNode = tempList.get(tempList.indexOf(compNode1));
-					tempNode.addNeighbor(compNode2);
-				}
+				appendNodeToComputerMapping(compNode1);
 			}
 			if(!computerMapping.containsKey(link.getC2())) {
 				addNewNodeToMapping(compNode2);
 			}else {
-				List<ComputerNode> tempList = getComputerMapping(link.getC2());
-				if(!tempList.contains(compNode2)) {
-					ComputerNode prevNode = tempList.get(tempList.size() - 1);
-					prevNode.addNeighbor((compNode2));
-					tempList.add(compNode2);
-					computerMapping.put(link.getC2(), tempList);
-				}else {//it does contain this one already, but we need to update it's new neighbor
-					ComputerNode tempNode = tempList.get(tempList.indexOf(compNode2));
-					tempNode.addNeighbor(compNode1);
-				}
+				appendNodeToComputerMapping(compNode2);
 			}
 		}
 	}
@@ -103,6 +85,19 @@ public class CommunicationsMonitor {
 		List<ComputerNode> tempList = new ArrayList<ComputerNode>();
 		tempList.add(toAdd);
 		computerMapping.put(toAdd.getID(), tempList);
+	}
+	
+	private void appendNodeToComputerMapping(ComputerNode toAppend) {
+		List<ComputerNode> tempList = getComputerMapping(toAppend.getID());
+		if(!tempList.contains(toAppend)) {
+			ComputerNode prevNode = tempList.get(tempList.size() - 1);
+			prevNode.addNeighbor((toAppend));
+			tempList.add(toAppend);
+			computerMapping.put(toAppend.getID(), tempList);
+		}else {//it does contain this one already, but we need to update it with it's new neighbor
+			ComputerNode tempNode = tempList.get(tempList.indexOf(toAppend));
+			tempNode.addNeighbor(toAppend.getOutNeighbors().get(0));
+		}
 	}
 	
 	/**
