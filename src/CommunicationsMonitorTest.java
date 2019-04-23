@@ -80,7 +80,7 @@ public class CommunicationsMonitorTest {
         assertEquals(4, cm.getCommunications().size());
     }
 
-    @Test
+    @Test //Current
     public void testCreateGraph() {
         cm.createGraph();
         HashMap<Integer, List<ComputerNode>> adjList = cm.getComputerMapping();
@@ -88,6 +88,7 @@ public class CommunicationsMonitorTest {
         List<ComputerNode> c1 = adjList.get(1);
         assertEquals(2, c1.size());
         //C1[0]
+        
         List<ComputerNode> c1Neighbors = c1.get(0).getOutNeighbors();
         assertEquals(2, c1Neighbors.size());
         assertEquals(2, c1Neighbors.get(0).getID());
@@ -131,10 +132,13 @@ public class CommunicationsMonitorTest {
         //C4[0]
         List<ComputerNode> c4Neighbors = c4.get(0).getOutNeighbors();
         assertEquals(3, c4Neighbors.size());
+        
         assertEquals(2, c4Neighbors.get(0).getID());
         assertEquals(8, c4Neighbors.get(0).getTimestamp());
+        
         assertEquals(3, c4Neighbors.get(1).getID());
         assertEquals(8, c4Neighbors.get(1).getTimestamp());
+        
         assertEquals(4, c4Neighbors.get(2).getID());
         assertEquals(12, c4Neighbors.get(2).getTimestamp());
         //C4[1]

@@ -60,34 +60,43 @@ public class CommunicationsMonitor {
 		});
 		for(Communication link : commList) {
 			//Create Nodes if they do not exist
-			ComputerNode compNode1, compNode2;
-			compNode1 = new ComputerNode(link.getC1(), link.getTimestamp());
-			compNode2 = new ComputerNode(link.getC2(), link.getTimestamp());
+			ComputerNode compNode1 = new ComputerNode(link.getC1(), link.getTimestamp());
+			ComputerNode compNode2 = new ComputerNode(link.getC2(), link.getTimestamp());
+			addEdge(compNode1, compNode2);
 			if(!computerMapping.containsKey(link.getC1())) {//Add new computerNode
-				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
-				tempList.add(compNode1);
-				computerMapping.put(link.getC1(), tempList);
-			} else {
+				addNewNodeToMapping(compNode1);
+			} else {//Computer has been referenced before, append to mapping
 				List<ComputerNode> tempList = getComputerMapping(link.getC1());
-				tempList.add(compNode1);
-				computerMapping.put(link.getC1(), tempList);
+				if(!tempList.contains(compNode1)) {
+					ComputerNode prevNode = tempList.get(tempList.size() - 1);
+					prevNode.addNeighbor((compNode1));
+					tempList.add(compNode1);
+					computerMapping.put(link.getC1(), tempList);
+				}
 			}
 			if(!computerMapping.containsKey(link.getC2())) {
-				List<ComputerNode> tempList = new ArrayList<ComputerNode>();
-				tempList.add(compNode2);
-				computerMapping.put(link.getC2(), tempList);
+				addNewNodeToMapping(compNode2);
 			}else {
 				List<ComputerNode> tempList = getComputerMapping(link.getC2());
-				tempList.add(compNode2);
-				computerMapping.put(link.getC2(), tempList);
+				if(!tempList.contains(compNode2)) {
+					ComputerNode prevNode = tempList.get(tempList.size() - 1);
+					prevNode.addNeighbor((compNode2));
+					tempList.add(compNode2);
+					computerMapping.put(link.getC2(), tempList);
+				}
 			}
-			addEdge(compNode1, compNode2);
 		}
 	}
 	
 	private void addEdge(ComputerNode one, ComputerNode two) {
 		one.addNeighbor(two);
 		two.addNeighbor(one);
+	}
+	
+	private void addNewNodeToMapping(ComputerNode toAdd) {
+		List<ComputerNode> tempList = new ArrayList<ComputerNode>();
+		tempList.add(toAdd);
+		computerMapping.put(toAdd.getID(), tempList);
 	}
 	
 	/**
