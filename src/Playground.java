@@ -17,5 +17,12 @@ public class Playground {
 		for(ComputerNode n : aList) {
 			System.out.println(n.toString());
 		}
+		
+		//Expected: 
+			/*
+			 * Source: [1 : 2]
+			 * [1 : 4] - > [2 : 8] - > [4 : 8] - >- > [3 : 8]
+			 * C1 -> C2 (at time 4), c2 -> c4 (time 8), c4 -> c3 (at time 8)
+			 */
 	}
 }

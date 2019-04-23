@@ -128,7 +128,9 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
-		//TODO
+		//Error handling
+		
+		//find computerNode 1 w/ c1
 		return null;
 	}
 	
@@ -323,32 +325,35 @@ public class CommunicationsMonitor {
     	for(Integer k : timeMapping.keySet()) {
     		times.add(k);
     	}
-    	result.add(new ComputerNode(indexInfect, infectTime));
+    	//result.add(new ComputerNode(indexInfect, infectTime));Source Node and infectTime
     	
-    	int xNot = times.get(0);
-    	int i = 0;
+    	int xNot = times.get(0);//xNot = 1stIndex[value]
+    	int i = 0;//first index
     	while(xNot < infectTime) {
     		if(i == times.size()) return null;
     		xNot = times.get(i++);
     	}//Now xNot is at least x.
-    	int yNot = times.get(times.size() - 1);
-    	int j = times.get(times.size() - 1);
+    	int yNot = times.get(times.size() - 1);//Now yNot = lastIndex[value]
+    	int j = times.size() -1;//Last index
     	while(yNot > targetTime) {
     		if(j < 0) return null;
     		yNot = times.get(j--);
     	}//Now we have at most y
-    	while(xNot <= yNot) {
-    		List<ComputerNode> currList = timeMapping.get(xNot);
-    		for(ComputerNode currNode : currList) {
-    			if(!result.contains(currNode)) {
-    				result.add(currNode);
-    			}
-    			if(currNode.getID() == indexTarget) {
-    				xNot = yNot + yNot;
-    				break;
-    			}
-    		}
-    		xNot++;
+    	
+    	for(int index = 0; index < times.size(); index++) {
+    		if(times.get(index) <= yNot) {
+    			xNot = times.get(index);
+        		List<ComputerNode> currList = timeMapping.get(xNot);//gets value, not index.
+        		for(ComputerNode currNode : currList) {
+        			if(!result.contains(currNode)) {
+        				result.add(currNode);
+        			}
+        			if(currNode.getID() == indexTarget) {
+        				xNot = yNot + yNot;
+        				break;
+        			}
+        		}
+        	}
     	}
     	return result;
     }
