@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * 
@@ -124,7 +126,28 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
-		//TODO
+		if(!computerMapping.containsKey(c1)) {
+			throw new IllegalArgumentException("Computer Node: " +c1 + "Is not inside the computer mapping");
+		}
+		if(!computerMapping.containsKey(c2)) {
+			throw new IllegalArgumentException("Computer Node: " +c2 + "Is not inside the computer mapping");
+		}
+		if(y > x) return null;
+		//find c1 at time x' where x' >= x
+		ComputerNode infectedNode = computerMapping.get(c1).get(0);//Get first instance of computer node 1
+		int xNot = infectedNode.getTimestamp();
+		if(xNot > x) return null; //right?
+		int i = 0;
+		while(xNot < x) {
+			if(computerMapping.get(c1).get(++i) != null){
+				infectedNode = computerMapping.get(c1).get(i);
+			}
+		}
+		//Run BFS or DFS to get all neighbors of infectedNode
+		List<ComputerNode> reachable = BFS(infectedNode);
+		//if node (c2, y') is reachable from node (c1, x') where y' <= y 
+			//Then return transmission seq
+		//return null otherwise
 		return null;
 	}
 	
@@ -171,34 +194,50 @@ public class CommunicationsMonitor {
 	 * Finds shortest path from source node to all other connected nodes
 	 * @param G
 	 * @param s
+	 * @return 
 	 */
-//	private void BFS(Graph G, Vertex s) {
-//		for(Vertex u : V) {
-//			u.setColor(Color.WHITE);
-//			u.setDistance(Integer.MAX_VALUE);
-//			u.setPredecessor(null);
-//		}
-//		s.setColor(Color.GRAY);
-//		s.setDistance(0);
-//		s.setPredecessor(null);
-//		Queue Q = new Queue();
-//		Enqueue(Q, s);
-//		while(!Q.isEmpty()) {
-//			Vertex u = Q.dequeue();
-//			for(Vertex v : G.Adj[u]) {
-//				if(v.getColor() == Color.WHITE) {
-//					v.setColor(Color.GRAY);
-//					v.setDistance();
-//					v.setPredecessor(u);
-//					Enqueue(Q, v);
-//				}
-//			u.setColor(Color.BLACK;
-//			}
-//		}
-//	}
+	public List<ComputerNode> BFS(ComputerNode sourceVertex) {
+		List<ComputerNode> result = new ArrayList<ComputerNode>();
+		ArrayList<Node<ComputerNode>> nodes = new ArrayList<Node<ComputerNode>>();
+		for(ComputerNode u : sourceVertex.getOutNeighbors()) {// for all
+			Node<ComputerNode> newNode = new Node(u, Color.WHITE, Integer.MAX_VALUE, null);
+			nodes.add(newNode);
+		}
+		sourceVertex.setColor(Color.GRAY);
+		Node<ComputerNode> source = new Node(sourceVertex, Color.GRAY, 0, null);
+		Queue<Node<ComputerNode>> Q = new PriorityQueue<Node<ComputerNode>>();
+		Q.add(source);
+		while(!Q.isEmpty()) {
+			Node<ComputerNode> u = (Node<ComputerNode>) Q.remove();
+			for(Node<ComputerNode> v : nodes) {
+				if(v.getColor() == Color.WHITE) {
+					v.setColor(Color.GRAY);
+					v.setDistance(0);
+					v.setPredecessor(u);
+					Q.add(v);
+				}
+			u.setColor(Color.BLACK);
+			result.add(u.getData());
+			}
+		}
+		return result;
+	}
 	
-	
-	
+	public String BFS_toString(ComputerNode sourceVertex) {
+		ComputerNode nodeInMapping = computerMapping.get(sourceVertex.getID()).get(0);
+		List<ComputerNode> nodes = BFS(nodeInMapping);
+		String result = "";
+		for(int i = 0; i < nodes.size(); i++) {
+			ComputerNode curr = nodes.get(i);
+			result += curr.toString();
+			if(i + 1 < nodes.size()) {
+				result += "->";
+			}
+		}
+		return result;
+	}
+
+
 	/**
 	 * CLRS
 	 * Creates depth-first forest
