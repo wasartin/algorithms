@@ -72,6 +72,9 @@ public class CommunicationsMonitor {
 					prevNode.addNeighbor((compNode1));
 					tempList.add(compNode1);
 					computerMapping.put(link.getC1(), tempList);
+				}else {
+					ComputerNode tempNode = tempList.get(tempList.indexOf(compNode1));
+					tempNode.addNeighbor(compNode2);
 				}
 			}
 			if(!computerMapping.containsKey(link.getC2())) {
@@ -83,6 +86,9 @@ public class CommunicationsMonitor {
 					prevNode.addNeighbor((compNode2));
 					tempList.add(compNode2);
 					computerMapping.put(link.getC2(), tempList);
+				}else {//it does contain this one already, but we need to update it's new neighbor
+					ComputerNode tempNode = tempList.get(tempList.indexOf(compNode2));
+					tempNode.addNeighbor(compNode1);
 				}
 			}
 		}
