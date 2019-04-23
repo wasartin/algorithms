@@ -72,6 +72,13 @@ public class CommunicationsMonitorTest {
         assertEquals(8, communications.get(2).timestamp);
         assertEquals(12, communications.get(3).timestamp);
     }
+    
+    @Test
+    public void testAddAfterGraph() {
+        cm.createGraph();
+        cm.addCommunication(6, 7, 3);
+        assertEquals(4, cm.getCommunications().size());
+    }
 
     @Test
     public void testCreateGraph() {
@@ -136,13 +143,6 @@ public class CommunicationsMonitorTest {
         assertEquals(1, c4Neighbors.get(0).getID());
         assertEquals(12, c4Neighbors.get(0).getTimestamp());
 
-    }
-
-    @Test
-    public void testAddAfterGraph() {
-        cm.createGraph();
-        cm.addCommunication(6, 7, 3);
-        assertEquals(4, cm.getCommunications().size());
     }
 
     @Test
