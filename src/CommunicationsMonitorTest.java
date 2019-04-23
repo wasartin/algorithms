@@ -213,7 +213,28 @@ public class CommunicationsMonitorTest {
 		 * 		2. c4 gets the virus from c2 at time 8
 		 * 		3. c3 gets the cirus from c4 at time 8
 		 */
-		//TODO
+		CommunicationsMonitor cm2 = new CommunicationsMonitor();
+        cm2.addCommunication(1, 2, 4);
+        cm2.addCommunication(2, 4, 8);
+        cm2.addCommunication(3, 4, 8);
+        cm2.addCommunication(1, 4, 12);
+        List<Communication> communications2 = (ArrayList<Communication>) cm.getCommunications();
+        
+//        cm2.createTimeMapping();
+//        List<ComputerNode> actualPath = cm2.weirdQueryInfection(1, 3, 2, 8);
+//        
+//        List<ComputerNode> expectedPath = new ArrayList<ComputerNode>() {{
+//        	add(new ComputerNode(1, 4));
+//        	add(new ComputerNode(2, 4));
+//        	add(new ComputerNode(2, 8));
+//        	add(new ComputerNode(4, 8));
+//        	add(new ComputerNode(3, 8));
+//        }};
+//        
+//        assertEquals(expectedPath.size(), actualPath.size());
+//        for(int i = 0; i < actualPath.size(); i++) {
+//        	assertEquals(expectedPath.get(i), actualPath.get(i));
+//        }
 	}
 	
 	@Test

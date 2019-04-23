@@ -126,28 +126,18 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
-		if(!computerMapping.containsKey(c1)) {
-			throw new IllegalArgumentException("Computer Node: " +c1 + "Is not inside the computer mapping");
+		//Error handling
+		ArrayList<Integer> computerIDs = new ArrayList<Integer>();
+		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
+			throw new IllegalArgumentException("Computer Id must be inside network");
 		}
-		if(!computerMapping.containsKey(c2)) {
-			throw new IllegalArgumentException("Computer Node: " +c2 + "Is not inside the computer mapping");
-		}
-		if(y > x) return null;
-		//find c1 at time x' where x' >= x
-		ComputerNode infectedNode = computerMapping.get(c1).get(0);//Get first instance of computer node 1
-		int xNot = infectedNode.getTimestamp();
-		if(xNot > x) return null; //right?
-		int i = 0;
-		while(xNot < x) {
-			if(computerMapping.get(c1).get(++i) != null){
-				infectedNode = computerMapping.get(c1).get(i);
-			}
-		}
-		//Run BFS or DFS to get all neighbors of infectedNode
-		List<ComputerNode> reachable = BFS(infectedNode);
-		//if node (c2, y') is reachable from node (c1, x') where y' <= y 
-			//Then return transmission seq
-		//return null otherwise
+		if(y > x) throw new IllegalArgumentException("TIme y must be >= time x");
+		//find computerNode 1 w/ c1
+		ComputerNode infectedNode = new ComputerNode(c1, x);
+		ComputerNode targetNode = new ComputerNode(c2, y);
+		int xNot;	//xNot >= x :: this is the first possible node of infection for Computer Node
+		xNot = computerMapping.get(c1).get(0).getTimestamp(); //first isntance of time.
+		int yNot;	//yNot <= y
 		return null;
 	}
 	
@@ -196,47 +186,9 @@ public class CommunicationsMonitor {
 	 * @param s
 	 * @return 
 	 */
-	public List<ComputerNode> BFS(ComputerNode sourceVertex) {
-		List<ComputerNode> result = new ArrayList<ComputerNode>();
-		ArrayList<Node<ComputerNode>> nodes = new ArrayList<Node<ComputerNode>>();
-		for(ComputerNode u : sourceVertex.getOutNeighbors()) {// for all
-			Node<ComputerNode> newNode = new Node(u, Color.WHITE, Integer.MAX_VALUE, null);
-			nodes.add(newNode);
-		}
-		sourceVertex.setColor(Color.GRAY);
-		Node<ComputerNode> source = new Node(sourceVertex, Color.GRAY, 0, null);
-		Queue<Node<ComputerNode>> Q = new PriorityQueue<Node<ComputerNode>>();
-		Q.add(source);
-		while(!Q.isEmpty()) {
-			Node<ComputerNode> u = (Node<ComputerNode>) Q.remove();
-			for(Node<ComputerNode> v : nodes) {
-				if(v.getColor() == Color.WHITE) {
-					v.setColor(Color.GRAY);
-					v.setDistance(0);
-					v.setPredecessor(u);
-					Q.add(v);
-				}
-			u.setColor(Color.BLACK);
-			result.add(u.getData());
-			}
-		}
-		return result;
-	}
-	
-	public String BFS_toString(ComputerNode sourceVertex) {
-		ComputerNode nodeInMapping = computerMapping.get(sourceVertex.getID()).get(0);
-		List<ComputerNode> nodes = BFS(nodeInMapping);
-		String result = "";
-		for(int i = 0; i < nodes.size(); i++) {
-			ComputerNode curr = nodes.get(i);
-			result += curr.toString();
-			if(i + 1 < nodes.size()) {
-				result += "->";
-			}
-		}
-		return result;
-	}
-
+//	public List<ComputerNode> BFS(ComputerNode sourceVertex) {
+//
+//	}
 
 	/**
 	 * CLRS
@@ -302,5 +254,6 @@ public class CommunicationsMonitor {
     	}
     	return result;
     }
+    
     
 }

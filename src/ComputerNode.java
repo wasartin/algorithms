@@ -12,17 +12,26 @@ public class ComputerNode {
 	private int id;
 	private int timestamp;
 	List<ComputerNode> neighbors;
+<<<<<<< HEAD
 	Color color;
+=======
+	private int visited;
+>>>>>>> ee3b67fe5b2546c12d2a8b2db04241c703a118d1
 
 	public ComputerNode() {
-		neighbors = new ArrayList<>();
+		this.visited = 0;
+		this.neighbors = new ArrayList<>();
 	}
 	
 	public ComputerNode(int id, int timestamp) {
 		this();
 		this.id = id;
 		this.timestamp = timestamp;
+<<<<<<< HEAD
 		this.color = Color.WHITE;
+=======
+		this.visited = 0; 
+>>>>>>> ee3b67fe5b2546c12d2a8b2db04241c703a118d1
 	}
 	
 	/**
@@ -92,6 +101,14 @@ public class ComputerNode {
 			}
 		}
 		return false;
+	}
+	
+	public void markedVisited() {
+		this.visited = 1;
+	}
+	
+	public int getVisited() {
+		return this.visited;
 	}
 
 }
