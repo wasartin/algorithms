@@ -12,11 +12,11 @@ public class Playground {
 		cm.addCommunication(3, 4, 8);
 		cm.addCommunication(1, 4, 12);
 		communications = (ArrayList<Communication>) cm.getCommunications();
-		cm.createTimeMapping();
-		List<ComputerNode> aList = cm.weirdQueryInfection(1, 3, 2, 8);
-		for(ComputerNode n : aList) {
-			System.out.println(n.toString());
-		}
+//		cm.createTimeMapping();
+//		List<ComputerNode> aList = cm.weirdQueryInfection(1, 3, 2, 8);
+//		for(ComputerNode n : aList) {
+//			System.out.println(n.toString());
+//		}
 		
 		//Expected: 
 			/*

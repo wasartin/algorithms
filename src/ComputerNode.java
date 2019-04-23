@@ -12,16 +12,18 @@ public class ComputerNode {
 	private int id;
 	private int timestamp;
 	List<ComputerNode> neighbors;
-	//Color color;
+	private int visited;
 
 	public ComputerNode() {
-		neighbors = new ArrayList<>();
+		this.visited = 0;
+		this.neighbors = new ArrayList<>();
 	}
 	
 	public ComputerNode(int id, int timestamp) {
 		this();
 		this.id = id;
 		this.timestamp = timestamp;
+		this.visited = 0; 
 	}
 	
 	/**
@@ -91,6 +93,14 @@ public class ComputerNode {
 			}
 		}
 		return false;
+	}
+	
+	public void markedVisited() {
+		this.visited = 1;
+	}
+	
+	public int getVisited() {
+		return this.visited;
 	}
 
 }
