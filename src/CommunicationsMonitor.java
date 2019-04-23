@@ -226,31 +226,9 @@ public class CommunicationsMonitor {
 //		u.setFinished(time);							Finishing Time
 //	}
 	
-	
 	/**
 	 * Helper method just to visualize the graph
 	 */
-//	public String adjacenyListToString() {
-//    	String result = "";
-//    	for(Integer i : computerMapping.keySet()) {
-//    		result += String.valueOf(i) + ": ";
-//    		List<ComputerNode> currList = computerMapping.get(i);
-//    		for(int j = 0; j < currList.size(); j++) {
-//    			List<ComputerNode> neighbors = currList.get(j).getOutNeighbors();
-//    			for(int k = 0; k < neighbors.size(); k++) {
-//        			ComputerNode currNode = currList.get(j);
-//    			}
-//
-//        		result += currNode.toString();
-//        		if(j < currList.size() - 1) {
-//        			result += "->";
-//        		}
-//    		}
-//    		result += "\n";
-//    	}
-//    	return result;
-//	}
-
     public String computerMappingToString() {
     	String result = "";;
     	for(Integer i : computerMapping.keySet()) {
@@ -264,6 +242,14 @@ public class CommunicationsMonitor {
         		}
     		}
     		result += "\n";
+    	}
+    	return result;
+    }
+    
+    public String communicationLinksToString() {
+    	String result = "";
+    	for(Communication link : commList) {
+    		result += link + "\n";
     	}
     	return result;
     }

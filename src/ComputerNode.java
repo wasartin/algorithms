@@ -80,5 +80,17 @@ public class ComputerNode {
 		return "[" + id + " : " + timestamp + "]";
 	}
 	
-	
+	@Override
+	public boolean equals(Object other) {
+		if(other != null) {// null? 1st commandment 
+			if(other instanceof ComputerNode){
+				ComputerNode temp = (ComputerNode) other;
+				if( (temp.getID() == this.getID()) && (this.getTimestamp() == temp.getTimestamp())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }

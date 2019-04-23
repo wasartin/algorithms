@@ -36,16 +36,10 @@ public class CommunicationsMonitorTest {
     
     @Test
     public void computerMappingToStringTest() {
-    	cm.createGraph();
-    	System.out.println(cm.computerMappingToString());
+//    	cm.createGraph();
+//    	System.out.println(cm.computerMappingToString());
+//    	System.out.println(cm.communicationLinksToString());
     }
-    
-    @Test
-    public void adjacenyList_I_ThinkTest() {
-    	cm.createGraph();
-    	System.out.println(cm.adjacenyListToString());
-    }
-
 
     @Test
     public void testComputerNodeEquality() {
