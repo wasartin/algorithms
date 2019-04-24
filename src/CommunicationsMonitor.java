@@ -102,6 +102,7 @@ public class CommunicationsMonitor {
 		}
 	}
 	
+	//Note to self, do a DFS on the source node, to the target node
 	/**
 	 * 	 * @Required
 	 * Determines whether computers c2 could be infected by time y if computer c1 
@@ -127,7 +128,6 @@ public class CommunicationsMonitor {
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
 		//Error handling
-		ArrayList<Integer> computerIDs = new ArrayList<Integer>();
 		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
 			throw new IllegalArgumentException("Computer Id must be inside network");
 		}
@@ -136,9 +136,42 @@ public class CommunicationsMonitor {
 		ComputerNode infectedNode = new ComputerNode(c1, x);
 		ComputerNode targetNode = new ComputerNode(c2, y);
 		int xNot;	//xNot >= x :: this is the first possible node of infection for Computer Node
-		xNot = computerMapping.get(c1).get(0).getTimestamp(); //first isntance of time.
 		int yNot;	//yNot <= y
-		return null;
+		//Get node that is at least x, and the node that is at least y
+		int i = 0;
+		do {
+			infectedNode = computerMapping.get(c1).get(i++);
+			xNot = infectedNode.getTimestamp();
+		}while(xNot < x && xNot < computerMapping.get(c1).size());
+		
+		int j = computerMapping.get(c2).size() - 1;
+		do {
+			targetNode = computerMapping.get(c2).get(j--);
+			yNot = targetNode.getTimestamp();
+		}while(yNot > y && yNot >= 0);
+		
+		//DO DFS on infected node till it hits target Node
+		infectedNode.markedVisited();
+		DFS(infectedNode);
+		if(targetNode.getVisited() == 0) {
+			return null;
+		}
+//		List<ComputerNode> result = new ArrayList<ComputerNode>();
+//		result.add(infectedNode);
+//		
+		List<Integer> indexes = new ArrayList<Integer>();
+		for(Integer k : computerMapping.keySet()) {
+			indexes.add(k);
+		}
+		for(i = 0; i < computerMapping.size(); i++) {
+			List<ComputerNode> currList = computerMapping.get(i);
+			for(ComputerNode n : currList) {
+				if(n.getVisited() == 1) {
+					result.add(n);
+				}
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -200,32 +233,22 @@ public class CommunicationsMonitor {
 	 * 			For every vertex u,
 	 * 				u.d < u.f
 	 */
-//	private void DFS(Graph G) {						//O(V + E)				
-//		for(Vertex u : G.V) {						//O(|V|)
-//			u.setColor(Color.WHITE);
-//			u.setPredecessor(null);
-//		}
-//		this.time = 0;
-//		for(Vertex u : G.V) {						//O(|V|)
-//			if(u.getColor() == Color.WHITE) {
-//				DFSVisit(G, u);						//O(|E|)
-//			}
-//		}
-//	}
-//	
-//	private void DFSVisit(Graph G, Vertex u) {
-//		this.time = this.time++;
-//		u.setDistance(time);							//Discovery Time
-//		u.setColor(Color.GRAY);
-//		for each vertex in the adjlist Edge (u, v)		//Implement the ADJ list first				//O(|E|)
-//			if(v.getColor() == Color.WHITE) {
-//				v.setPredecessor(u);
-//				DFSVisit(G, v);
-//			}
-//		u.setColor(Color.BLACK);
-//		time++;
-//		u.setFinished(time);							Finishing Time
-//	}
+	private void DFS(ComputerNode source) {			
+		for(ComputerNode u : source.getOutNeighbors()) {						//O(|V|)
+			if(u.getVisited() == 0) {
+				DFSVisit(u);						//O(|E|)
+			}
+		}
+	}
+	
+	private void DFSVisit(ComputerNode node) {
+		node.markedVisited();
+		for(ComputerNode v : node.getOutNeighbors()) {
+			if(v.getVisited() == 0) {
+				DFSVisit(v);
+			}
+		}
+	}
 	
 	/**
 	 * Helper method just to visualize the graph
