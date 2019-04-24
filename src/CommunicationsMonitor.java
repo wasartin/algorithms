@@ -56,7 +56,6 @@ public class CommunicationsMonitor {
 	 */
 	public void createGraph() {
 		createdGraph = true;//Now addCommunication(...) cannot be run
-		//Scan triplets in sorted order
 		Collections.sort(commList, new Comparator<Communication>() {
 		    @Override
 		    public int compare(Communication comm1, Communication comm2) {  
@@ -81,17 +80,31 @@ public class CommunicationsMonitor {
 		}
 	}
 	
+	/**
+	 * Private helper method for adding and edge between two nodes
+	 * @param one
+	 * @param two
+	 */
 	private void addEdge(ComputerNode one, ComputerNode two) {
 		one.addNeighbor(two);
 		two.addNeighbor(one);
 	}
 	
+	/**
+	 * Private helper method for adding a new node to the computer mapping 
+	 * (First instance of this index)
+	 * @param toAdd
+	 */
 	private void addNewNodeToMapping(ComputerNode toAdd) {
 		List<ComputerNode> tempList = new ArrayList<ComputerNode>();
 		tempList.add(toAdd);
 		computerMapping.put(toAdd.getID(), tempList);
 	}
 	
+	/**
+	 * Private helper method for appending or updating a node in the already existing index.
+	 * @param toAppend
+	 */
 	private void appendNodeToComputerMapping(ComputerNode toAppend) {
 		List<ComputerNode> tempList = getComputerMapping(toAppend.getID());
 		if(!tempList.contains(toAppend)) {
@@ -105,7 +118,6 @@ public class CommunicationsMonitor {
 		}
 	}
 	
-	//Note to self, do a DFS on the source node, to the target node
 	/**
 	 * 	 * @Required
 	 * Determines whether computers c2 could be infected by time y if computer c1 
@@ -114,11 +126,7 @@ public class CommunicationsMonitor {
 	 * is a path in graph G. The first ComputerNode object on the path will correspond
 	 * to c1. Similarly, the last ComputerNode object on the path will correspond to
 	 * c2. If c2 cannot be infected, then return null
-	 * 
-	 * Ex 3:
-	 * 		-In Example 1, an infection path would be 
-	 * 			(C1, 4), (C2, 4), (c2, 8), (c4, 8), (C3, 8)
-	 * 
+
 	 * This method can assume that it will only be called after createGraph() and that
 	 * x <= y. This method must run in O(m) time (Number of vertices). This method can
 	 * also be called multiple times with different inputs once the graph is constructed
@@ -127,47 +135,14 @@ public class CommunicationsMonitor {
 	 * @param c2
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return list of the infection path. or Null if no path exists
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
-		if(infectedPath.size() > 0) {//reset nodes
-			for(ComputerNode n : infectedPath) {
-				n.setVisit(0);
-			}
-		}
-		infectedPath = new ArrayList<ComputerNode>();
-		//Error handling
-		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {//
-			return null;//throw new IllegalArgumentException("Computer Id must be inside network");
-		}
-		if(y < x) {//target time must be before infect time
-			return null;
-		}
-		//Get last node of each list to see if the infect or target time ever happen.
-		if(getLastNodeInList(c1).getTimestamp() < x) return null; 	//If the last time is before the infect time then it's impossible.
-		if(getFirstNodeInList(c2).getTimestamp() > y) return null; //if the first node in the list here is after the target time, then it doesn't happen
-		ComputerNode infectedNode = new ComputerNode(c1, x);
-		ComputerNode targetNode = new ComputerNode(c2, y);
-		int xNot;	//xNot >= x :: this is the first possible node of infection for Computer Node
-		int yNot;	//yNot <= y
-		int i = 0;
-		//Get a node actually in graph, if possible
-		ComputerNode tempNode = new ComputerNode();
-		do {	
-			tempNode = computerMapping.get(c1).get(i++);
-			xNot = infectedNode.getTimestamp();
-		}while(xNot < x && xNot < computerMapping.get(c1).size());
-		infectedNode = tempNode;
+		if(!isViablePath(c1, c2, x, y)) return null;
 		
-		tempNode = new ComputerNode();
-		int j = computerMapping.get(c2).size() - 1;
-		do {
-			tempNode = computerMapping.get(c2).get(j--);
-			yNot = targetNode.getTimestamp();
-			if(yNot > y) return null;//target time frame was never interacted with.
-		}while(yNot > y && yNot >= 0 && j >= 0);
-		targetNode = tempNode;
-		//DO DFS on infected node till it hits target Node
+		ComputerNode infectedNode = getSourceNodeForQuery(c1, x);
+		ComputerNode targetNode = getTargetNodeForQuery(c2, y);
+		
 		infectedNode.markedVisited();
 		DFS(infectedNode, targetNode);
 		if(targetNode.getVisited() == 0) {
@@ -176,11 +151,77 @@ public class CommunicationsMonitor {
 		return this.infectedPath;
 	}
 	
+	/**
+	 * Private helper method that does the error checks for queryInfection
+	 * Also resets the infectedPath, should probably do that somewhere else.
+	 * @param c1
+	 * @param c2
+	 * @param x
+	 * @param y
+	 * @return true if the path is viable, false otherwise.
+	 */
+	private boolean isViablePath(int c1, int c2, int x, int y) {
+		if(infectedPath.size() > 0) {//reset all nodes
+			for(ComputerNode n : infectedPath) {
+				n.setVisit(0);
+			}
+		}
+		infectedPath = new ArrayList<ComputerNode>();//(re)set infectedPath
+		//Error handling
+		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {//
+			return false;//throw new IllegalArgumentException("Computer Id must be inside network");
+		}
+		if(y < x) {//target time must be before infect time
+			return false;
+		}
+		//Get last node of each list to see if the infect or target time ever happen.
+		if(getLastNodeInList(c1).getTimestamp() < x) return false; 	//If the last time is before the infect time then it's impossible.
+		if(getFirstNodeInList(c2).getTimestamp() > y) return false; //if the first node in the list here is after the target time, then it doesn't happen
+		return true;
+	}
+	
+	private ComputerNode getSourceNodeForQuery(int c1, int x) {
+		ComputerNode infectedNode = new ComputerNode(c1, x);
+		int xNot;	//xNot >= x :: this is the first possible node of infection for Computer Node
+		int i = 0;
+
+		ComputerNode tempNode = new ComputerNode();		//Get a node actually in graph, if possible
+		do {	
+			tempNode = computerMapping.get(c1).get(i++);
+			xNot = infectedNode.getTimestamp();
+		}while(xNot < x && i < computerMapping.get(c1).size());//whaaat?
+		infectedNode = tempNode;
+		return infectedNode;
+	}
+	
+	private ComputerNode getTargetNodeForQuery(int c2, int y) {
+		ComputerNode targetNode = new ComputerNode(c2, y);
+		ComputerNode tempNode = new ComputerNode();
+		int yNot;	//yNot <= y
+		int j = computerMapping.get(c2).size() - 1;
+		do {
+			tempNode = computerMapping.get(c2).get(j--);
+			yNot = targetNode.getTimestamp();
+		}while(yNot > y && j >= 0);
+		targetNode = tempNode;
+		return targetNode;
+	}
+	
+	/** TODO probably delete
+	 * Private helper method that returns the last node in a list.
+	 * @param index
+	 * @return
+	 */
 	private ComputerNode getLastNodeInList(int index) {
 		List<ComputerNode> tempList = computerMapping.get(index);
 		return tempList.get(tempList.size() - 1);
 	}
 	
+	/** TODO probably delete
+	 * Private helper node that returns first node in a list.
+	 * @param index
+	 * @return
+	 */
 	private ComputerNode getFirstNodeInList(int index) {
 		List<ComputerNode> tempList = computerMapping.get(index);
 		return tempList.get(0);
@@ -323,7 +364,7 @@ public class CommunicationsMonitor {
     	return result;
     }
     
-    /**
+    /**TODO delete
      * Helper method to visualize the communication links. This should jsut be done in communication
      * @return
      */
@@ -333,7 +374,5 @@ public class CommunicationsMonitor {
     		result += link + "\n";
     	}
     	return result;
-    }
-    
-    
+    }   
 }

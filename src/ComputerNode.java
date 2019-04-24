@@ -35,6 +35,10 @@ public class ComputerNode {
 		return id;
 	}
 	
+	/**
+	 * Sets the id of the computerNode
+	 * @param id
+	 */
 	public void setID(int id) {
 		this.id = id;
 	}
@@ -48,6 +52,10 @@ public class ComputerNode {
 		return timestamp;
 	}
 	
+	/**
+	 * Sets the timestamp of the ComputerNode
+	 * @param timestamp
+	 */
 	public void setTimestamp(int timestamp) {
 		this.timestamp = timestamp;
 	}
@@ -62,6 +70,9 @@ public class ComputerNode {
 		return neighbors;
 	}
 	
+	/*
+	 * 
+	 */
 	public boolean addNeighbor(ComputerNode vertex) {
 		//if this node is already connected, then return false;
 		if(neighbors.contains(vertex)) return false;
@@ -74,6 +85,9 @@ public class ComputerNode {
 		return "[" + id + " : " + timestamp + "]";
 	}
 	
+	/**
+	 * Checks 
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if(other != null) {// null? 1st commandment 
@@ -87,18 +101,27 @@ public class ComputerNode {
 		return false;
 	}
 	
+	/**
+	 * Method for determining if the node is part of the infection path
+	 */
 	public void markedVisited() {
 		this.visited = 1;
 	}
 	
+	/**
+	 * Finds out of the node has been visited or not
+	 * @return 1 if visited, 0 otherwise
+	 */
 	public int getVisited() {
 		return this.visited;
 	}
 	
+	/**
+	 * (Re)set visit
+	 * @param visit
+	 */
 	public void setVisit(int visit) {
 		this.visited = visit;
 	}
-	
-	
 
 }

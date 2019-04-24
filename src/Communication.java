@@ -13,11 +13,6 @@ public class Communication{
     public int getC2() { return this.c2; }
     public int getTimestamp() { return this.timestamp; }
 
-//    @Override
-//    public String toString() {
-//    	return "c:" + c1 + " <=> c:" + c2 + " at " + timestamp;
-//    }
-    
     @Override
     public String toString() {
     	return String.format(FORMAT, c1, c2, timestamp);
