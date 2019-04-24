@@ -199,15 +199,6 @@ public class CommunicationsMonitorTest {
   
 	@Test
 	public void exampleOne_fromSpecSheet() {
-		/*
-		 * Suppose n = 4, and the trace data consists of triples
-		 * (C1, C2, 4), (c2, c4, 8), (C3, C4, 8), (C1, C4, 12)
-		 * and that the virus was inserted into computer C1 at time 2. 
-		 * Then C3 would be infected at time 8 by a sequence of three steps
-		 * 		1. c2 becomes infected at time 4, 
-		 * 		2. c4 gets the virus from c2 at time 8
-		 * 		3. c3 gets the cirus from c4 at time 8
-		 */
 		CommunicationsMonitor cm2 = new CommunicationsMonitor();
         cm2.addCommunication(1, 2, 4);
         cm2.addCommunication(2, 4, 8);
@@ -218,7 +209,7 @@ public class CommunicationsMonitorTest {
         cm2.createGraph();
         List<ComputerNode> actualPath = cm2.queryInfection(1, 3, 2, 8);
         
-        System.out.println(cm2.infectedPathToString(actualPath));
+
         List<ComputerNode> expectedPath = new ArrayList<ComputerNode>() {{
         	add(new ComputerNode(1, 4));
         	add(new ComputerNode(2, 4));
@@ -227,13 +218,15 @@ public class CommunicationsMonitorTest {
         	add(new ComputerNode(3, 8));
         }};
         
+        List<ComputerNode> otherMethod = cm2.getInfectedPath();
+        //System.out.println(cm2.infectedPathToString(otherMethod));
         
         for(int i = 0; i < actualPath.size(); i++) {
-        	System.out.println("Expected Node:" +expectedPath.get(i) + ", actual:" +actualPath.get(i));
-        	assertEquals(expectedPath.get(i), actualPath.get(i));
+        	//System.out.println("Expected Node:" +expectedPath.get(i) + ", actual:" +otherMethod.get(i));
+        	assertEquals(expectedPath.get(i), otherMethod.get(i));
         }
-        System.out.println("ExpectedSize: " + expectedPath.size() + ", actual:" +actualPath.size());
-        assertEquals(expectedPath.size(), actualPath.size());
+       //System.out.println("ExpectedSize: " + expectedPath.size() + ", actual:" +otherMethod.size());
+        assertEquals(expectedPath.size(), otherMethod.size());
 	}
 
 	@Test

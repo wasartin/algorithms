@@ -19,6 +19,8 @@ public class CommunicationsMonitor {
 	private HashMap<Integer, List<ComputerNode>> computerMapping;
 	private boolean createdGraph;
 	List<Communication> commList;
+	
+	private List<ComputerNode> infectedPath;
 
 	/**
 	 * @Required
@@ -151,25 +153,8 @@ public class CommunicationsMonitor {
 		}while(yNot > y && yNot >= 0);
 		
 		//DO DFS on infected node till it hits target Node
-		infectedNode.markedVisited();
-		DFS(infectedNode, y);
-		if(targetNode.getVisited() == 0) {
-			return null;
-		}
-		List<ComputerNode> result = new ArrayList<ComputerNode>();
-		List<Integer> indexes = new ArrayList<Integer>();
-		for(Integer k : computerMapping.keySet()) {
-			indexes.add(k);
-		}
-		for(i = 0; i < indexes.size(); i++) {
-			List<ComputerNode> currList = computerMapping.get(indexes.get(i));
-			for(ComputerNode n : currList) {
-				if(n.getVisited() == 1) {
-					result.add(n);
-				}
-			}
-		}
-		return result;
+		DFS(infectedNode, targetNode);
+		return this.infectedPath;
 	}
 	
 	/**
@@ -218,21 +203,36 @@ public class CommunicationsMonitor {
 	 * 			For every vertex u,
 	 * 				u.d < u.f
 	 */
-	private void DFS(ComputerNode source, int limit) {			
+	public void DFS(ComputerNode source, ComputerNode targetNode) {		
+		infectedPath = new ArrayList<ComputerNode>();
 		for(ComputerNode u : source.getOutNeighbors()) {						//O(|V|)
-			if(u.getVisited() == 0 && u.getTimestamp() <= limit) {
-				DFSVisit(u, limit);						//O(|E|)
+			if(u.getVisited() == 0 && u.getTimestamp() <= targetNode.getTimestamp()) {
+				if(DFSVisit(u, targetNode) == 1) {
+					infectedPath.add(u);
+				}					//O(|E|)
 			}
+		}
+		if(infectedPath.size() > 0) {
+			infectedPath.add(source);
+			Collections.reverse(infectedPath);
 		}
 	}
 	
-	private void DFSVisit(ComputerNode node, int limit) {
-		node.markedVisited();
-		for(ComputerNode v : node.getOutNeighbors()) {
-			if(v.getVisited() == 0 && v.getTimestamp() <= limit) {
-				DFSVisit(v, limit);
+	private int DFSVisit(ComputerNode sourceNode, ComputerNode targetNode) {
+		if(sourceNode.equals(targetNode)) {
+			sourceNode.markedVisited();
+			return 1;//Base case
+		}
+		for(ComputerNode v : sourceNode.getOutNeighbors()) {
+			sourceNode.markedVisited();
+			if(v.getVisited() == 0 && v.getTimestamp() <= targetNode.getTimestamp()) {
+				if(DFSVisit(v, targetNode) == 1) {
+					infectedPath.add(v);
+					return 1;
+				}
 			}
 		}
+		return 0;
 	}
 	
 	public String infectedPathToString(List<ComputerNode> infectedNodes) {
@@ -273,6 +273,10 @@ public class CommunicationsMonitor {
     		result += link + "\n";
     	}
     	return result;
+    }
+    
+    public List<ComputerNode> getInfectedPath() {
+    	return this.infectedPath;
     }
     
     
