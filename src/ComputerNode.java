@@ -95,6 +95,10 @@ public class ComputerNode {
 		return this.visited;
 	}
 	
+	public void setVisit(int visit) {
+		this.visited = visit;
+	}
+	
 	
 
 }

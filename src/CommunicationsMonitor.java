@@ -131,9 +131,11 @@ public class CommunicationsMonitor {
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
 		//Error handling
 		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
-			throw new IllegalArgumentException("Computer Id must be inside network");
+			return null;//throw new IllegalArgumentException("Computer Id must be inside network");
 		}
-		if(y < x) throw new IllegalArgumentException("TIme y must be >= time x");
+		if(y < x) {
+			return null;//
+		}
 		//find computerNode 1 w/ c1
 		ComputerNode infectedNode = new ComputerNode(c1, x);
 		ComputerNode targetNode = new ComputerNode(c2, y);
@@ -150,10 +152,14 @@ public class CommunicationsMonitor {
 		do {
 			targetNode = computerMapping.get(c2).get(j--);
 			yNot = targetNode.getTimestamp();
-		}while(yNot > y && yNot >= 0);
+		}while(yNot > y && yNot >= 0 && j >= 0);
 		
 		//DO DFS on infected node till it hits target Node
+		infectedNode.markedVisited();
 		DFS(infectedNode, targetNode);
+		if(targetNode.getVisited() == 0) {
+			return null;
+		}
 		return this.infectedPath;
 	}
 	
@@ -207,7 +213,8 @@ public class CommunicationsMonitor {
 		infectedPath = new ArrayList<ComputerNode>();
 		for(ComputerNode u : source.getOutNeighbors()) {						//O(|V|)
 			if(u.getVisited() == 0 && u.getTimestamp() <= targetNode.getTimestamp()) {
-				if(DFSVisit(u, targetNode) == 1) {
+				u.setVisit(DFSVisit(u, targetNode));
+				if(u.getVisited() == 1) {
 					infectedPath.add(u);
 				}					//O(|E|)
 			}
@@ -217,16 +224,17 @@ public class CommunicationsMonitor {
 			Collections.reverse(infectedPath);
 		}
 	}
-	
+
 	private int DFSVisit(ComputerNode sourceNode, ComputerNode targetNode) {
 		if(sourceNode.equals(targetNode)) {
-			sourceNode.markedVisited();
+			//sourceNode.markedVisited();
 			return 1;//Base case
 		}
 		for(ComputerNode v : sourceNode.getOutNeighbors()) {
 			sourceNode.markedVisited();
 			if(v.getVisited() == 0 && v.getTimestamp() <= targetNode.getTimestamp()) {
-				if(DFSVisit(v, targetNode) == 1) {
+				v.setVisit(DFSVisit(v, targetNode));
+				if(v.getVisited() == 1) {
 					infectedPath.add(v);
 					return 1;
 				}

@@ -166,7 +166,6 @@ public class CommunicationsMonitorTest {
     public void testQueryInfectionNoNode() {
         cm.createGraph();
         List<ComputerNode> path = cm.queryInfection(1, 3, 2, 9);
-
         path = cm.queryInfection(10, 4, 0, 10);
         assertEquals(null, path);
     }
