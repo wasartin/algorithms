@@ -209,7 +209,7 @@ public class CommunicationsMonitor {
 	 * 			For every vertex u,
 	 * 				u.d < u.f
 	 */
-	public void DFS(ComputerNode source, ComputerNode targetNode) {		
+	private void DFS(ComputerNode source, ComputerNode targetNode) {		
 		infectedPath = new ArrayList<ComputerNode>();
 		for(ComputerNode u : source.getOutNeighbors()) {						//O(|V|)
 			if(u.getVisited() == 0 && u.getTimestamp() <= targetNode.getTimestamp()) {
