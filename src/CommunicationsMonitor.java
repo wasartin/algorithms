@@ -130,37 +130,43 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
-		if(infectedPath.size() > 0) {
+		if(infectedPath.size() > 0) {//reset nodes
 			for(ComputerNode n : infectedPath) {
 				n.setVisit(0);
 			}
 		}
 		infectedPath = new ArrayList<ComputerNode>();
 		//Error handling
-		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
+		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {//
 			return null;//throw new IllegalArgumentException("Computer Id must be inside network");
 		}
-		if(y < x) {
-			return null;//
+		if(y < x) {//target time must be before infect time
+			return null;
 		}
-		//find computerNode 1 w/ c1
+		//Get last node of each list to see if the infect or target time ever happen.
+		if(getLastNodeInList(c1).getTimestamp() < x) return null; 	//If the last time is before the infect time then it's impossible.
+		if(getFirstNodeInList(c2).getTimestamp() > y) return null; //if the first node in the list here is after the target time, then it doesn't happen
 		ComputerNode infectedNode = new ComputerNode(c1, x);
 		ComputerNode targetNode = new ComputerNode(c2, y);
 		int xNot;	//xNot >= x :: this is the first possible node of infection for Computer Node
 		int yNot;	//yNot <= y
-		//Get node that is at least x, and the node that is at least y
 		int i = 0;
-		do {
-			infectedNode = computerMapping.get(c1).get(i++);
+		//Get a node actually in graph, if possible
+		ComputerNode tempNode = new ComputerNode();
+		do {	
+			tempNode = computerMapping.get(c1).get(i++);
 			xNot = infectedNode.getTimestamp();
 		}while(xNot < x && xNot < computerMapping.get(c1).size());
+		infectedNode = tempNode;
 		
+		tempNode = new ComputerNode();
 		int j = computerMapping.get(c2).size() - 1;
 		do {
-			targetNode = computerMapping.get(c2).get(j--);
+			tempNode = computerMapping.get(c2).get(j--);
 			yNot = targetNode.getTimestamp();
+			if(yNot > y) return null;//target time frame was never interacted with.
 		}while(yNot > y && yNot >= 0 && j >= 0);
-		if(yNot > y) return null; //timeframe was never interacted with
+		targetNode = tempNode;
 		//DO DFS on infected node till it hits target Node
 		infectedNode.markedVisited();
 		DFS(infectedNode, targetNode);
@@ -168,6 +174,16 @@ public class CommunicationsMonitor {
 			return null;
 		}
 		return this.infectedPath;
+	}
+	
+	private ComputerNode getLastNodeInList(int index) {
+		List<ComputerNode> tempList = computerMapping.get(index);
+		return tempList.get(tempList.size() - 1);
+	}
+	
+	private ComputerNode getFirstNodeInList(int index) {
+		List<ComputerNode> tempList = computerMapping.get(index);
+		return tempList.get(0);
 	}
 	
 	/**
@@ -191,8 +207,8 @@ public class CommunicationsMonitor {
 	 * Returns the list of ComputerNode objects associated with computer c by 
 	 * performing a lookup in the mapping
 	 *
-	 * @param c
-	 * @return
+	 * @param c index of computer node
+	 * @return computer mapping at the index given
 	 */
 	List<ComputerNode> getComputerMapping(int c){
 		if(!computerMapping.containsKey(c)) {
@@ -202,9 +218,21 @@ public class CommunicationsMonitor {
 		return computerMapping.get(c);
 	}
 	
+	/**
+	 * Returns the communication links in this computer mapping.
+	 * @return List of communication links.
+	 */
 	public List<Communication> getCommunications(){
 		return commList;
 	}
+	
+	/**
+	 * Method to return the infected path.
+	 * @return path of infected nodes
+	 */
+    public List<ComputerNode> getInfectedPath() {
+    	return this.infectedPath;
+    }
 	
 	/**
 	 * CLRS
@@ -233,6 +261,12 @@ public class CommunicationsMonitor {
 		}
 	}
 
+	/**
+	 * 
+	 * @param sourceNode
+	 * @param targetNode
+	 * @return integer 
+	 */
 	private int DFSVisit(ComputerNode sourceNode, ComputerNode targetNode) {
 		if(sourceNode.equals(targetNode)) {
 			//sourceNode.markedVisited();
@@ -251,6 +285,12 @@ public class CommunicationsMonitor {
 		return 0;
 	}
 	
+	/**
+	 * Helper method
+	 * Just to see what an infected list looks like for debugging.
+	 * @param infectedNodes
+	 * @return
+	 */
 	public String infectedPathToString(List<ComputerNode> infectedNodes) {
 		String result ="";
 		for(int i = 0; i < infectedNodes.size(); i++) {
@@ -283,16 +323,16 @@ public class CommunicationsMonitor {
     	return result;
     }
     
+    /**
+     * Helper method to visualize the communication links. This should jsut be done in communication
+     * @return
+     */
     public String communicationLinksToString() {
     	String result = "";
     	for(Communication link : commList) {
     		result += link + "\n";
     	}
     	return result;
-    }
-    
-    public List<ComputerNode> getInfectedPath() {
-    	return this.infectedPath;
     }
     
     
