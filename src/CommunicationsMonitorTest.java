@@ -154,7 +154,8 @@ public class CommunicationsMonitorTest {
         cm.createGraph();
         List<ComputerNode> path = cm.queryInfection(1, 3, 2, 9);
         HashMap<Integer, List<ComputerNode>> adjList = cm.getComputerMapping();
-        System.out.println(cm.infectedPathToString(path));
+        //System.out.println(cm.infectedPathToString(path) + "\n");
+       // System.out.println(cm.computerMappingToString());
         assertEquals(adjList.get(1).get(0), path.get(0));
         assertEquals(adjList.get(2).get(0), path.get(1));
         assertEquals(adjList.get(2).get(1), path.get(2));
@@ -183,13 +184,13 @@ public class CommunicationsMonitorTest {
     public void testQueryInfectionShortPath() {
         cm.createGraph();
         List<ComputerNode> path = cm.queryInfection(1, 3, 2, 9);
-        HashMap<Integer, List<ComputerNode>> adjList = cm.getComputerMapping();
+        HashMap<Integer, List<ComputerNode>> hashList = cm.getComputerMapping();
 
         path = cm.queryInfection(1, 4, 2, 8);
-        assertEquals(adjList.get(1).get(0), path.get(0));
-        assertEquals(adjList.get(2).get(0), path.get(1));
-        assertEquals(adjList.get(2).get(1), path.get(2));
-        assertEquals(adjList.get(4).get(0), path.get(3));
+        assertEquals(hashList.get(1).get(0), path.get(0));
+        assertEquals(hashList.get(2).get(0), path.get(1));
+        assertEquals(hashList.get(2).get(1), path.get(2));
+        assertEquals(hashList.get(4).get(0), path.get(3));
     }
 
     /**

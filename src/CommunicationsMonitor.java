@@ -129,6 +129,7 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
+		infectedPath = new ArrayList<ComputerNode>();
 		//Error handling
 		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
 			return null;//throw new IllegalArgumentException("Computer Id must be inside network");
@@ -158,7 +159,7 @@ public class CommunicationsMonitor {
 		infectedNode.markedVisited();
 		DFS(infectedNode, targetNode);
 		if(targetNode.getVisited() == 0) {
-			return null;
+			infectedPath = null;
 		}
 		return this.infectedPath;
 	}
