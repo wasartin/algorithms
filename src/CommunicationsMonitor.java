@@ -30,6 +30,7 @@ public class CommunicationsMonitor {
 		computerMapping = new HashMap<>();
 		createdGraph = false;
 		commList = new ArrayList<Communication>();
+		infectedPath = new ArrayList<ComputerNode>();
 	}
 
 	/**
@@ -129,6 +130,11 @@ public class CommunicationsMonitor {
 	 * @return
 	 */
 	public List<ComputerNode> queryInfection(int c1, int c2, int x, int y){
+		if(infectedPath.size() > 0) {
+			for(ComputerNode n : infectedPath) {
+				n.setVisit(0);
+			}
+		}
 		infectedPath = new ArrayList<ComputerNode>();
 		//Error handling
 		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
@@ -154,12 +160,12 @@ public class CommunicationsMonitor {
 			targetNode = computerMapping.get(c2).get(j--);
 			yNot = targetNode.getTimestamp();
 		}while(yNot > y && yNot >= 0 && j >= 0);
-		
+		if(yNot > y) return null; //timeframe was never interacted with
 		//DO DFS on infected node till it hits target Node
 		infectedNode.markedVisited();
 		DFS(infectedNode, targetNode);
 		if(targetNode.getVisited() == 0) {
-			infectedPath = null;
+			return null;
 		}
 		return this.infectedPath;
 	}
@@ -210,7 +216,8 @@ public class CommunicationsMonitor {
 	 * 			For every vertex u,
 	 * 				u.d < u.f
 	 */
-	private void DFS(ComputerNode source, ComputerNode targetNode) {		
+	private void DFS(ComputerNode source, ComputerNode targetNode) {	
+		//mark all nodes unvisisted
 		infectedPath = new ArrayList<ComputerNode>();
 		for(ComputerNode u : source.getOutNeighbors()) {						//O(|V|)
 			if(u.getVisited() == 0 && u.getTimestamp() <= targetNode.getTimestamp()) {

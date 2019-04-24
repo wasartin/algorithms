@@ -154,8 +154,7 @@ public class CommunicationsMonitorTest {
         cm.createGraph();
         List<ComputerNode> path = cm.queryInfection(1, 3, 2, 9);
         HashMap<Integer, List<ComputerNode>> adjList = cm.getComputerMapping();
-        //System.out.println(cm.infectedPathToString(path) + "\n");
-       // System.out.println(cm.computerMappingToString());
+
         assertEquals(adjList.get(1).get(0), path.get(0));
         assertEquals(adjList.get(2).get(0), path.get(1));
         assertEquals(adjList.get(2).get(1), path.get(2));
@@ -174,9 +173,9 @@ public class CommunicationsMonitorTest {
     @Test
     public void testQueryInfectionNoPath() {
         cm.createGraph();
-        List<ComputerNode> path = cm.queryInfection(1, 3, 2, 9);
+        List<ComputerNode> path = cm.queryInfection(1, 3, 2, 9);//does have a path
 
-        path = cm.queryInfection(1, 4, 2, 7);
+        path = cm.queryInfection(1, 4, 2, 7); //does not, so should return null
         assertEquals(null, path);
     }
 
