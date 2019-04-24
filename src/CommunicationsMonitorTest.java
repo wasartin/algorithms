@@ -196,12 +196,7 @@ public class CommunicationsMonitorTest {
     /**
      * End of Random Guy Code
      */
-    
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
-
+  
 	@Test
 	public void exampleOne_fromSpecSheet() {
 		/*
@@ -220,23 +215,27 @@ public class CommunicationsMonitorTest {
         cm2.addCommunication(1, 4, 12);
         List<Communication> communications2 = (ArrayList<Communication>) cm.getCommunications();
         
-//        cm2.createTimeMapping();
-//        List<ComputerNode> actualPath = cm2.weirdQueryInfection(1, 3, 2, 8);
-//        
-//        List<ComputerNode> expectedPath = new ArrayList<ComputerNode>() {{
-//        	add(new ComputerNode(1, 4));
-//        	add(new ComputerNode(2, 4));
-//        	add(new ComputerNode(2, 8));
-//        	add(new ComputerNode(4, 8));
-//        	add(new ComputerNode(3, 8));
-//        }};
-//        
-//        assertEquals(expectedPath.size(), actualPath.size());
-//        for(int i = 0; i < actualPath.size(); i++) {
-//        	assertEquals(expectedPath.get(i), actualPath.get(i));
-//        }
+        cm2.createGraph();
+        List<ComputerNode> actualPath = cm2.queryInfection(1, 3, 2, 8);
+        
+        System.out.println(cm2.infectedPathToString(actualPath));
+        List<ComputerNode> expectedPath = new ArrayList<ComputerNode>() {{
+        	add(new ComputerNode(1, 4));
+        	add(new ComputerNode(2, 4));
+        	add(new ComputerNode(2, 8));
+        	add(new ComputerNode(4, 8));
+        	add(new ComputerNode(3, 8));
+        }};
+        
+        
+        for(int i = 0; i < actualPath.size(); i++) {
+        	System.out.println("Expected Node:" +expectedPath.get(i) + ", actual:" +actualPath.get(i));
+        	assertEquals(expectedPath.get(i), actualPath.get(i));
+        }
+        System.out.println("ExpectedSize: " + expectedPath.size() + ", actual:" +actualPath.size());
+        assertEquals(expectedPath.size(), actualPath.size());
 	}
-	
+
 	@Test
 	public void exampleTwo_fromSpecSheet() {
 		/*

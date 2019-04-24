@@ -131,7 +131,7 @@ public class CommunicationsMonitor {
 		if(!computerMapping.containsKey(c1) || !computerMapping.containsKey(c2)) {
 			throw new IllegalArgumentException("Computer Id must be inside network");
 		}
-		if(y > x) throw new IllegalArgumentException("TIme y must be >= time x");
+		if(y < x) throw new IllegalArgumentException("TIme y must be >= time x");
 		//find computerNode 1 w/ c1
 		ComputerNode infectedNode = new ComputerNode(c1, x);
 		ComputerNode targetNode = new ComputerNode(c2, y);
@@ -152,19 +152,17 @@ public class CommunicationsMonitor {
 		
 		//DO DFS on infected node till it hits target Node
 		infectedNode.markedVisited();
-		DFS(infectedNode);
+		DFS(infectedNode, y);
 		if(targetNode.getVisited() == 0) {
 			return null;
 		}
-//		List<ComputerNode> result = new ArrayList<ComputerNode>();
-//		result.add(infectedNode);
-//		
+		List<ComputerNode> result = new ArrayList<ComputerNode>();
 		List<Integer> indexes = new ArrayList<Integer>();
 		for(Integer k : computerMapping.keySet()) {
 			indexes.add(k);
 		}
-		for(i = 0; i < computerMapping.size(); i++) {
-			List<ComputerNode> currList = computerMapping.get(i);
+		for(i = 0; i < indexes.size(); i++) {
+			List<ComputerNode> currList = computerMapping.get(indexes.get(i));
 			for(ComputerNode n : currList) {
 				if(n.getVisited() == 1) {
 					result.add(n);
@@ -210,19 +208,6 @@ public class CommunicationsMonitor {
 		return commList;
 	}
 	
-	
-	/**
-	 * CLRS pseudocode code.
-	 * private for now
-	 * Finds shortest path from source node to all other connected nodes
-	 * @param G
-	 * @param s
-	 * @return 
-	 */
-//	public List<ComputerNode> BFS(ComputerNode sourceVertex) {
-//
-//	}
-
 	/**
 	 * CLRS
 	 * Creates depth-first forest
@@ -233,21 +218,33 @@ public class CommunicationsMonitor {
 	 * 			For every vertex u,
 	 * 				u.d < u.f
 	 */
-	private void DFS(ComputerNode source) {			
+	private void DFS(ComputerNode source, int limit) {			
 		for(ComputerNode u : source.getOutNeighbors()) {						//O(|V|)
-			if(u.getVisited() == 0) {
-				DFSVisit(u);						//O(|E|)
+			if(u.getVisited() == 0 && u.getTimestamp() <= limit) {
+				DFSVisit(u, limit);						//O(|E|)
 			}
 		}
 	}
 	
-	private void DFSVisit(ComputerNode node) {
+	private void DFSVisit(ComputerNode node, int limit) {
 		node.markedVisited();
 		for(ComputerNode v : node.getOutNeighbors()) {
-			if(v.getVisited() == 0) {
-				DFSVisit(v);
+			if(v.getVisited() == 0 && v.getTimestamp() <= limit) {
+				DFSVisit(v, limit);
 			}
 		}
+	}
+	
+	public String infectedPathToString(List<ComputerNode> infectedNodes) {
+		String result ="";
+		for(int i = 0; i < infectedNodes.size(); i++) {
+			result += infectedNodes.get(i);
+			if(i + 1 < infectedNodes.size()) {
+				result += "->";
+			}
+			
+		}
+		return result;
 	}
 	
 	/**
