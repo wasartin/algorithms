@@ -1,3 +1,4 @@
+package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -15,6 +16,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import main.Endpoint;
+import main.Intervals;
+import main.Node;
+import main.Position;
+import main.RBTree;
+
 /**
  * 
  * @author Will Sartin & Josh Ramon
@@ -25,230 +32,179 @@ public class IntervalTest2 {
 	@Rule
 	public final ExpectedException thrown = ExpectedException.none();
 	
-//	public static Intervals intervalEX;
-//	public Intervals intervals;
+	public static Intervals intervalEX;
+	public Intervals intervals;
 	
-	public Intervals intervals_small5;
-	
-	//TODO: make more trees to test
 	
 	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
-	
-	
-	
 	private final static String FILENAME_BASE = "src\\res\\";
 	
-	public List<String> fileReader(String file_ext){
-		BufferedReader input;
-		ArrayList<String> lines = new ArrayList<String>();
-		try {
-			input = new BufferedReader(new FileReader(new File(FILENAME_BASE+file_ext)));
-			String line = null;
-			while ((line = input.readLine()) != null) {
-				lines.add(line);
-			}
-			input.close();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return lines;
-	}
-	
-	public int[][] stringsToInt(List<String> input){
-		//skip first line.
-		int[][] result = new int[input.size()][2];
-		int startingPointForIntervals = 1;
-		int index = 0;
-		for(int i = startingPointForIntervals; i < input.size() - 1; i++) {
-			String currInterval = input.get(i);
-			//parse into two numbers
-			String[] ends = currInterval.split("\\s+");
-			int leftInt = Integer.valueOf(ends[0]);
-			int rightInt = Integer.valueOf(ends[1]);
-			result[index][0] = leftInt;
-			result[index][1] = rightInt;
-			index++;
-		}
-		return result;
-	}
-
-	
-	
-	
-
 	@Before
 	public void setUp() {
-//		intervalEX = new Intervals();
-//		
-//        intervals = new Intervals();
-//        
-//		int points[][] = {
-//							{0, 4}, 
-//							{1, 6}, 
-//							{3, 9}, 
-//							{7, 11}
-//							};
-//		for(int i=0; i<points.length; i++) {
-//			intervalEX.intervalInsert(points[i][0], points[i][1]);
-//		}
-		
-		//need int points[][]
+		intervalEX = new Intervals();
+        intervals = new Intervals();
+        
+		int points[][] = {
+							{0, 4}, 
+							{1, 6}, 
+							{3, 9}, 
+							{7, 11}
+							};
+		for(int i=0; i<points.length; i++) {
+			intervalEX.intervalInsert(points[i][0], points[i][1]);
+		}
+	}
 
+	@Test
+	public void small_1() {
+		List<String> valuesInFile = fileReader("small_1.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
 		
-		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
-	public void small5() {
-		intervals_small5 = new Intervals();
-		List<String> strings = fileReader("small_5.txt");
-		int[][] input = stringsToInt(strings);
-		int answer = Integer.valueOf(strings.get(0));
-		for(int i = 0; i < input.length; i++) {
-			intervals_small5.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for small. Expected: " +answer + ", actual: " +intervals_small5.findPOM());
-		Assert.assertTrue(intervals_small5.findPOM() == answer);
+	public void small_2() {
+		List<String> valuesInFile = fileReader("small_2.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
+	}
+	
+	@Test
+	public void small_3() {
+		List<String> valuesInFile = fileReader("small_3.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 
+	@Test
+	public void small_4() {
+		List<String> valuesInFile = fileReader("small_4.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
+	}
 	
+	@Test
+	public void smallFive() {
+		List<String> valuesInFile = fileReader("small_5.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
+	}
+
 	@Test
 	public void med1() {
-		Intervals interval_Medium1 = new Intervals();
-		int[][] input = stringsToInt(fileReader("medium_1.txt"));
-		for(int i = 0; i < input.length; i++) {
-			interval_Medium1.intervalInsert(input[i][0], input[i][1]);
-		}
-		Assert.assertTrue(interval_Medium1.findPOM() == 38);
+		List<String> valuesInFile = fileReader("medium_1.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 
 	@Test
 	public void med2() {
-		Intervals interval_Medium2 = new Intervals();
-		int[][] input = stringsToInt(fileReader("medium_2.txt"));
+		List<String> valuesInFile = fileReader("medium_2.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
 		
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_Medium2.intervalInsert(input[i][0], input[i][1]);
-		}//break at 1466
-		System.out.println("Answer for Medium 2:59, actual:"+ interval_Medium2.findPOM() + ",");
-		Assert.assertTrue(interval_Medium2.findPOM() == 59);
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 		
 	}
 	
 	
 	@Test
 	public void med3() {
-		Intervals interval_Medium3 = new Intervals();
-		List<String> strings = fileReader("medium_3.txt");
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_Medium3.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for medium 3. Expected: " +answer + ", actual: " +interval_Medium3.findPOM());
-		Assert.assertTrue(interval_Medium3.findPOM() == answer);
+		List<String> valuesInFile = fileReader("medium_3.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void med4() {
-		Intervals interval_Medium4 = new Intervals();
-		List<String> strings = fileReader("medium_4.txt");
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_Medium4.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for medium 4. Expected: " +answer + ", actual: " +interval_Medium4.findPOM());
-		Assert.assertTrue(interval_Medium4.findPOM() == answer);
+		List<String> valuesInFile = fileReader("medium_4.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void med5() {
-		Intervals interval_Medium5 = new Intervals();
-		List<String> strings = fileReader("medium_5.txt");
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_Medium5.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for medium 5. Expected: " +answer + ", actual: " +interval_Medium5.findPOM());
-		Assert.assertTrue(interval_Medium5.findPOM() == answer);
+		List<String> valuesInFile = fileReader("medium_5.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void large1() {
-		Intervals interval_large1 = new Intervals();
-		List<String> strings = fileReader("large_1.txt");
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_large1.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for large1. Expected: " +answer + ", actual: " +interval_large1.findPOM());
-		Assert.assertTrue(interval_large1.findPOM() == answer);
+		List<String> valuesInFile = fileReader("large_1.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void large2() {
-		Intervals interval_large2 = new Intervals();
-		List<String> strings = fileReader("large_2.txt");//CHANGES EACH TIME
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_large2.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for large2. Expected: " +answer + ", actual: " +interval_large2.findPOM());
-		Assert.assertTrue(interval_large2.findPOM() == answer);
+		List<String> valuesInFile = fileReader("large_2.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void large3() {
-		Intervals interval_large3 = new Intervals();
-		List<String> strings = fileReader("large_3.txt");//CHANGES EACH TIME
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_large3.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for large3. Expected: " +answer + ", actual: " +interval_large3.findPOM());
-		Assert.assertTrue(interval_large3.findPOM() == answer);
+		List<String> valuesInFile = fileReader("large_3.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void large4() {
-		Intervals interval_large4 = new Intervals();
-		List<String> strings = fileReader("large_4.txt");//CHANGES EACH TIME
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_large4.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for large3. Expected: " +answer + ", actual: " +interval_large4.findPOM());
-		Assert.assertTrue(interval_large4.findPOM() == answer);
+		List<String> valuesInFile = fileReader("large_4.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 	@Test
 	public void large5() {
-		Intervals interval_large5 = new Intervals();
-		List<String> strings = fileReader("large_5.txt");//CHANGES EACH TIME
-		int answer = Integer.valueOf(strings.get(0));
-		int[][] input = stringsToInt(strings);
-		for(int i = 0; i < input.length; i++) {
-			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
-			interval_large5.intervalInsert(input[i][0], input[i][1]);
-		}
-		System.out.println("Test for large5. Expected: " +answer + ", actual: " +interval_large5.findPOM());
-		Assert.assertTrue(interval_large5.findPOM() == answer);
+		List<String> valuesInFile = fileReader("large_5.txt");
+		List<Integer> possibleSolutions = possibleSolutions(valuesInFile.remove(0));
+		Intervals intervals = createIntervals(valuesInFile);
+		
+		//System.out.println("Actual: " + intervals.findPOM() +", Choices: " + possibleSolutions.toString());
+		assertTrue(possibleSolutions.contains(intervals.findPOM()));
 	}
 	
 //	@Test
@@ -446,4 +402,54 @@ public class IntervalTest2 {
 //        assertTrue(intervals.getRBTree().getRoot().isNilNode());
 //    }
 
+	
+	public List<String> fileReader(String file_ext){
+		BufferedReader input;
+		ArrayList<String> lines = new ArrayList<String>();
+		try {
+			input = new BufferedReader(new FileReader(new File(FILENAME_BASE+file_ext)));
+			String line = null;
+			while ((line = input.readLine()) != null) {
+				lines.add(line);
+			}
+			input.close();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return lines;
+	}
+	
+	public int[][] stringsToInt(List<String> input){
+		int[][] endPointAsInts = new int[input.size()][2];
+		for(int row = 0; row < input.size(); row++) {
+			String toParse = input.get(row);
+			String[] ends = toParse.split("\\s+");
+			int leftInt = Integer.valueOf(ends[0]);
+			int rightInt = Integer.valueOf(ends[1]);
+			endPointAsInts[row][0] = leftInt;
+			endPointAsInts[row][1] = rightInt;
+		}
+		return endPointAsInts;
+	}
+	
+	private Intervals createIntervals(List<String> valuesInFile) {
+		int[][] endpoints = stringsToInt(valuesInFile);
+		Intervals result = new Intervals();
+		for(int i = 0; i < endpoints.length; i++) {
+			result.intervalInsert(endpoints[i][0], endpoints[i][1]);
+		}
+		return result;
+	}
+
+	private List<Integer> possibleSolutions(String input){
+		List<Integer> result = new ArrayList<Integer>();
+		String[] holder = input.split("\\s+");
+		for(int i = 0; i < holder.length; i++) {
+			result.add(Integer.valueOf(holder[i]));
+		}
+		return result;
+	}
+	
 }

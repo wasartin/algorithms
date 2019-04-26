@@ -1,4 +1,9 @@
+package test;
 import org.junit.rules.ExpectedException;
+
+import main.Endpoint;
+import main.Position;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

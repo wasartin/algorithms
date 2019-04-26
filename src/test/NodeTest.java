@@ -1,3 +1,4 @@
+package test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -5,6 +6,11 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import main.Endpoint;
+import main.Node;
+import main.Position;
+import main.RBTree;
 
 /**
  * 

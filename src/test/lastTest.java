@@ -1,3 +1,4 @@
+package test;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -12,6 +13,12 @@ import java.util.Scanner;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import main.Color;
+import main.Endpoint;
+import main.Node;
+import main.Position;
+import main.RBTree;
 
 /**
  * 
@@ -28,7 +35,7 @@ public class lastTest {
 	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
 	private final static String FILENAME_BASE = "src\\res\\";
 	
-	public List<String> fileReader(String file_ext){
+	private List<String> fileReader(String file_ext){
 		BufferedReader input;
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
@@ -46,7 +53,7 @@ public class lastTest {
 		return lines;
 	}
 	
-	public List<Node> stringToNodes(List<String> input){
+	private List<Node> stringToNodes(List<String> input){
 		//skip first line.
 		List<Node> nodes = new ArrayList<Node>();
 		int startingPointForIntervals = 1;
@@ -71,13 +78,13 @@ public class lastTest {
 		List<String> valuesInFile = fileReader(small_1);
 		List<Node> nodesInFile = stringToNodes(valuesInFile);
 
-		rbt1_SmallOne = new RBTree();
+		RBTree rbt_smallOne = new RBTree();
 		for(Node node : nodesInFile) {
-			rbt1_SmallOne.RBInsert(node);
+			rbt_smallOne.RBInsert(node);
 		}
-		rbt_Small5 = new RBTree();
+		rbt_smallOne = new RBTree();
 		for(Node node : stringToNodes(fileReader("small_5.txt"))) {
-			rbt_Small5.RBInsert(node);
+			rbt_smallOne.RBInsert(node);
 		}
 	}
 	
@@ -94,12 +101,8 @@ public class lastTest {
 		int result = rbt_med2.getRoot().getEmax().getValue();
 		System.out.println("Expected:"+answer +", actual:" +result);
 		Assert.assertTrue(result == answer);
-		
-
-		
 	}
-	
-	
+
 		/**
 		 * Every Node is either red or black
 		 */
