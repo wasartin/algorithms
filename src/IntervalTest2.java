@@ -105,11 +105,12 @@ public class IntervalTest2 {
 		intervals_small5 = new Intervals();
 		List<String> strings = fileReader("small_5.txt");
 		int[][] input = stringsToInt(strings);
+		int answer = Integer.valueOf(strings.get(0));
 		for(int i = 0; i < input.length; i++) {
 			intervals_small5.intervalInsert(input[i][0], input[i][1]);
 		}
-		
-		Assert.assertTrue(intervals_small5.findPOM() == 66);
+		System.out.println("Test for small. Expected: " +answer + ", actual: " +intervals_small5.findPOM());
+		Assert.assertTrue(intervals_small5.findPOM() == answer);
 	}
 
 	
@@ -136,15 +137,61 @@ public class IntervalTest2 {
 	}
 	
 	
-//	@Test
-//	public void med1() {
-//		Intervals interval_Medium1 = new Intervals();
-//		int[][] input = stringsToInt(fileReader("medium_1.txt"));
-//		for(int i = 0; i < input.length; i++) {
-//			interval_Medium1.intervalInsert(input[i][0], input[i][1]);
-//		}
-//		Assert.assertTrue(interval_Medium1.findPOM() == 38);
-//	}
+	@Test
+	public void med3() {
+		Intervals interval_Medium3 = new Intervals();
+		List<String> strings = fileReader("medium_3.txt");
+		int answer = Integer.valueOf(strings.get(0));
+		int[][] input = stringsToInt(strings);
+		for(int i = 0; i < input.length; i++) {
+			System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
+			interval_Medium3.intervalInsert(input[i][0], input[i][1]);
+		}
+		System.out.println("Test for medium 3. Expected: " +answer + ", actual: " +interval_Medium3.findPOM());
+		Assert.assertTrue(interval_Medium3.findPOM() == answer);
+	}
+	
+	@Test
+	public void med4() {
+		Intervals interval_Medium4 = new Intervals();
+		List<String> strings = fileReader("medium_4.txt");
+		int answer = Integer.valueOf(strings.get(0));
+		int[][] input = stringsToInt(strings);
+		for(int i = 0; i < input.length; i++) {
+			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
+			interval_Medium4.intervalInsert(input[i][0], input[i][1]);
+		}
+		System.out.println("Test for medium 4. Expected: " +answer + ", actual: " +interval_Medium4.findPOM());
+		Assert.assertTrue(interval_Medium4.findPOM() == answer);
+	}
+	
+	@Test
+	public void med5() {
+		Intervals interval_Medium5 = new Intervals();
+		List<String> strings = fileReader("medium_5.txt");
+		int answer = Integer.valueOf(strings.get(0));
+		int[][] input = stringsToInt(strings);
+		for(int i = 0; i < input.length; i++) {
+			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
+			interval_Medium5.intervalInsert(input[i][0], input[i][1]);
+		}
+		System.out.println("Test for medium 5. Expected: " +answer + ", actual: " +interval_Medium5.findPOM());
+		Assert.assertTrue(interval_Medium5.findPOM() == answer);
+	}
+	
+	@Test
+	public void large1() {
+		Intervals interval_large1 = new Intervals();
+		List<String> strings = fileReader("medium_5.txt");
+		int answer = Integer.valueOf(strings.get(0));
+		int[][] input = stringsToInt(strings);
+		for(int i = 0; i < input.length; i++) {
+			//System.out.println("Currently inputting["+input[i][0] + ":" + input[i][1] + "], at index:" + i);
+			interval_large1.intervalInsert(input[i][0], input[i][1]);
+		}
+		System.out.println("Test for large1. Expected: " +answer + ", actual: " +interval_large1.findPOM());
+		Assert.assertTrue(interval_large1.findPOM() == answer);
+	}
 	
 	@Test
 	public void intervalInsert_Fail1() throws IllegalArgumentException {
