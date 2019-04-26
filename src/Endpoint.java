@@ -7,7 +7,7 @@
  */
 public class Endpoint {
 	
-	private static final String FORMAT = "[Point:%3d || %9s]";
+//	private static final String FORMAT = "[Point:%3d || %9s]";
 	private int value;
 	private Position pValue;
 	
@@ -51,8 +51,8 @@ public class Endpoint {
 		return false;
 	}
 	
-	@Override
-	public String toString() {
-		return String.format(FORMAT, this.getValue(), ((this.getPValue() == Position.LEFT)? "Left(+1)" : "Right(-1)"));
-	}
+//	@Override
+//	public String toString() {
+//		return String.format(FORMAT, this.getValue(), ((this.getPValue() == Position.LEFT)? "Left(+1)" : "Right(-1)"));
+//	}
 }

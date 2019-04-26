@@ -7,16 +7,16 @@
  */
 public class Node{
 
-	private static final String FORMAT = "\n"
-			+ "Color:%5s"
-			+ "\n" 
-			+ "KEY:   %s          Parent: %s" 
-			+ "\n"
-			+ "Value: %-8d ||  MaxValue: %d          LeftChild: %s"
-			+ "\n"
-			+ "Emax:  %s          RightChild: %s"
-			+ "\n"
-			+ "Height:%d, Size: %d";
+//	private static final String FORMAT = "\n"
+//			+ "Color:%5s"
+//			+ "\n" 
+//			+ "KEY:   %s          Parent: %s" 
+//			+ "\n"
+//			+ "Value: %-8d ||  MaxValue: %d          LeftChild: %s"
+//			+ "\n"
+//			+ "Emax:  %s          RightChild: %s"
+//			+ "\n"
+//			+ "Height:%d, Size: %d";
 
 	/**
 	 * The tree is sorted by endpoints. the Key is the endpoint.
@@ -269,23 +269,23 @@ public class Node{
 		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil Node" : "Key:" 
 				+ this.getKey() + ", Color:" + ((this.getColorEnum() == Color.RED) ? "Red" : "Black");
 	}
-	
-	public String simpleString() {
-		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil" : this.getKey() 
-				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B");
-	}
-	
-	public String moreInfoString() {
-		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil" : this.getKey() 
-				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B") + ", Val:" + this.getVal() + ", maxVal:" + this.getMaxVal()
-				+ ", Emax:" + this.getEmax().toString();
-	}
-	
-	public String structuredToString() {
-		return String.format(FORMAT, ((this.getColorEnum() == Color.RED) ? "Red" : "Black"), this.getEndpoint().toString(), 
-				this.getParent().toString(), this.getVal(), this.getMaxVal(), this.getLeft().toString(), 
-				this.getEmax().toString(), this.getRight().toString(), this.getHeight(), this.getSize());
-	}
+//	
+//	public String simpleString() {
+//		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil" : this.getKey() 
+//				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B");
+//	}
+//	
+//	public String moreInfoString() {
+//		return (this.getEndpoint().getPValue() == Position.NIL && this.getEndpoint().getValue() == 0)? "Nil" : this.getKey() 
+//				+ ":" + ((this.getColorEnum() == Color.RED) ? "R" : "B") + ", Val:" + this.getVal() + ", maxVal:" + this.getMaxVal()
+//				+ ", Emax:" + this.getEmax().toString();
+//	}
+//	
+//	public String structuredToString() {
+//		return String.format(FORMAT, ((this.getColorEnum() == Color.RED) ? "Red" : "Black"), this.getEndpoint().toString(), 
+//				this.getParent().toString(), this.getVal(), this.getMaxVal(), this.getLeft().toString(), 
+//				this.getEmax().toString(), this.getRight().toString(), this.getHeight(), this.getSize());
+//	}
 	
 	//A method just for testing
 	public boolean isNilNode() {

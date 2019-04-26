@@ -26,8 +26,7 @@ public class lastTest {
 	public static RBTree rbt_Small5;
 
 	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
-	
-	private final static String FILENAME_BASE = "C:\\Users\\watis\\ISU\\cs311\\project\\PA1\\workspace\\group19\\src\\res\\";
+	private final static String FILENAME_BASE = "src\\res\\";
 	
 	public List<String> fileReader(String file_ext){
 		BufferedReader input;
@@ -76,15 +75,31 @@ public class lastTest {
 		for(Node node : nodesInFile) {
 			rbt1_SmallOne.RBInsert(node);
 		}
-		
-		
 		rbt_Small5 = new RBTree();
 		for(Node node : stringToNodes(fileReader("small_5.txt"))) {
 			rbt_Small5.RBInsert(node);
 		}
+	}
+	
+	@Test
+	public void med2() {
+		RBTree rbt_med2 = new RBTree();
+		List<String> valuesInFile = fileReader("medium_2.txt");
+		List<Node> nodesInFile = stringToNodes(valuesInFile);
+		int answer = Integer.valueOf(valuesInFile.get(0));
+		for(Node node : nodesInFile) {
+			rbt_med2.RBInsert(node);
+		}
 		
+		int result = rbt_med2.getRoot().getEmax().getValue();
+		System.out.println("Expected:"+answer +", actual:" +result);
+		Assert.assertTrue(result == answer);
+		
+
 		
 	}
+	
+	
 		/**
 		 * Every Node is either red or black
 		 */

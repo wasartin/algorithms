@@ -89,7 +89,7 @@ public class RBTree{
 			x.setSize(x.getSize() + 1); 					//1st phase update (Mentioned in CLRS 14.1)
 			x.setHeight(x.getHeight() + 1);					
 			y = x;
-			if(z.getKey() < x.getKey()) {
+			if(z.getKey() < x.getKey()) { //change here
 				x = x.getLeft();
 			}
 			else {
@@ -100,7 +100,7 @@ public class RBTree{
 		if(y.isNilNode()) {
 			this.root = z;
 		}
-		else if(z.getKey() < y.getKey()) {
+		else if(z.getKey() < y.getKey()) {//change here
 			y.setLeft(z);
 		}
 		else {
@@ -515,16 +515,16 @@ public class RBTree{
 		}
 	}
 	
-	public void printTree() {
-		print("", this.getRoot());
-	}
-	
-	private void print(String prefix, Node n) {
-	    if (!n.isNilNode()) {	
-	        print(prefix + "     ", n.getRight());
-	        System.out.println (prefix + ("|-- ") + n.moreInfoString());
-	        print(prefix + "     ", n.getLeft());
-	    }
-	}
+//	public void printTree() {
+//		print("", this.getRoot());
+//	}
+//	
+//	private void print(String prefix, Node n) {
+//	    if (!n.isNilNode()) {	
+//	        print(prefix + "     ", n.getRight());
+//	        System.out.println (prefix + ("|-- ") + n.moreInfoString());
+//	        print(prefix + "     ", n.getLeft());
+//	    }
+//	}
 
 }
