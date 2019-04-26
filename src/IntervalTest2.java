@@ -12,7 +12,7 @@ import org.junit.rules.ExpectedException;
  * @author Will Sartin & Josh Ramon
  *
  */
-public class IntervalsTest {
+public class IntervalTest2 {
 	
 	@Rule
 	public final ExpectedException thrown = ExpectedException.none();

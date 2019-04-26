@@ -1,5 +1,3 @@
-
-
 /**
  * 
  * @author Will Sartin & Josh Ramon
