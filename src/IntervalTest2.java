@@ -1,6 +1,14 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,9 +28,55 @@ public class IntervalTest2 {
 	public static Intervals intervalEX;
 	public Intervals intervals;
 	
+	public Intervals intervals_small5;
+	
 	//TODO: make more trees to test
 	
 	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
+	
+	
+	
+	private final static String FILENAME_BASE = "C:\\Users\\watis\\ISU\\cs311\\project\\PA1\\workspace\\group19\\src\\res\\";
+	
+	public List<String> fileReader(String file_ext){
+		BufferedReader input;
+		ArrayList<String> lines = new ArrayList<String>();
+		try {
+			input = new BufferedReader(new FileReader(new File(FILENAME_BASE+file_ext)));
+			String line = null;
+			while ((line = input.readLine()) != null) {
+				lines.add(line);
+			}
+			input.close();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return lines;
+	}
+	
+	public int[][] stringsToInt(List<String> input){
+		//skip first line.
+		int[][] result = new int[input.size()][2];
+		int startingPointForIntervals = 1;
+		int index = 0;
+		for(int i = startingPointForIntervals; i < input.size() - 1; i++) {
+			String currInterval = input.get(i);
+			//parse into two numbers
+			String[] ends = currInterval.split("\\s+");
+			int leftInt = Integer.valueOf(ends[0]);
+			int rightInt = Integer.valueOf(ends[1]);
+			result[index][0] = leftInt;
+			result[index][1] = rightInt;
+			index++;
+		}
+		return result;
+	}
+
+	
+	
+	
 
 	@Before
 	public void setUp() {
@@ -30,12 +84,68 @@ public class IntervalTest2 {
 		
         intervals = new Intervals();
         
-		int points[][] = {{0, 4}, {1, 6}, {3, 9}, {7, 11}};
+		int points[][] = {
+							{0, 4}, 
+							{1, 6}, 
+							{3, 9}, 
+							{7, 11}
+							};
 		for(int i=0; i<points.length; i++) {
 			intervalEX.intervalInsert(points[i][0], points[i][1]);
 		}
+		
+		//need int points[][]
+
+		
+		
+	}
+	
+	@Test
+	public void small5() {
+		intervals_small5 = new Intervals();
+		List<String> strings = fileReader("small_5.txt");
+		int[][] input = stringsToInt(strings);
+		for(int i = 0; i < input.length; i++) {
+			intervals_small5.intervalInsert(input[i][0], input[i][1]);
+		}
+		
+		Assert.assertTrue(intervals_small5.findPOM() == 66);
 	}
 
+	
+	@Test
+	public void med1() {
+		Intervals interval_Medium1 = new Intervals();
+		int[][] input = stringsToInt(fileReader("medium_1.txt"));
+		for(int i = 0; i < input.length; i++) {
+			interval_Medium1.intervalInsert(input[i][0], input[i][1]);
+		}
+		Assert.assertTrue(interval_Medium1.findPOM() == 38);
+	}
+
+	@Test
+	public void med2() {
+		Intervals interval_Medium2 = new Intervals();
+		int[][] int2 = stringsToInt(fileReader("medium_2.txt"));
+		for(int i = 0; i < int2.length; i++) {
+			interval_Medium2.intervalInsert(int2[i][0], int2[i][1]);
+		}
+		System.out.println("Answer for Medium 2: " + interval_Medium2.findPOM());
+		Assert.assertTrue(interval_Medium2.findPOM() == 59);
+		
+	}
+	
+	
+//	@Test
+//	public void med1() {
+//		Intervals interval_Medium1 = new Intervals();
+//		int[][] input = stringsToInt(fileReader("medium_1.txt"));
+//		for(int i = 0; i < input.length; i++) {
+//			interval_Medium1.intervalInsert(input[i][0], input[i][1]);
+//		}
+//		Assert.assertTrue(interval_Medium1.findPOM() == 38);
+//	}
+	
 	@Test
 	public void intervalInsert_Fail1() throws IllegalArgumentException {
 		thrown.expect(IllegalArgumentException.class);

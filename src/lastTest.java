@@ -23,6 +23,7 @@ public class lastTest {
 	//This is the tree from the spec sheet
 	public static RBTree rbt1;
 	public static RBTree rbt1_SmallOne;
+	public static RBTree rbt_Small5;
 
 	public final static Node nilNode = new Node(new Endpoint(0, Position.NIL));
 	
@@ -75,6 +76,14 @@ public class lastTest {
 		for(Node node : nodesInFile) {
 			rbt1_SmallOne.RBInsert(node);
 		}
+		
+		
+		rbt_Small5 = new RBTree();
+		for(Node node : stringToNodes(fileReader("small_5.txt"))) {
+			rbt_Small5.RBInsert(node);
+		}
+		
+		
 	}
 		/**
 		 * Every Node is either red or black
@@ -123,6 +132,8 @@ public class lastTest {
 
 		int smallOne = 46;
 		Assert.assertTrue(rbt1_SmallOne.getRoot().getEmax().getValue() == smallOne);
+		
+		Assert.assertTrue(rbt_Small5.getRoot().getEmax().getValue() == 66);
 	}
 	
 	/**
