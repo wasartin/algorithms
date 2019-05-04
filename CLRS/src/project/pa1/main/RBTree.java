@@ -1,12 +1,11 @@
-package main;
-
+package project.pa1.main;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 /**
  * 
- * @author Will Sartin & Josh Ramon
+ * @author Will Sartin
  *
  */
 public class RBTree{

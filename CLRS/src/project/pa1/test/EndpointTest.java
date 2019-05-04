@@ -1,15 +1,14 @@
-package test;
-import org.junit.rules.ExpectedException;
+package project.pa1.test;
 
-import main.Endpoint;
-import main.Position;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import project.pa1.main.Endpoint;
+import project.pa1.main.Position;
 
 /**
  * 
@@ -52,9 +51,9 @@ public class EndpointTest {
 		Endpoint left = new Endpoint(1, 1);
 		Endpoint right = new Endpoint(2, -1);
 		Endpoint nil = new Endpoint(0, 0);
-		Assert.assertTrue(left.getValue() == 1);
-		Assert.assertTrue(right.getValue() == 2);
-		Assert.assertTrue(nil.getValue() == 0);
+		assertTrue(left.getValue() == 1);
+		assertTrue(right.getValue() == 2);
+		assertTrue(nil.getValue() == 0);
 	}
 	
 	@Test
@@ -62,9 +61,9 @@ public class EndpointTest {
 		Endpoint left = new Endpoint(1, 1);
 		Endpoint right = new Endpoint(2, -1);
 		Endpoint nil = new Endpoint(0, 0);
-		Assert.assertTrue(left.getPValue() == Position.LEFT);
-		Assert.assertTrue(right.getPValue() == Position.RIGHT);
-		Assert.assertTrue(nil.getPValue() == Position.NIL);
+		assertTrue(left.getPValue() == Position.LEFT);
+		assertTrue(right.getPValue() == Position.RIGHT);
+		assertTrue(nil.getPValue() == Position.NIL);
 	}
 
 }

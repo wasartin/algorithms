@@ -1,5 +1,4 @@
-package test;
-import static org.junit.Assert.assertEquals;
+package project.pa1.test;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -10,17 +9,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.Endpoint;
-import main.Intervals;
-import main.Node;
-import main.Position;
-import main.RBTree;
+import project.pa1.main.Endpoint;
+import project.pa1.main.Intervals;
+import project.pa1.main.Node;
+import project.pa1.main.Position;
 
 /**
  * 

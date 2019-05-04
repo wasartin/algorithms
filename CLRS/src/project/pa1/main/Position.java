@@ -1,9 +1,10 @@
+package project.pa1.main;
+
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * 
- * @author Will Sartin & Josh Ramon
+ * @author Will Sartin
  *
  */
 public enum Position{

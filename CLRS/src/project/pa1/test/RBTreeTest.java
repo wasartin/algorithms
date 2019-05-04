@@ -1,24 +1,17 @@
-package test;
+package project.pa1.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import main.Color;
-import main.Endpoint;
-import main.Node;
-import main.Position;
-import main.RBTree;
-
+import project.pa1.main.Color;
+import project.pa1.main.Endpoint;
+import project.pa1.main.Node;
+import project.pa1.main.Position;
+import project.pa1.main.RBTree;
 /**
  * 
  * @author Will Sartin & Josh Ramon

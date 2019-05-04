@@ -1,7 +1,7 @@
-package main;
+package project.pa1.main;
 /**
  * 
- * @author Will Sartin & Josh Ramon
+ * @author Will Sartin
  *
  */
 public enum Color {

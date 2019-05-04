@@ -1,4 +1,4 @@
-package test;
+package project.pa1.test;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,10 +12,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import main.Endpoint;
-import main.Node;
-import main.Position;
-import main.RBTree;
+import project.pa1.main.Endpoint;
+import project.pa1.main.Node;
+import project.pa1.main.Position;
+import project.pa1.main.RBTree;
 
 public class RBTreeTests_LargeDataSet {
 	

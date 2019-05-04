@@ -1,18 +1,19 @@
-package test;
+package project.pa1.test;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.Endpoint;
-import main.Intervals;
-import main.Node;
-import main.Position;
-import main.RBTree;
+import project.pa1.main.Endpoint;
+import project.pa1.main.Intervals;
+import project.pa1.main.Node;
+import project.pa1.main.Position;
+import project.pa1.main.RBTree;
 
 /**
  * 
@@ -55,7 +56,7 @@ public class IntervalsTest {
 	public void findPOM_Success() {
 		int expectedPOM = 3;
 		int actualPOM = intervalEX.findPOM();
-		Assert.assertEquals(expectedPOM, actualPOM);
+		assertEquals(expectedPOM, actualPOM);
 	}
 	
 	@Test
@@ -112,14 +113,14 @@ public class IntervalsTest {
 	public void intervalDelete_Fail1(){
 		Intervals intv = new Intervals();
 		intv.intervalInsert(1, 4);
-		Assert.assertFalse("Exception thrown and caught, this is out of bounds of the current collection of Intervals", intv.intervalDelete(2));
+		assertFalse("Exception thrown and caught, this is out of bounds of the current collection of Intervals", intv.intervalDelete(2));
 	}
 	
 	@Test
 	public void intervalDelete_Fail2(){
 		Intervals intv = new Intervals();
 		intv.intervalInsert(1, 4);
-		Assert.assertFalse("Indexing start at 1", intv.intervalDelete(0));
+		assertFalse("Indexing start at 1", intv.intervalDelete(0));
 	}
 	
 	@Test 
@@ -127,14 +128,14 @@ public class IntervalsTest {
 		Intervals intv = new Intervals();
 		intv.intervalInsert(1, 4);
 		intv.intervalDelete(1);
-		Assert.assertFalse("This has already been deleted", intv.intervalDelete(1));
+		assertFalse("This has already been deleted", intv.intervalDelete(1));
 	}
 	
 	@Test
 	public void intervalDelete_Success1() {		
-		Assert.assertTrue(intervalEX.intervalDelete(1));
+		assertTrue(intervalEX.intervalDelete(1));
 		RBTree t = intervalEX.getRBTree();
-		Assert.assertTrue(t.getSize() == 6);
+		assertTrue(t.getSize() == 6);
 	}
     @Test
     public void testIntervalInsert() {

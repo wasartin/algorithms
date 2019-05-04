@@ -1,5 +1,6 @@
+package project.pa1.main;
 /**
- * @author Will Sartin & Josh Ramon
+ * @author Will Sartin
  */
 import java.util.ArrayList;
 
